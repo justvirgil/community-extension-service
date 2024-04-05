@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "@nuxtjs/eslint-config-typescript",
+    "plugin:markdown/recommended",
+    "plugin:json/recommended",
+    "prettier"
+  ],
+  "ignorePatterns": ["vars/env.json"]
+}

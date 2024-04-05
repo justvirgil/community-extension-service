@@ -1,0 +1,51 @@
+@font-face {
+  font-family: 'ces';
+  src:  url('./../../public/icons/ces.eot?7n1w68');
+  src:  url('./../../public/icons/ces.eot?7n1w68#iefix') format('embedded-opentype'),
+    url('./../../public/icons/ces.ttf?7n1w68') format('truetype'),
+    url('./../../public/icons/ces.woff?7n1w68') format('woff'),
+    url('./../../public/icons/ces.svg?7n1w68#ces') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="ces-"], [class*=" ces-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'ces' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ces-home:before {
+  content: "\e900";
+}
+.ces-book:before {
+  content: "\e91f";
+}
+.ces-bell:before {
+  content: "\e951";
+}
+.ces-calendar:before {
+  content: "\e953";
+}
+.ces-power:before {
+  content: "\e9b5";
+}
+.ces-menu:before {
+  content: "\e9bd";
+}
+.ces-question:before {
+  content: "\ea09";
+}
+.ces-checkbox-checked:before {
+  content: "\ea52";
+}
