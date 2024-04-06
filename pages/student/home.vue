@@ -12,14 +12,14 @@
             <p class="text-xl ml-2">{{ pageTitle }}</p>
           </div>
           <div class="flex items-center justify-center mr-5">
-            <NuxtLink to="/member" class="mx-3 text-xl">
+            <NuxtLink to="/student/faq" class="mx-3 text-xl">
              <VIcon
                 :alt="'ces-question'"
                 :icon="'ces-question'"
                 size="medium"
               />
             </NuxtLink>
-            <NuxtLink to="/member" class="mx-3 text-xl">
+            <NuxtLink to="/student/notification" class="mx-3 text-xl">
              <VIcon
                 :alt="'ces-bell'"
                 :icon="'ces-bell'"
@@ -36,8 +36,22 @@
             </button>
             <div v-if="isOpen" class="absolute top-full right-0 mt-2 w-28 bg-white border border-gray-300 shadow-lg">
               <ul>
-                <li><NuxtLink to="/student/profile" class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200">Profile</NuxtLink></li>
-                <li><a @click="logUserOut" class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200 cursor-pointer">Logout</a></li>
+                <li class="flex flex-row justify-center items-center">
+                 <VIcon
+                    :alt="'ces-user'"
+                    :icon="'ces-user'"
+                    size="medium"
+                  />
+                  <NuxtLink to="/student/profile" class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200">Profile</NuxtLink>
+                </li>
+                <li class="flex flex-row justify-center items-center">
+                 <VIcon
+                    :alt="'ces-exit'"
+                    :icon="'ces-exit'"
+                    size="medium"
+                  />
+                  <a @click="logUserOut" class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200 cursor-pointer">Logout</a>
+                </li>
               </ul>
             </div>
           </div>
