@@ -45,13 +45,53 @@
       </nav>
     </header>
 
-    <p>Activities Content</p>
-    <div class="bg-orange-200">
-      <button @click="addActivity">Add activity</button>
+      <!-- <div class="flex flex-row"> -->
+        <div class="grow flex flex-col items-center">
+          <div class="bg-red-400 py-3 px-4 flex items-start text-xl text-center w-full">
+
+             <VButton
+                class="w-34 mx-3"
+              >
+                All
+            </VButton>
+
+             <VButton
+                class="w-34 mx-3"
+              >
+                Completed
+            </VButton>
+
+
+             <VButton
+                class="w-34 mx-3"
+              >
+                Approval
+            </VButton>
+
+             <VButton
+                class="w-34 mx-3"
+              >
+                Upcoming
+            </VButton>
+
+          </div>
+
+          <div class="bg-blue-200 w-full p-3">
+            <p class="pl-5">
+              Hello
+            </p>
+          </div>
+      </div>
+    <!-- </div> -->
+      <div class="w-full h-full bg-white">
+        <p>Activities Content</p>
+        <div class="bg-orange-200">
+          <button @click="addActivity">Add activity</button>
+        </div>
+        <p>Display activities</p>
+        <p v-for="(item, index) in readContent" :key="index">{{ item.name }}</p>
+      </div>
     </div>
-    <p>Display activities</p>
-    <p v-for="(item, index) in readContent" :key="index">{{ item.name }}</p>
-  </div>
 </template>
 
 <script setup>
@@ -72,41 +112,8 @@
 
   onMounted(async () => {
     await authorizedUser()
-    await fetchContent()
   })
 
-  // const addActivity = async () => {
-  //   await add("sample", {
-  //     name: "bbb",
-  //     description: "bbb",
-  //     location: "bbb",
-  //     where: "bbb",
-  //     when: "bbb",
-  //     what: "bbb",
-  //     yearLevel: "bbb",
-  //     createdAt: "bbb",
-  //     updatedAt: "bbb",
-  //     createdBy: "bbb",
-  //     status: "bbb",
-  //     approvedAt: "bbb",
-  //     approvedBy: "bbb",
-  //     isCompleted: "bbb",
-  //     pendingUsers: "bbb",
-  //     approvedUsers: "bbb",
-  //     rejectedUsers: "bbb"
-  //   })
-  // }
-
-  const addActivity = async () => {
-    if(!authorizedUser()){
-      throw new Error("Not authorized")
-    }
-    await add("sample", {
-      id: "2",
-      name: "hello",
-      year: 2
-    })
-  }
 
   const fetchContent = async () => {
     if(!authorizedUser()){

@@ -46,35 +46,31 @@
     </header>
 
         <div class="grow flex flex-col items-center">
-          <div class="bg-red-400 py-3 px-4 flex items-start text-sm text-center w-full">
+          <div class="bg-red-400 py-3 px-4 flex items-start text-xl text-center w-full">
 
              <VButton
                 class="w-34 mx-3"
-                :is-rounded="true"
               >
-                1st year
+                All
             </VButton>
 
              <VButton
                 class="w-34 mx-3"
-                :is-rounded="true"
               >
-                2nd year
+                Completed
             </VButton>
 
 
              <VButton
                 class="w-34 mx-3"
-                :is-rounded="true"
               >
-                3rd year
+                Approval
             </VButton>
 
              <VButton
                 class="w-34 mx-3"
-                :is-rounded="true"
               >
-                4th year
+                Upcoming
             </VButton>
 
           </div>
@@ -101,7 +97,7 @@
   const { add, read } = useFirestore()
 
   const readContent = ref([])
-  const pageTitle = ref('Available')
+  const pageTitle = ref('Activities')
   const isOpen = ref(false)
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value

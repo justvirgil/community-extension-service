@@ -46,39 +46,32 @@ f<template>
     </header>
 
     <div class="flex flex-row">
-        <div class="grow flex flex-col items-center">
-          <div class="bg-red-400 p-3 text-xl text-center w-full">
-            <p>DATE</p>
-          </div>
-          <div class="pt-12 py-auto w-[800px]">
-            <DatePicker v-model="date" :color="calendarColor" :is-dark="calendarColor" expanded />
-          </div>
-        </div>
-
-        <div class="grow">
-          <div class="bg-blue-400 p-3 text-xl text-center">
-            <p>AVAILABLE</p>
-          </div>
-          <div class="text-center">
-            <p>LIST</p>
-          </div>
-        </div>
+      <div class="bg-red-400 py-3 pr-4 flex items-start text-xl text-center w-full">
+       <p class="pl-24">FREQUENTLY ASKED</p>
+      </div>
     </div>
 
+      <div class="w-full h-full bg-white flex flex-col">
+        <div class="flex flex-col p-5 text-sm relative">
+          <p>1. LOREM IPSUM</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo pellentesque faucibus interdum a neque. Nam lobortis, nulla ut consequat aliquet, lorem justo accumsan dui, non maximus ex erat at nibh. Vivamus nec nisi arcu.</p>
+          <p>2. LOREM IPSUM</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo pellentesque faucibus interdum a neque. Nam lobortis, nulla ut consequat aliquet, lorem justo accumsan dui, non maximus ex erat at nibh. Vivamus nec nisi arcu.</p>
+          <p>3. LOREM IPSUM</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo pellentesque faucibus interdum a neque. Nam lobortis, nulla ut consequat aliquet, lorem justo accumsan dui, non maximus ex erat at nibh. Vivamus nec nisi arcu.</p>
+        </div>
+        <button class="absolute right-20 bottom-5 bg-red-300 px-6 py-3">CHAT</button>
+      </div>
   </div>
 </template>
 
 <script setup>
-  import { DatePicker } from 'v-calendar'
-  import 'v-calendar/style.css'
-
   const { authorizedUser, logout } = useFirebaseAuth()
   const { read } = useFirestore()
 
-  const calendarColor = ref(true)
-  const date = ref(new Date())
   const readContent = ref([])
-  const pageTitle = ref('Calendar')
+  const pageTitle = ref('FAQ')
+  
   const isOpen = ref(false)
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
@@ -107,3 +100,4 @@ f<template>
     layout: 'member'
   })
 </script>
+  

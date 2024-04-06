@@ -46,39 +46,38 @@ f<template>
     </header>
 
     <div class="flex flex-row">
-        <div class="grow flex flex-col items-center">
-          <div class="bg-red-400 p-3 text-xl text-center w-full">
-            <p>DATE</p>
-          </div>
-          <div class="pt-12 py-auto w-[800px]">
-            <DatePicker v-model="date" :color="calendarColor" :is-dark="calendarColor" expanded />
-          </div>
-        </div>
-
-        <div class="grow">
-          <div class="bg-blue-400 p-3 text-xl text-center">
-            <p>AVAILABLE</p>
-          </div>
-          <div class="text-center">
-            <p>LIST</p>
-          </div>
+        <!-- <div class="grow flex flex-col items-center"> -->
+          <div class="bg-red-400 py-3 pr-4 flex items-start text-xl text-center w-full">
+            <p class="pl-24">Username</p>
+          <!-- </div> -->
         </div>
     </div>
 
+      <div class="w-full h-full bg-white flex items-center justify-center">
+        <div class="bg-yellow  w-[30rem] h-[15rem] p-7 relative">
+          <p>Student</p>
+          <div class="flex flex-row items-center justify-between pt-3 px-10">
+            <div>
+              ICON
+            </div>
+            <div class="flex flex-col mt-3 pr-20">
+              <p>Full name</p>
+              <p>Year & Course</p>
+              <p>Email</p>
+            </div>
+          </div>
+          <p class="pt-6 absolute right-20 bottom-5">ID</p>
+        </div>
+      </div>
   </div>
 </template>
 
 <script setup>
-  import { DatePicker } from 'v-calendar'
-  import 'v-calendar/style.css'
-
   const { authorizedUser, logout } = useFirebaseAuth()
   const { read } = useFirestore()
 
-  const calendarColor = ref(true)
-  const date = ref(new Date())
   const readContent = ref([])
-  const pageTitle = ref('Calendar')
+  const pageTitle = ref('Profile')
   const isOpen = ref(false)
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
@@ -107,3 +106,4 @@ f<template>
     layout: 'member'
   })
 </script>
+  

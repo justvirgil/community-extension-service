@@ -1,16 +1,39 @@
 <template>
-	<div class="bg-red-500">
-		<div class="">
+	<div class="flex flex-col bg-red-500 w-[220px] h-[150px] relative">
+		<div class="flex grow justify-center items-center">
 			{{ title }}
 		</div>
-		<div>
-			<div>
-				<p>One</p>
-				<p>Two</p>
-				<p>Three</p>
+		<div class="flex flex-row pb-3">
+			<div class="flex flex-row grow justify-center items-center">
+
+         <VIcon
+            :alt="'ces-camera'"
+            :icon="'ces-camera'"
+            size="medium"
+            class="mr-3"
+          />
+
+         <VIcon
+            :alt="'ces-image'"
+            :icon="'ces-image'"
+            size="medium"
+            class="mr-3"
+          />
+
+         <VIcon
+            :alt="'ces-file-text2'"
+            :icon="'ces-file-text2'"
+            size="medium"
+            class="mr-3"
+          />
+
 			</div>
-			<div>
-				<p>Eye</p>
+			<div class="grow ml-12">
+       <VIcon
+          :alt="'ces-eye'"
+          :icon="'ces-eye'"
+          size="medium"
+        />
 			</div>
 		</div>
 	</div>

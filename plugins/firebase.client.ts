@@ -10,27 +10,15 @@ export default defineNuxtPlugin(() => {
 
 	console.log("config key",config.public.apiKey)
 
-	// const firebaseConfig = {
-	//   apiKey: config.public.apiKey,
-	//   authDomain: config.public.authDomain,
-	//   databaseURL: config.public.databaseURL,
-	//   projectId: config.public.projectId,
-	//   storageBucket: config.public.storageBucket,
-	//   messagingSenderId: config.public.messagingSenderId,
-	//   appId: config.public.appId
-	// }
-
-	firebase.initializeApp({
-	  'messagingSenderId': 'xxxxxxxxxxxxxx',
-	  'apiKey': "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-	  'authDomain': "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-	  'databaseURL': "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-	  'projectId': "xxxxxxxxxxxxxx",
-	  'storageBucket': "xxxxxxxxxxxxxx",
-	  'messagingSenderId': "599149435887",
-	  'appId': "x:xxxxxxxxxxxxxx:xxx:xxxxxxxxxxxxxx",
-	  'measurementId': "xxxxxxxxxxxxxx"
-	});
+	const firebaseConfig = {
+	  apiKey: config.public.apiKey,
+	  authDomain: config.public.authDomain,
+	  databaseURL: config.public.databaseURL,
+	  projectId: config.public.projectId,
+	  storageBucket: config.public.storageBucket,
+	  messagingSenderId: config.public.messagingSenderId,
+	  appId: config.public.appId
+	}
 
     const app = initializeApp(firebaseConfig)
     const firestoreDb = getFirestore(app)

@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ces';
-  src:  url('./../../public/icons/ces.eot?7n1w68');
-  src:  url('./../../public/icons/ces.eot?7n1w68#iefix') format('embedded-opentype'),
-    url('./../../public/icons/ces.ttf?7n1w68') format('truetype'),
-    url('./../../public/icons/ces.woff?7n1w68') format('woff'),
-    url('./../../public/icons/ces.svg?7n1w68#ces') format('svg');
+  src:  url('./../../public/icons/ces.eot?80wot');
+  src:  url('./../../public/icons/ces.eot?80wot#iefix') format('embedded-opentype'),
+    url('./../../public/icons/ces.ttf?80wot') format('truetype'),
+    url('./../../public/icons/ces.woff?80wot') format('woff'),
+    url('./../../public/icons/ces.svg?80wot#ces') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -28,8 +28,17 @@
 .ces-home:before {
   content: "\e900";
 }
+.ces-image:before {
+  content: "\e90d";
+}
+.ces-camera:before {
+  content: "\e90f";
+}
 .ces-book:before {
   content: "\e91f";
+}
+.ces-file-text2:before {
+  content: "\e926";
 }
 .ces-bell:before {
   content: "\e951";
@@ -37,14 +46,35 @@
 .ces-calendar:before {
   content: "\e953";
 }
+.ces-user:before {
+  content: "\e971";
+}
+.ces-bin:before {
+  content: "\e9ac";
+}
 .ces-power:before {
   content: "\e9b5";
 }
 .ces-menu:before {
   content: "\e9bd";
 }
+.ces-eye:before {
+  content: "\e9ce";
+}
+.ces-eye-blocked:before {
+  content: "\e9d1";
+}
 .ces-question:before {
   content: "\ea09";
+}
+.ces-info:before {
+  content: "\ea0c";
+}
+.ces-checkmark:before {
+  content: "\ea10";
+}
+.ces-exit:before {
+  content: "\ea14";
 }
 .ces-checkbox-checked:before {
   content: "\ea52";

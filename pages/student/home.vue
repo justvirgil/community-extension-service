@@ -48,6 +48,7 @@
       <div>
         <p>Member Content</p>
         <p>{{ dataFetched }} </p>
+        <card title="CES CONTENT" />
       </div>
 
     </div>
