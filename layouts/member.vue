@@ -35,7 +35,7 @@
           <p class="ml-2">Activities</p>
         </NuxtLink>
 
-        <NuxtLink to="/student/info" class="mb-8 flex flex-row items-center">
+        <NuxtLink to="/student/tracker" class="mb-8 flex flex-row items-center">
          <VIcon
             :alt="'ces-power'"
             :icon="'ces-power'"

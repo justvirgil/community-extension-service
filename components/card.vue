@@ -1,10 +1,10 @@
 <template>
-	<div class="flex flex-col bg-red-500 w-[220px] h-[150px] relative">
-		<div class="flex grow justify-center items-center">
-			{{ title }}
+	<div class="flex flex-col bg-green w-[220px] h-[150px] relative p-1 rounded-lg">
+		<div class="flex grow justify-center items-center bg-red-200 px-3 overflow-auto">
+			<p>{{ title }}</p>
 		</div>
-		<div class="flex flex-row pb-3">
-			<div class="flex flex-row grow justify-center items-center">
+		<div class="flex flex-row mb-1 relative h-5">
+			<div class="flex flex-row ml-7 justify-center items-center">
 
          <VIcon
             :alt="'ces-camera'"
@@ -28,11 +28,11 @@
           />
 
 			</div>
-			<div class="grow ml-12">
+			<div class="grow absolute right-8">
        <VIcon
           :alt="'ces-eye'"
           :icon="'ces-eye'"
-          size="medium"
+          size="large"
         />
 			</div>
 		</div>

@@ -62,7 +62,16 @@
       <div>
         <p>Member Content</p>
         <p>{{ dataFetched }} </p>
-        <card title="CES CONTENT" />
+        <card :title="testTitle" />
+        <div class="flex justify-center items-center absolute top-10 right-20">
+          <cardDescription 
+            title="TITLE"
+            :content="testContent"
+            where="WHERE"
+            when="WHEN"
+           />
+        </div>
+        
       </div>
 
     </div>
@@ -76,6 +85,10 @@
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
+
+  const testTitle = ref('Hello world')
+
+  const testContent = ref('Lorem ipsum dolor sit ame vitae quam id leo pellentesque faucibus interdum a neque. Nam lobortis, nulla ut consequat aliquet, lorem justo accumsan dui, non maximus ex erat at nibh. Vivamus nec nisi arcu.')
 
   const logUserOut = async() => {
     await logout()
