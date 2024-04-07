@@ -1,9 +1,9 @@
 <template>
-	<div class="flex flex-col bg-blue-500 w-[380px] h-[500px] p-5 relative rounded-[30px]">
-    <div class="flex flex-col">
-      <div class="flex flex-col pt-10 bg-red-400">
-        <p class="mb-5 bg-green">{{ title }}</p>
-        <p class="mb-5">DESCRIPTION</p>
+	<div class="flex flex-col bg-blue-500 w-[380px] h-[450px] p-5 justify-center rounded-[30px]">
+    <div class="flex flex-col relative">
+      <div class="flex flex-col pt-3 bg-red-400">
+        <p class="mb-3 bg-green">{{ title }}</p>
+        <p class="mb-3">DESCRIPTION</p>
       </div>
       <div class="flex items-center bg-red-200 h-[200px] justify-center overflow-auto">
         <p class="p-2">{{ content }}</p>

@@ -63,14 +63,14 @@
         <p>Member Content</p>
         <p>{{ dataFetched }} </p>
         <card :title="testTitle" />
-        <div class="flex justify-center items-center absolute top-10 right-20">
+<!--         <div class="flex justify-center items-center absolute top-10 right-20">
           <cardDescription 
             title="TITLE"
             :content="testContent"
             where="WHERE"
             when="WHEN"
            />
-        </div>
+        </div> -->
         
       </div>
 

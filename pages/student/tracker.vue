@@ -59,9 +59,10 @@
         </nav>
       </header>
 
-    <NuxtPage />
     <div class="bg-white text-black [50px]">
-      <p v-for="(course, index) in courses" :key="index">{{ course.name }}</p>
+      wew
+      <!-- <p v-for="(course, index) in courses" :key="index">{{ course.name }}</p> -->
+      <piechart />
     </div>
   </div>
 </template>
