@@ -2,7 +2,7 @@
   <div class="flex flex-row">
     <div class="flex flex-col bg-green w-[220px] h-[150px] relative p-1 rounded-lg">
       <button class="flex grow justify-center items-center bg-red-200 px-3 overflow-auto" @click="toggleCard">
-        <p>{{ title }}</p>
+        <p>{{ cardData.name }}</p>
       </button>
       <div class="flex flex-row mb-1 relative h-5">
         <div class="flex flex-row ml-7 justify-center items-center">
@@ -43,10 +43,7 @@
 
     <cardDescription
       v-if="showCard"
-      title="Hello world"
-      content="Card content"
-      where="Where"
-      when="When"
+      :cardData="cardData"
     />
 
   </div>
@@ -60,17 +57,31 @@ const showCard = ref(false)
     title?: string
   }
 
-  interface Emit {
-    (e: 'click'): void
+  interface cardData {
+    cardData: {
+      name?: string
+      description?: string
+      where?: string
+      when?: string
+    }
   }
 
-  const emit = defineEmits<Emit>()
+  // interface Emit {
+  //   (e: 'click'): void
+  // }
+
+  // const emit = defineEmits<Emit>()
 
   const toggleCard = () => {
    showCard.value = !showCard.value
   }
 
-  const props = withDefaults(defineProps<Prop>(), {
-    title: ''
+  withDefaults(defineProps<cardData>(), {
+    cardData: {
+      name: '',
+      description: '',
+      where: '',
+      when: ''
+    }
   })
 </script>

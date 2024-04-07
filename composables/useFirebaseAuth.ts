@@ -6,6 +6,7 @@ export const useFirebaseAuth = () => {
   const errorMessage = useState(() => '')
   const dataFetched = useState(() => [])
   const courses = useState(() => [])
+  const activity = useState(() => [])
   const students = useState(() => [])
 
   const userUID = useState(() => '')
@@ -64,7 +65,7 @@ export const useFirebaseAuth = () => {
           email: userData.email,
           name: `${userData.firstName} ${userData.lastName}`,
           createdAt: userData.createdAt,
-          joinedActivities: []
+          joinedActivities: {}
         })
         console.log("user data", userData)
         await navigateTo('/student/home')
@@ -75,9 +76,9 @@ export const useFirebaseAuth = () => {
       console.log("logged user", user)
     } catch (error) {
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-        errorMessage.value = 'Invalid email or password'
+        errorMessage.value = 'Invalid email or password1'
       } else {
-        errorMessage.value = 'Invalid email or password'
+        errorMessage.value = 'Invalid email or password2'
       }
     } 
   }
@@ -114,6 +115,15 @@ export const useFirebaseAuth = () => {
     try {
       const coursesDataArray = await read("courses")
       courses.value = coursesDataArray
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const getActivities = async () => {
+    try {
+      const activityDataArray = await read("activities")
+      activity.value = activityDataArray
     } catch (error) {
       errorMessage.value = `${error}`
     }
@@ -184,6 +194,8 @@ export const useFirebaseAuth = () => {
     courses,
     getStudents,
     students,
+    getActivities,
+    activity,
     authorizedUser,
     getUserUID,
     userUID

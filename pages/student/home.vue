@@ -59,26 +59,19 @@
         </nav>
       </header>
 
-      <div>
+      <div class="m-5 bg-blue-200 h-full">
         <p>Member Content</p>
         <p>{{ dataFetched }} </p>
-        <card :title="testTitle" />
-<!--         <div class="flex justify-center items-center absolute top-10 right-20">
-          <cardDescription 
-            title="TITLE"
-            :content="testContent"
-            where="WHERE"
-            when="WHEN"
-           />
-        </div> -->
-        
+        <p v-for="(item, index) in activity" :key="index">
+          <card :card-data="item" />
+        </p>
       </div>
 
     </div>
 </template>
 
 <script setup>
-  const { authorizedUser, logout, dataFetched } = useFirebaseAuth()
+  const { authorizedUser, logout, dataFetched, activity, getActivities } = useFirebaseAuth()
 
   const pageTitle = ref('Home')
   const isOpen = ref(false)
@@ -97,8 +90,11 @@
 
   onMounted( async () => {
     await authorizedUser()
+    await getActivities()
   })
 
+
+console.log("content",activity)
 
 
   definePageMeta({
