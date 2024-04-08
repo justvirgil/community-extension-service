@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendEmailVerification, getAuth } from 'firebase/auth'
-
+import { arrayUnion, arrayRemove } from 'firebase/firestore'
 export const useFirebaseAuth = () => {
-  const { addUser, readById, read } = useFirestore()
+  const { addUser, readById, read, update } = useFirestore()
   const { $auth } = useNuxtApp()
   const errorMessage = useState(() => '')
   const dataFetched = useState(() => [])
@@ -146,13 +146,35 @@ export const useFirebaseAuth = () => {
   //   }
   // }
 
-  // const addActivites = async () => {
-  //   try {
-      
-  //   } catch (error) {
-  //     errorMessage.value = `${error}`
-  //   }
-  // }
+  const updateUserActivity = async (activityID: string, userID: string) => {
+    try {
+      await update('users', userID, {
+        joinedActivities: activityID
+      })
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const joinActivity = async (activityID: string, userID: string) => {
+    try {
+      await update('activities', activityID, {
+        pendingUsers: arrayUnion(userID)
+      })
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const removeActivity = async (activityID: string, userID: string) => {
+    try {
+      await update('activities', activityID, {
+        pendingUsers: arrayRemove(userID)
+      })
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
 
   const authorizedUser = async() => {
     try {
@@ -196,6 +218,9 @@ export const useFirebaseAuth = () => {
     students,
     getActivities,
     activity,
+    updateUserActivity,
+    joinActivity,
+    removeActivity,
     authorizedUser,
     getUserUID,
     userUID

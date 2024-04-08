@@ -7,26 +7,26 @@
       <div class="flex flex-row mb-1 relative h-5">
         <div class="flex flex-row ml-7 justify-center items-center">
 
-           <VIcon
-              :alt="'ces-camera'"
-              :icon="'ces-camera'"
-              size="medium"
-              class="mr-3"
-            />
+         <VIcon
+            :alt="'ces-camera'"
+            :icon="'ces-camera'"
+            size="medium"
+            class="mr-3"
+          />
 
-           <VIcon
-              :alt="'ces-image'"
-              :icon="'ces-image'"
-              size="medium"
-              class="mr-3"
-            />
+         <VIcon
+            :alt="'ces-image'"
+            :icon="'ces-image'"
+            size="medium"
+            class="mr-3"
+          />
 
-           <VIcon
-              :alt="'ces-file-text2'"
-              :icon="'ces-file-text2'"
-              size="medium"
-              class="mr-3"
-            />
+         <VIcon
+            :alt="'ces-file-text2'"
+            :icon="'ces-file-text2'"
+            size="medium"
+            class="mr-3"
+          />
 
         </div>
         <div class="grow absolute right-8">
@@ -44,6 +44,9 @@
     <cardDescription
       v-if="showCard"
       :cardData="cardData"
+      @click="toggleCard"
+      @join="emit('join')"
+      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-500 w-[380px] p-5 justify-center rounded-[30px] z-50"
     />
 
   </div>
@@ -66,15 +69,15 @@ const showCard = ref(false)
     }
   }
 
-  // interface Emit {
-  //   (e: 'click'): void
-  // }
-
-  // const emit = defineEmits<Emit>()
-
   const toggleCard = () => {
    showCard.value = !showCard.value
   }
+
+  interface Join {
+    (e: 'join'): void
+  }
+
+  const emit = defineEmits<Join>()
 
   withDefaults(defineProps<cardData>(), {
     cardData: {

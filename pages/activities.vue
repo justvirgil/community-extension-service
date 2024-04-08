@@ -22,12 +22,12 @@
 
   // const addActivity = async () => {
   //   await add("sample", {
-  //     name: "bbb",
-  //     description: "bbb",
-  //     location: "bbb",
-  //     where: "bbb",
-  //     when: "bbb",
-  //     what: "bbb",
+      // name: "bbb",
+      // description: "bbb",
+      // location: "bbb",
+      // where: "bbb",
+      // when: "bbb",
+      // what: "bbb",
   //     yearLevel: "bbb",
   //     createdAt: "bbb",
   //     updatedAt: "bbb",

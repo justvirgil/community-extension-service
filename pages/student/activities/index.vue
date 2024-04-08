@@ -94,19 +94,17 @@
             </p>
           </div>
       </div>
-      <div class="w-full h-full bg-white">
-        <p>Activities Content</p>
-        <div class="bg-orange-200">
-          <button @click="addActivity">Add activity</button>
+
+      <div class="m-3 h-full bg-white overflow-x-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <card v-for="(item, index) in activity" :key="index" :card-data="item" @join="join(item.id)" />
         </div>
-        <p>Display activities</p>
-        <p v-for="(item, index) in readContent" :key="index">{{ item.name }}</p>
       </div>
     </div>
 </template>
 
 <script setup>
-  const { authorizedUser, logout } = useFirebaseAuth()
+  const { authorizedUser, logout, userUID, activity, getActivities, joinActivity, removeActivity } = useFirebaseAuth()
   const { add, read } = useFirestore()
 
   const readContent = ref([])
@@ -116,6 +114,22 @@
     isOpen.value = !isOpen.value
   }
 
+  const join = async (activityId) => {
+    try {
+      await joinActivity(activityId, userUID.value)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    } 
+  }
+
+  const remove = async (activityId) => {
+    try {
+      await removeActivity(activityId, userUID.value)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    } 
+  }
+
   const logUserOut = async() => {
     await logout()
     navigateTo('/')
@@ -123,6 +137,7 @@
 
   onMounted(async () => {
     await authorizedUser()
+    await getActivities()
   })
 
 

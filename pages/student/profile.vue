@@ -60,34 +60,37 @@ f<template>
       </header>
 
     <div class="flex flex-row">
-        <!-- <div class="grow flex flex-col items-center"> -->
-          <div class="bg-red-400 py-3 pr-4 flex items-start text-xl text-center w-full">
-            <p class="pl-24">Username</p>
-          <!-- </div> -->
+          <div class="bg-red-400 py-3 pr-4 flex items-start text-xl text-center w-full h-10">
+            <p class="pl-24">{{ dataFetched.firstName }} {{ dataFetched.lastName }}</p>
         </div>
     </div>
 
       <div class="w-full h-full bg-white flex items-center justify-center">
-        <div class="bg-yellow  w-[30rem] h-[15rem] p-7 relative">
+        <div class="bg-yellow  w-[30rem] h-[15rem] p-7 rounded-md relative">
           <p>Student</p>
           <div class="flex flex-row items-center justify-between pt-3 px-10">
-            <div>
-              ICON
+            <div class="mr-5">
+             <VIcon
+                :alt="'ces-user'"
+                :icon="'ces-user'"
+                class="text-[100px]"
+              />
             </div>
             <div class="flex flex-col mt-3 pr-20">
-              <p>Full name</p>
-              <p>Year & Course</p>
-              <p>Email</p>
+              <p>{{ dataFetched.firstName }} {{ dataFetched.lastName }}</p>
+              <p>Year</p>
+              <p>Course</p>
+              <p>{{ dataFetched.email }}</p>
             </div>
           </div>
-          <p class="pt-6 absolute right-20 bottom-5">ID</p>
+          <p class="pt-6 absolute right-10 bottom-5">{{ dataFetched.id }}</p>
         </div>
       </div>
   </div>
 </template>
 
 <script setup>
-  const { authorizedUser, logout } = useFirebaseAuth()
+  const { authorizedUser, logout, dataFetched } = useFirebaseAuth()
   const { read } = useFirestore()
 
   const readContent = ref([])

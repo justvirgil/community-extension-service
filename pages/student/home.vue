@@ -59,24 +59,40 @@
         </nav>
       </header>
 
-      <div class="m-5 bg-blue-200 h-full">
+      <div class="m-5 bg-blue-200 h-full overflow-x-auto">
         <p>Member Content</p>
         <p>{{ dataFetched }} </p>
-        <p v-for="(item, index) in activity" :key="index">
-          <card :card-data="item" />
-        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <card v-for="(item, index) in activity" :key="index" :card-data="item" @join="join(item.id)" />
+        </div>
       </div>
-
     </div>
 </template>
 
 <script setup>
-  const { authorizedUser, logout, dataFetched, activity, getActivities } = useFirebaseAuth()
+  const { authorizedUser, userUID, logout, dataFetched, activity, getActivities, joinActivity, removeActivity } = useFirebaseAuth()
 
   const pageTitle = ref('Home')
   const isOpen = ref(false)
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
+  }
+  console.log("AAA", userUID.value)
+
+  const join = async (activityId) => {
+    try {
+      await joinActivity(activityId, userUID.value)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    } 
+  }
+
+  const remove = async (activityId) => {
+    try {
+      await removeActivity(activityId, userUID.value)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    } 
   }
 
   const testTitle = ref('Hello world')
