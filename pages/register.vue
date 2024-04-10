@@ -81,7 +81,7 @@
   const errorMessage = ref('')
 
   const { register, errorMessage: authError } = useFirebaseAuth()
-  const { add, readById } = useFirestore()
+  const { readById } = useFirestore()
 
   const checkEmail = async () => {
     const users = await readById('admins', email.value)

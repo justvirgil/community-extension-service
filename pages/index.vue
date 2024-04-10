@@ -131,7 +131,7 @@
 
   const goAdminPage = () => {
     if (configKey.value === $secretAdminKey) {
-      navigateTo('/adminLogin')
+      navigateTo('/admin/login')
     } else {
       errorKeyMessage.value = 'Invalid Secret Key'
     }

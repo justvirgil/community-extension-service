@@ -34,8 +34,8 @@ f
                 <li class="flex flex-row justify-center items-center">
                   <VIcon :alt="'ces-exit'" :icon="'ces-exit'" size="medium" />
                   <a
-                    @click="logUserOut"
                     class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200 cursor-pointer"
+                    @click="logUserOut"
                     >Logout</a
                   >
                 </li>

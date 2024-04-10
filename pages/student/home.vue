@@ -33,8 +33,8 @@
                 <li class="flex flex-row justify-center items-center">
                   <VIcon :alt="'ces-exit'" :icon="'ces-exit'" size="medium" />
                   <a
-                    @click="logUserOut"
                     class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200 cursor-pointer"
+                    @click="logUserOut"
                     >Logout</a
                   >
                 </li>
@@ -52,7 +52,7 @@
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
       >
-        <card
+        <cards
           v-for="(item, index) in activity"
           :key="index"
           :card-data="item"
@@ -72,15 +72,8 @@
     dataFetched,
     activity,
     getActivities,
-    joinActivity,
-    removeActivity
+    joinActivity
   } = useFirebaseAuth()
-
-  import {
-    getAuth,
-    setPersistence,
-    browserLocalPersistence
-  } from 'firebase/auth'
 
   const pageTitle = ref('Home')
   const isOpen = ref(false)
@@ -88,7 +81,6 @@
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
-  console.log('AAA', userUID.value)
 
   const join = async (activityId) => {
     try {
@@ -98,48 +90,14 @@
     }
   }
 
-  const remove = async (activityId) => {
-    try {
-      await removeActivity(activityId, userUID.value)
-    } catch (error) {
-      errorMessage.value = `${error}`
-    }
-  }
-
-  const testTitle = ref('Hello world')
-
-  const testContent = ref(
-    'Lorem ipsum dolor sit ame vitae quam id leo pellentesque faucibus interdum a neque. Nam lobortis, nulla ut consequat aliquet, lorem justo accumsan dui, non maximus ex erat at nibh. Vivamus nec nisi arcu.'
-  )
-
   const logUserOut = async () => {
     await logout()
     navigateTo('/')
   }
 
-  // const getProfile = () => {
-  // const auth = getAuth()
-  // setPersistence(auth, browserLocalPersistence)
-  //   .then(() => {
-  //     // Auth state persistence set successfully
-  //     console.log("successfull")
-  //         const user = auth.currentUser
-
-  //   if(user) {
-  //     console.log('hello', user)
-  //     userData.value = user
-  //   }
-
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error setting auth state persistence:", error)
-  //   })
-  // }
-
   onMounted(async () => {
     await authorizedUser()
     await getUserProfile()
-    // await getProfile()
     await getActivities()
   })
 

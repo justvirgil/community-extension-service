@@ -4,7 +4,7 @@
       class="flex flex-col bg-blue-500 w-[380px] h-[450px] p-5 justify-center rounded-[30px] z-50"
     >
       <div class="flex flex-col relative">
-        <button @click="emit('click')" class="absolute right-3">
+        <button class="absolute right-3" @click="emit('click')">
           <VIcon :alt="'ces-exit'" :icon="'ces-exit'" class="text-sm" />
         </button>
         <div class="flex flex-col pt-3 bg-red-400">
@@ -22,8 +22,8 @@
         </div>
         <div class="flex flex-row justify-center items-center mt-4 relative">
           <button
-            @click="emit('join')"
             class="rounded-full bg-green w-fit px-5"
+            @click="emit('join')"
           >
             JOIN ACTIVITY
           </button>
@@ -40,10 +40,9 @@
 </template>
 
 <script setup lang="ts">
-  const { joinActivity } = useFirebaseAuth()
   const { timeConverter } = useTools()
 
-  interface cardData {
+  interface card {
     cardData: {
       name?: string
       description?: string
@@ -52,33 +51,18 @@
     }
   }
 
-  // interface Emit {
-  //   (e: 'click'): void
-  // }
-
-  // interface Join {
-  //   (e: 'join'): void
-  // }
-
-  // const emit = defineEmits<{Emit, Join}>()
-
   interface Emit {
     (e: 'click' | 'join'): void
   }
 
   const emit = defineEmits<Emit>()
 
-  // const join = () => {
-  //   // await joinActivity(cardData.activityId)
-  //   console.log('test')
-  // }
-
-  withDefaults(defineProps<cardData>(), {
+  withDefaults(defineProps<card>(), () => ({
     cardData: {
       name: '',
       description: '',
       where: '',
       when: ''
     }
-  })
+  }))
 </script>

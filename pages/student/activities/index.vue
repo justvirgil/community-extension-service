@@ -33,8 +33,8 @@
                 <li class="flex flex-row justify-center items-center">
                   <VIcon :alt="'ces-exit'" :icon="'ces-exit'" size="medium" />
                   <a
-                    @click="logUserOut"
                     class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200 cursor-pointer"
+                    @click="logUserOut"
                     >Logout</a
                   >
                 </li>
@@ -66,7 +66,7 @@
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
       >
-        <card
+        <cards
           v-for="(item, index) in activity"
           :key="index"
           :card-data="item"

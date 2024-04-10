@@ -34,8 +34,8 @@ f
                 <li class="flex flex-row justify-center items-center">
                   <VIcon :alt="'ces-exit'" :icon="'ces-exit'" size="medium" />
                   <a
-                    @click="logUserOut"
                     class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200 cursor-pointer"
+                    @click="logUserOut"
                     >Logout</a
                   >
                 </li>
@@ -76,16 +76,9 @@ f
 </template>
 
 <script setup>
-  const { authorizedUser, userUID, logout, getProfile, profile } =
+  const { authorizedUser, logout, getProfile, profile } =
     useFirebaseAuth()
-  const { read } = useFirestore()
-  import {
-    getAuth,
-    setPersistence,
-    browserLocalPersistence
-  } from 'firebase/auth'
 
-  const readContent = ref([])
   const userData = ref('')
   const pageTitle = ref('Profile')
   const isOpen = ref(false)
@@ -98,20 +91,10 @@ f
     navigateTo('/')
   }
 
-  // const fetchContent = async () => {
-  //   if(!authorizedUser()){
-  //     throw new Error("Not authorized")
-  //   }
-  //   readContent.value = await read("pendingUsers")
-  // }
-
   onMounted(async () => {
     await authorizedUser()
-    // await fetchContent()
     await getProfile()
   })
-
-  console.log('content', readContent.value)
 
   definePageMeta({
     layout: 'member'

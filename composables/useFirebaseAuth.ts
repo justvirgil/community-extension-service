@@ -230,14 +230,13 @@ export const useFirebaseAuth = () => {
     }
   }
 
-  const getUserProfile = async () => {
+  const getUserProfile = () => {
     try {
       const auth = getAuth()
       const user = auth.currentUser()
       if (user) {
-        // userUID.value = user.uid
-        // console.log("user uuid",userUID.value)
-        console.log('bunal sho', user)
+        // contents
+        console.log('test', user)
       }
     } catch (error) {
       errorMessage.value = `${error}`

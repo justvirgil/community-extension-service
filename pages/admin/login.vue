@@ -39,7 +39,7 @@
       </form>
       <div class="flex flex-row mt-10">
         <google-button />
-        <NuxtLink to="/adminRegister" class="text-white">
+        <NuxtLink to="/admin/register" class="text-white">
           <VButton
             class="ml-2.5 h-10 w-full text-xs rounded-lg"
             :is-bold="true"

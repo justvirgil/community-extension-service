@@ -33,8 +33,8 @@
                 <li class="flex flex-row justify-center items-center">
                   <VIcon :alt="'ces-exit'" :icon="'ces-exit'" size="medium" />
                   <a
-                    @click="logUserOut"
                     class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200 cursor-pointer"
+                    @click="logUserOut"
                     >Logout</a
                   >
                 </li>
@@ -46,15 +46,13 @@
     </header>
 
     <div class="bg-white text-black [50px]">
-      wew
-      <!-- <p v-for="(course, index) in courses" :key="index">{{ course.name }}</p> -->
       <piechart />
     </div>
   </div>
 </template>
 
 <script setup>
-  const { authorizedUser, logout, getStudents, getCourses, students, courses } =
+  const { authorizedUser, logout } =
     useFirebaseAuth()
 
   const pageTitle = ref('Tracker')

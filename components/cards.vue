@@ -42,10 +42,10 @@
 
     <cardDescription
       v-if="showCard"
-      :cardData="cardData"
+      :card-data="cardData"
+      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-500 w-[380px] p-5 justify-center rounded-[30px] z-50"
       @click="toggleCard"
       @join="emit('join')"
-      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-500 w-[380px] p-5 justify-center rounded-[30px] z-50"
     />
   </div>
 </template>
@@ -53,11 +53,7 @@
 <script setup lang="ts">
   const showCard = ref(false)
 
-  interface Prop {
-    title?: string
-  }
-
-  interface cardData {
+  interface card {
     cardData: {
       name?: string
       description?: string
@@ -76,12 +72,12 @@
 
   const emit = defineEmits<Join>()
 
-  withDefaults(defineProps<cardData>(), {
+  withDefaults(defineProps<card>(), () => ({
     cardData: {
       name: '',
       description: '',
       where: '',
       when: ''
     }
-  })
+  }))
 </script>
