@@ -75,7 +75,6 @@
 
 <script setup>
   const { authorizedUser, logout } = useFirebaseAuth()
-  const { read } = useFirestore()
 
   const readContent = ref([])
   const pageTitle = ref('Available')

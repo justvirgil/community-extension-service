@@ -25,6 +25,7 @@
   const emit = defineEmits(['update:modelValue'])
 
   withDefaults(defineProps<Prop>(), {
+    modelValue: '',
     placeholder: 'Input here'
   })
 

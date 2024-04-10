@@ -66,7 +66,7 @@
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
       >
-        <cards
+        <activity-card
           v-for="(item, index) in activity"
           :key="index"
           :card-data="item"
@@ -128,8 +128,6 @@
     }
     readContent.value = await read('activities')
   }
-
-  console.log('content', readContent.value)
 
   definePageMeta({
     layout: 'member'
