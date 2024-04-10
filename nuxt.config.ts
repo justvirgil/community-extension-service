@@ -13,7 +13,7 @@ export default defineNuxtConfig({
       projectId: process.env.FIRE_PROJECT_ID,
       storageBucket: process.env.FIRE_STORAGE_BUCKET,
       messagingSenderId: process.env.FIRE_MESSAGING_SENDER_ID,
-      appId: process.env.FIRE_APP_ID,
-    },
+      appId: process.env.FIRE_APP_ID
+    }
   }
 })

@@ -11,12 +11,12 @@
   const { authorizedUser, courses, getCourses } = useFirebaseAuth()
   const { read } = useFirestore()
 
-  onMounted( async () => {
+  onMounted(async () => {
     await authorizedUser()
     await getCourses()
   })
 
-  console.log("content",courses)
+  console.log('content', courses)
 
   definePageMeta({
     layout: 'member'

@@ -43,24 +43,24 @@
   // }
 
   const addActivity = async () => {
-    if(!authorizedUser()){
-      throw new Error("Not authorized")
+    if (!authorizedUser()) {
+      throw new Error('Not authorized')
     }
-    await add("sample", {
-      id: "2",
-      name: "hello",
+    await add('sample', {
+      id: '2',
+      name: 'hello',
       year: 2
     })
   }
 
   const fetchContent = async () => {
-    if(!authorizedUser()){
-      throw new Error("Not authorized")
+    if (!authorizedUser()) {
+      throw new Error('Not authorized')
     }
-    readContent.value = await read("activities")
+    readContent.value = await read('activities')
   }
 
-  console.log("content",readContent.value)
+  console.log('content', readContent.value)
 
   definePageMeta({
     layout: 'member'

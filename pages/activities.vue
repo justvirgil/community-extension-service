@@ -22,12 +22,12 @@
 
   // const addActivity = async () => {
   //   await add("sample", {
-      // name: "bbb",
-      // description: "bbb",
-      // location: "bbb",
-      // where: "bbb",
-      // when: "bbb",
-      // what: "bbb",
+  // name: "bbb",
+  // description: "bbb",
+  // location: "bbb",
+  // where: "bbb",
+  // when: "bbb",
+  // what: "bbb",
   //     yearLevel: "bbb",
   //     createdAt: "bbb",
   //     updatedAt: "bbb",
@@ -43,24 +43,24 @@
   // }
 
   const addActivity = async () => {
-    if(!authorizedUser()){
-      throw new Error("Not authorized")
+    if (!authorizedUser()) {
+      throw new Error('Not authorized')
     }
-    await add("sample", {
-      id: "2",
-      name: "hello",
+    await add('sample', {
+      id: '2',
+      name: 'hello',
       year: 2
     })
   }
 
   const fetchContent = async () => {
-    if(!authorizedUser()){
-      throw new Error("Not authorized")
+    if (!authorizedUser()) {
+      throw new Error('Not authorized')
     }
-    readContent.value = await read("activities")
+    readContent.value = await read('activities')
   }
 
-  console.log("content",readContent.value)
+  console.log('content', readContent.value)
 
   definePageMeta({
     layout: 'member'

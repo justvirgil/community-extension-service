@@ -19,13 +19,13 @@
   })
 
   const fetchContent = async () => {
-    if(!authorizedUser()){
-      throw new Error("Not authorized")
+    if (!authorizedUser()) {
+      throw new Error('Not authorized')
     }
-    readContent.value = await read("pendingUsers")
+    readContent.value = await read('pendingUsers')
   }
 
-  console.log("content",readContent.value)
+  console.log('content', readContent.value)
 
   definePageMeta({
     layout: 'member'

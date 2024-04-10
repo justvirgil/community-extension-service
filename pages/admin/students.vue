@@ -8,9 +8,10 @@
 </template>
 
 <script setup>
-  const { authorizedUser, getStudents, getCourses, students, courses } = useFirebaseAuth()
+  const { authorizedUser, getStudents, getCourses, students, courses } =
+    useFirebaseAuth()
 
-  onMounted( async () => {
+  onMounted(async () => {
     await authorizedUser()
     await getStudents()
     await getCourses()

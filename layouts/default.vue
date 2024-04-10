@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-screen w-full">
-<!--     <img
+    <!--     <img
       src="~/assets/images/circle-shape.svg"
       alt="Image Description"
       class="absolute inset-0 w-full h-full object-cover"

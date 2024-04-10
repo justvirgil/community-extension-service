@@ -1,41 +1,40 @@
 <template>
   <div class="flex flex-row">
-    <div class="flex flex-col bg-green w-[220px] h-[150px] relative p-1 rounded-lg">
-      <button class="flex grow justify-center items-center bg-red-200 px-3 overflow-auto" @click="toggleCard">
+    <div
+      class="flex flex-col bg-green w-[220px] h-[150px] relative p-1 rounded-lg"
+    >
+      <button
+        class="flex grow justify-center items-center bg-red-200 px-3 overflow-auto"
+        @click="toggleCard"
+      >
         <p>{{ cardData.name }}</p>
       </button>
       <div class="flex flex-row mb-1 relative h-5">
         <div class="flex flex-row ml-7 justify-center items-center">
-
-         <VIcon
+          <VIcon
             :alt="'ces-camera'"
             :icon="'ces-camera'"
             size="medium"
             class="mr-3"
           />
 
-         <VIcon
+          <VIcon
             :alt="'ces-image'"
             :icon="'ces-image'"
             size="medium"
             class="mr-3"
           />
 
-         <VIcon
+          <VIcon
             :alt="'ces-file-text2'"
             :icon="'ces-file-text2'"
             size="medium"
             class="mr-3"
           />
-
         </div>
         <div class="grow absolute right-8">
           <button @click="toggleCard">
-           <VIcon
-              :alt="'ces-eye'"
-              :icon="'ces-eye'"
-              size="large"
-            />
+            <VIcon :alt="'ces-eye'" :icon="'ces-eye'" size="large" />
           </button>
         </div>
       </div>
@@ -48,13 +47,11 @@
       @join="emit('join')"
       class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-500 w-[380px] p-5 justify-center rounded-[30px] z-50"
     />
-
   </div>
 </template>
 
-
 <script setup lang="ts">
-const showCard = ref(false)
+  const showCard = ref(false)
 
   interface Prop {
     title?: string
@@ -70,7 +67,7 @@ const showCard = ref(false)
   }
 
   const toggleCard = () => {
-   showCard.value = !showCard.value
+    showCard.value = !showCard.value
   }
 
   interface Join {

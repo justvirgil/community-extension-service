@@ -1,7 +1,11 @@
 <template>
   <button
-    class="bg-green hover:bg-green/80 text-white font-bold py-2 px-4 "
-    :class="{ 'font-bold': props.isBold, 'font-normal': !props.isBold, 'rounded-full': isRounded }"
+    class="bg-green hover:bg-green/80 text-white font-bold py-2 px-4"
+    :class="{
+      'font-bold': props.isBold,
+      'font-normal': !props.isBold,
+      'rounded-full': isRounded
+    }"
     v-bind="$attrs"
     @click="emit('click')"
   >

@@ -18,7 +18,7 @@ export default {
       },
       overscrollBehavior: {
         none: 'none'
-      },
+      }
     }
   },
   content: ['./src/**/*.{html,js}']

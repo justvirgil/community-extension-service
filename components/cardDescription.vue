@@ -1,19 +1,19 @@
 <template>
   <div class="flex items-center justify-center">
-    <div class="flex flex-col bg-blue-500 w-[380px] h-[450px] p-5 justify-center rounded-[30px] z-50">
+    <div
+      class="flex flex-col bg-blue-500 w-[380px] h-[450px] p-5 justify-center rounded-[30px] z-50"
+    >
       <div class="flex flex-col relative">
         <button @click="emit('click')" class="absolute right-3">
-          <VIcon
-            :alt="'ces-exit'"
-            :icon="'ces-exit'"
-            class="text-sm"
-          />
+          <VIcon :alt="'ces-exit'" :icon="'ces-exit'" class="text-sm" />
         </button>
         <div class="flex flex-col pt-3 bg-red-400">
           <p class="mb-3 w-full h-6 bg-green">{{ cardData.name }}</p>
           <p class="mb-3 w-full h-6 bg-blue-200">DESCRIPTION</p>
         </div>
-        <div class="flex items-center bg-red-200 h-[200px] justify-center overflow-auto">
+        <div
+          class="flex items-center bg-red-200 h-[200px] justify-center overflow-auto"
+        >
           <p class="p-2">{{ cardData.description }}</p>
         </div>
         <div class="w-full bg-red-400">
@@ -21,26 +21,27 @@
           <p class="mb-2 w-full h-6">{{ timeConverter(cardData.when) }}</p>
         </div>
         <div class="flex flex-row justify-center items-center mt-4 relative">
-          <button @click="emit('join')" class="rounded-full bg-green w-fit px-5">
+          <button
+            @click="emit('join')"
+            class="rounded-full bg-green w-fit px-5"
+          >
             JOIN ACTIVITY
           </button>
-           <VIcon
-              :alt="'ces-eye'"
-              :icon="'ces-eye'"
-              size="large"
-              class="absolute right-8"
-            />
-
+          <VIcon
+            :alt="'ces-eye'"
+            :icon="'ces-eye'"
+            size="large"
+            class="absolute right-8"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
 
-
 <script setup lang="ts">
-const { joinActivity } = useFirebaseAuth()
-const { timeConverter } = useTools()
+  const { joinActivity } = useFirebaseAuth()
+  const { timeConverter } = useTools()
 
   interface cardData {
     cardData: {
@@ -79,5 +80,5 @@ const { timeConverter } = useTools()
       where: '',
       when: ''
     }
-  })  
+  })
 </script>

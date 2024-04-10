@@ -49,6 +49,5 @@ Copy and paste these scripts into the bottom of your <body> tag, but before you 
   const app = initializeApp(firebaseConfig);
 </script>
 
-
 #08743c = green
 and white, yellow = #e0bc1c
