@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 export const useTools = () => {
   const timeConverter = (time: Timestamp) => {
     const milliseconds = time.seconds * 1000 + time.nanoseconds / 1000000
@@ -12,7 +14,12 @@ export const useTools = () => {
     })
   }
 
+  const generateUUID = () => {
+    return uuidv4().replace(/-/g, '').substring(0, 20)
+  }
+
   return {
-    timeConverter
+    timeConverter,
+    generateUUID
   }
 }

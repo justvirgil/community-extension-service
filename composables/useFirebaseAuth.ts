@@ -8,7 +8,8 @@ import {
 } from 'firebase/auth'
 import { arrayUnion, arrayRemove } from 'firebase/firestore'
 export const useFirebaseAuth = () => {
-  const { addUser, readById, read, update } = useFirestore()
+  const { addUser, addSubcollection, readById, read, update } = useFirestore()
+  const { generateUUID } = useTools()
   const { $auth } = useNuxtApp()
   const errorMessage = useState(() => '')
   const dataFetched = useState(() => [])
@@ -16,6 +17,7 @@ export const useFirebaseAuth = () => {
   const activity = useState(() => [])
   const students = useState(() => [])
   const profile = useState(() => [])
+  const generatedUUID = generateUUID()
 
   const userUID = useState(() => '')
 
@@ -219,6 +221,25 @@ export const useFirebaseAuth = () => {
     }
   }
 
+  const addNotification = async (data: Object) => {
+    try {
+      await addSubcollection('notifications', userUID.value, 'notificationList', generateUUID(), data)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  // const getNotification = async () => {
+  //   try {
+  //     const studentsDataArray = await read('notifications')
+  //     profile.value = studentsDataArray.find(
+  //       (student) => student.id === userUID.value
+  //     )
+  //   } catch (error) {
+  //     errorMessage.value = `${error}`
+  //   }
+  // }
+
   const getProfile = async () => {
     try {
       const studentsDataArray = await read('users')
@@ -235,7 +256,6 @@ export const useFirebaseAuth = () => {
       const auth = getAuth()
       const user = auth.currentUser()
       if (user) {
-        // contents
         console.log('test', user)
       }
     } catch (error) {
@@ -261,6 +281,7 @@ export const useFirebaseAuth = () => {
     dataFetched,
     register,
     addActivity,
+    addNotification,
     loginUser,
     loginAdmin,
     logout,
