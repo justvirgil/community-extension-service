@@ -25,11 +25,17 @@ export const useFirestore = () => {
     return colRef
   }
 
-   const addSubcollection = async (col: string, userId: string, subcol: string, itemUID: string, data: Object) => {
+  const addSubcollection = async (
+    col: string,
+    userId: string,
+    subcol: string,
+    itemUID: string,
+    data: Object
+  ) => {
     const colRef = doc($firestoreDb, col, userId, subcol, itemUID)
     await setDoc(colRef, data)
     return colRef
-  } 
+  }
 
   const update = async (col: string, userId: string, data: Object) => {
     const docRef = doc($firestoreDb, col, userId)

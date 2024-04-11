@@ -10,9 +10,16 @@
           <NuxtLink to="/student/faq" class="mx-3 text-xl">
             <VIcon :alt="'ces-question'" :icon="'ces-question'" size="medium" />
           </NuxtLink>
-          <NuxtLink to="/student/notification" class="mx-3 text-xl flex flex-row items-center justify-center">
+          <NuxtLink
+            to="/student/notification"
+            class="mx-3 text-xl flex flex-row items-center justify-center"
+          >
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
-            <p class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm">2</p>
+            <p
+              class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm"
+            >
+              2
+            </p>
           </NuxtLink>
           <div class="relative" @click="toggleDropDown">
             <button class="mx-3 text-xl">
@@ -49,7 +56,9 @@
     <div class="m-5 bg-blue-200 h-full overflow-x-auto">
       <p>Member Content</p>
       <p>{{ dataFetched }}</p>
-      <button class="bg-blue-700" @click="notify">press me to send notifiction</button>
+      <button class="bg-blue-700" @click="notify">
+        press me to send notifiction
+      </button>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
       >
@@ -79,7 +88,6 @@
     profile
   } = useFirebaseAuth()
 
-
   const { generateUUID } = useTools()
 
   const pageTitle = ref('Home')
@@ -97,14 +105,13 @@
     }
   }
 
-
   const notify = async () => {
     try {
       await addNotification({
         activityId: '123',
         isRead: false,
         message: 'test',
-        sender:  'sender',
+        sender: 'sender',
         timestamp: date.value
       })
     } catch (error) {

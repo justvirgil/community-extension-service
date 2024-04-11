@@ -76,8 +76,7 @@ f
 </template>
 
 <script setup>
-  const { authorizedUser, logout, getProfile, profile } =
-    useFirebaseAuth()
+  const { authorizedUser, logout, getProfile, profile } = useFirebaseAuth()
 
   const userData = ref('')
   const pageTitle = ref('Profile')

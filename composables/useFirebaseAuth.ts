@@ -223,7 +223,13 @@ export const useFirebaseAuth = () => {
 
   const addNotification = async (data: Object) => {
     try {
-      await addSubcollection('notifications', userUID.value, 'notificationList', generateUUID(), data)
+      await addSubcollection(
+        'notifications',
+        userUID.value,
+        'notificationList',
+        generateUUID(),
+        data
+      )
     } catch (error) {
       errorMessage.value = `${error}`
     }

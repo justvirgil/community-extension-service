@@ -52,8 +52,7 @@
 </template>
 
 <script setup>
-  const { authorizedUser, logout } =
-    useFirebaseAuth()
+  const { authorizedUser, logout } = useFirebaseAuth()
 
   const pageTitle = ref('Tracker')
   const isOpen = ref(false)
