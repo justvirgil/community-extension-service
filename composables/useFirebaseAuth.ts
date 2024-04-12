@@ -8,7 +8,7 @@ import {
 } from 'firebase/auth'
 import { arrayUnion, arrayRemove } from 'firebase/firestore'
 export const useFirebaseAuth = () => {
-  const { addUser, addSubcollection, readById, read, update } = useFirestore()
+  const { addUser, addSubcollection, updateSubcollection, readById, read, update } = useFirestore()
   const { generateUUID } = useTools()
   const { $auth } = useNuxtApp()
   const errorMessage = useState(() => '')
@@ -17,6 +17,8 @@ export const useFirebaseAuth = () => {
   const activity = useState(() => [])
   const students = useState(() => [])
   const profile = useState(() => [])
+  const notification = useState(() => [])
+  const unreadNotification = useState(() => '')
   const generatedUUID = generateUUID()
 
   const userUID = useState(() => '')
@@ -235,16 +237,32 @@ export const useFirebaseAuth = () => {
     }
   }
 
-  // const getNotification = async () => {
-  //   try {
-  //     const studentsDataArray = await read('notifications')
-  //     profile.value = studentsDataArray.find(
-  //       (student) => student.id === userUID.value
-  //     )
-  //   } catch (error) {
-  //     errorMessage.value = `${error}`
-  //   }
-  // }
+  const getNotification = async () => {
+    try {
+      const notifDataArray = await read(`notifications/${userUID.value}/notificationList`)
+      notification.value = notifDataArray
+
+      const unread = notifDataArray.filter(notification => !notification.isRead).length
+      unreadNotification.value = unread
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const updateNotification = async () => {
+    try {
+      const notifDataArray = notification.value
+
+      for (const notificationItem of notifDataArray) {
+        await updateSubcollection('notifications', userUID.value, 'notificationList', notificationItem.id, {
+          isRead: true
+        })
+      }
+      
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
 
   const getProfile = async () => {
     try {
@@ -288,6 +306,10 @@ export const useFirebaseAuth = () => {
     register,
     addActivity,
     addNotification,
+    getNotification,
+    updateNotification,
+    notification,
+    unreadNotification,
     loginUser,
     loginAdmin,
     logout,

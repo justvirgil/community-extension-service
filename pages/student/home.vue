@@ -16,9 +16,10 @@
           >
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
             <p
+              v-if="unreadNotification > 0"
               class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm"
             >
-              2
+              {{ unreadNotification }}
             </p>
           </NuxtLink>
           <div class="relative" @click="toggleDropDown">
@@ -56,9 +57,16 @@
     <div class="m-5 bg-blue-200 h-full overflow-x-auto">
       <p>Member Content</p>
       <p>{{ dataFetched }}</p>
+      <div class="flex flex-col">
       <button class="bg-blue-700" @click="notify">
         press me to send notifiction
       </button>
+      <button class="bg-blue-700" @click="updateNotif">
+        press me to update notifiction
+      </button>
+
+      </div>
+      <p>{{ unreadNotification }}</p>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
       >
@@ -69,6 +77,7 @@
           @join="join(item.id)"
         />
       </div>
+      <p>{{ notification }}</p>
     </div>
   </div>
 </template>
@@ -85,7 +94,11 @@
     getActivities,
     joinActivity,
     getProfile,
-    profile
+    profile,
+    getNotification,
+    updateNotification,
+    notification,
+    unreadNotification,
   } = useFirebaseAuth()
 
   const { generateUUID } = useTools()
@@ -119,6 +132,16 @@
     }
   }
 
+  const updateNotif = async () => {
+    try { 
+      await updateNotification()
+      console.log("update notification")
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+
   const logUserOut = async () => {
     await logout()
     navigateTo('/')
@@ -129,6 +152,7 @@
     await getUserProfile()
     await getActivities()
     await getProfile()
+    await getNotification()
   })
 
   console.log('content', activity)

@@ -42,6 +42,18 @@ export const useFirestore = () => {
     return await updateDoc(docRef, data)
   }
 
+  const updateSubcollection = async (
+    col: string,
+    userId: string,
+    subcol: string,
+    itemUID: string,
+    data: Object
+  ) => {
+    const colRef = doc($firestoreDb, col, userId, subcol, itemUID)
+    await updateDoc(colRef, data)
+    return colRef
+  }
+
   const read = async (col: string) => {
     const colRef = collection($firestoreDb, col)
     const snapshot = await getDocs(colRef)
@@ -79,6 +91,7 @@ export const useFirestore = () => {
     add,
     addUser,
     addSubcollection,
+    updateSubcollection,
     read,
     readById,
     update,
