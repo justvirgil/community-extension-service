@@ -55,13 +55,29 @@ f
     </div>
 
     <div class="w-full h-full bg-white flex items-center justify-center">
-      <div class="bg-yellow w-[30rem] h-[15rem] p-7 rounded-md relative">
+      <div class="bg-yellow w-[40rem] h-[15rem] p-7 rounded-md relative">
         <p>Student</p>
         <div class="flex flex-row items-center justify-between pt-3 px-10">
-          <div class="mr-5">
-            <VIcon :alt="'ces-user'" :icon="'ces-user'" class="text-[100px]" />
+          <div class="">
+            <VIcon
+              v-if="!profile.avatar"
+              :alt="'ces-user'"
+              :icon="'ces-user'"
+              class="text-[6rem]"
+            />
+            <img
+              v-if="profile.avatar"
+              :src="profile.avatar"
+              alt="Avatar"
+              class="h-24 w-24"
+            />
+            <input
+              type="file"
+              accept="image/png, image/jpeg"
+              @change="handleAvatarChange"
+            />
           </div>
-          <div class="flex flex-col mt-3 pr-20">
+          <div class="flex flex-col pr-20">
             <p>{{ profile.name }}</p>
             <p>Year</p>
             <p>Course</p>
@@ -76,13 +92,31 @@ f
 </template>
 
 <script setup>
-  const { authorizedUser, logout, getProfile, profile } = useFirebaseAuth()
+  const {
+    authorizedUser,
+    logout,
+    getProfile,
+    profile,
+    getUserUID,
+    updateUserAvatar
+  } = useFirebaseAuth()
+  const { uploadAvatar } = useFirestorage()
 
   const userData = ref('')
   const pageTitle = ref('Profile')
   const isOpen = ref(false)
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
+  }
+
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files[0]
+    const userId = getUserUID()
+    if (userId && file) {
+      const downloadURL = await uploadAvatar(userId, file)
+      await updateUserAvatar(userId, downloadURL)
+      await getProfile()
+    }
   }
 
   const logUserOut = async () => {

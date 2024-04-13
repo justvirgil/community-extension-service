@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getRemoteConfig } from 'firebase/remote-config'
+import { getStorage } from 'firebase/storage'
 import remoteConfigFile from '../public/json/remote_config_defaults.json'
 
 export default defineNuxtPlugin(() => {
@@ -22,6 +23,7 @@ export default defineNuxtPlugin(() => {
   const app = initializeApp(firebaseConfig)
   const firestoreDb = getFirestore(app)
   const remoteConfig = getRemoteConfig(app)
+  const storage = getStorage(app)
 
   remoteConfig.settings.minimumFetchIntervalMillis = 3600000
 
@@ -32,9 +34,11 @@ export default defineNuxtPlugin(() => {
 
   return {
     firestoreDb,
+    storage,
     provide: {
       auth,
       firestoreDb,
+      storage,
       secretAdminKey
     }
   }

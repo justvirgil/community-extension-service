@@ -266,6 +266,14 @@ export const useFirebaseAuth = () => {
     }
   }
 
+  const updateUserAvatar = async (userId, avatarPath) => {
+    try {
+      await update('users', userId, { avatar: avatarPath })
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
   const joinActivity = async (activityID: string, userID: string) => {
     try {
       await update('activities', activityID, {
@@ -408,6 +416,7 @@ export const useFirebaseAuth = () => {
     addNotification,
     getNotification,
     updateNotification,
+    updateUserAvatar,
     notification,
     unreadNotification,
     loginUser,
