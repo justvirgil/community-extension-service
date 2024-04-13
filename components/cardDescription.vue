@@ -27,12 +27,17 @@
           >
             JOIN ACTIVITY
           </button>
-          <VIcon
-            :alt="'ces-eye'"
-            :icon="'ces-eye'"
-            size="large"
-            class="absolute right-8"
-          />
+          <button
+            @click="emit('fullPage')"
+            class="rounded-full bg-green w-fit px-5"
+          >
+            <VIcon
+              :alt="'ces-eye'"
+              :icon="'ces-eye'"
+              size="large"
+              class="absolute right-8"
+            />
+          </button>
         </div>
       </div>
     </div>
@@ -52,7 +57,7 @@
   }
 
   interface Emit {
-    (e: 'click' | 'join'): void
+    (e: 'click' | 'join' | 'fullPage'): void
   }
 
   const emit = defineEmits<Emit>()

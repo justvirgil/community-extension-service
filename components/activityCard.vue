@@ -46,6 +46,7 @@
       class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-500 w-[380px] p-5 justify-center rounded-[30px] z-50"
       @click="toggleCard"
       @join="emit('join')"
+      @fullPage="emit('fullPage')"
     />
   </div>
 </template>
@@ -67,7 +68,7 @@
   }
 
   interface Join {
-    (e: 'join'): void
+    (e: 'join' | 'fullPage'): void
   }
 
   const emit = defineEmits<Join>()

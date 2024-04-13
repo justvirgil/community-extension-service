@@ -54,64 +54,29 @@
       </nav>
     </header>
 
-    <div class="bg-red-400 p-3 text-xl text-start w-full">
-      <p>Hello user! Here are your recent activities!</p>
-    </div>
-
-    <div
-      class="flex flex-row m-5 bg-blue-200 h-full overflow-x-auto justify-center"
-    >
-      <div class="grow flex flex-col items-center">
-        <p class="mt-5 text-2xl">completed</p>
-        <div class="py-5">
-          <activity-card
-            v-for="(item, index) in userActivityCompleted"
-            :key="index"
-            :card-data="item"
-            class="py-2"
-            @join="join(item.id)"
-          />
-        </div>
+    <div class="m-5 bg-blue-200 h-full overflow-x-auto">
+      <p>Member Content</p>
+      <p>{{ dataFetched }}</p>
+      <div class="flex flex-col">
+        <button class="bg-blue-700" @click="notify">
+          press me to send notifiction
+        </button>
+        <button class="bg-blue-700" @click="updateNotif">
+          press me to update notifiction
+        </button>
       </div>
-
-      <div class="grow flex flex-col items-center">
-        <p class="mt-5 text-2xl">pending</p>
-        <div class="py-5">
-          <activity-card
-            v-for="(item, index) in userActivityPending"
-            :key="index"
-            :card-data="item"
-            class="py-2"
-            @join="join(item.id)"
-          />
-        </div>
+      <p>{{ unreadNotification }}</p>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
+        <activity-card
+          v-for="(item, index) in activity"
+          :key="index"
+          :card-data="item"
+          @join="join(item.id)"
+        />
       </div>
-
-      <div class="grow flex flex-col items-center">
-        <p class="mt-5 text-2xl">upcoming</p>
-        <div class="py-5">
-          <activity-card
-            v-for="(item, index) in userActivityUpcoming"
-            :key="index"
-            :card-data="item"
-            class="py-2"
-            @join="join(item.id)"
-          />
-        </div>
-      </div>
-
-      <div class="grow flex flex-col items-center">
-        <p class="mt-5 text-2xl">cancelled</p>
-        <div class="py-5">
-          <activity-card
-            v-for="(item, index) in userActivityCancelled"
-            :key="index"
-            :card-data="item"
-            class="py-2"
-            @join="join(item.id)"
-          />
-        </div>
-      </div>
+      <p>{{ notification }}</p>
     </div>
   </div>
 </template>
@@ -132,12 +97,7 @@
     getNotification,
     updateNotification,
     notification,
-    unreadNotification,
-    getUserAcitivities,
-    userActivityCompleted,
-    userActivityPending,
-    userActivityUpcoming,
-    userActivityCancelled
+    unreadNotification
   } = useFirebaseAuth()
 
   const { generateUUID } = useTools()
@@ -191,7 +151,6 @@
     await getActivities()
     await getProfile()
     await getNotification()
-    await getUserAcitivities()
   })
 
   console.log('content', activity)

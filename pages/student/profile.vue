@@ -48,9 +48,9 @@ f
 
     <div class="flex flex-row">
       <div
-        class="bg-red-400 py-3 pr-4 flex items-start text-xl text-center w-full h-10"
+        class="bg-red-400 py-3 pr-4 flex items-center text-xl text-center w-full h-10"
       >
-        <p class="pl-24">{{ profile.name }}</p>
+        <p class="pl-24">Greetings, {{ profile.name }}</p>
       </div>
     </div>
 

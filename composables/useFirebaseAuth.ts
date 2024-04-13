@@ -8,16 +8,29 @@ import {
 } from 'firebase/auth'
 import { arrayUnion, arrayRemove } from 'firebase/firestore'
 export const useFirebaseAuth = () => {
-  const { addUser, addSubcollection, updateSubcollection, readById, read, update } = useFirestore()
+  const {
+    addUser,
+    addSubcollection,
+    updateSubcollection,
+    readById,
+    read,
+    update
+  } = useFirestore()
   const { generateUUID } = useTools()
   const { $auth } = useNuxtApp()
   const errorMessage = useState(() => '')
   const dataFetched = useState(() => [])
   const courses = useState(() => [])
   const activity = useState(() => [])
+  const specificActivity = useState(() => [])
+  const filteredActivities = useState(() => [])
   const students = useState(() => [])
   const profile = useState(() => [])
   const notification = useState(() => [])
+  const userActivityCompleted = useState(() => [])
+  const userActivityPending = useState(() => [])
+  const userActivityUpcoming = useState(() => [])
+  const userActivityCancelled = useState(() => [])
   const unreadNotification = useState(() => '')
   const generatedUUID = generateUUID()
 
@@ -160,6 +173,80 @@ export const useFirebaseAuth = () => {
     }
   }
 
+  const getActivityById = async (activityId: string) => {
+    try {
+      const activityDataArray = await read('activities')
+
+      const activity = activityDataArray.find(
+        (activity) => activity.id === activityId
+      )
+
+      specificActivity.value = activity
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const filterAllActivities = async () => {
+    try {
+      const dataArray = await read('activities')
+      filteredActivities.value = dataArray
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const filterActivitiesByStatus = async (status: string) => {
+    try {
+      const dataArray = await read('activities')
+
+      const filteredData = dataArray.filter(
+        (activity) => activity.status === status
+      )
+
+      filteredActivities.value = filteredData
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const getUserAcitivities = async () => {
+    try {
+      const userDataArray = await read('activities')
+
+      const filterComplete = userDataArray.filter(
+        (activity) =>
+          activity.pendingUsers.includes(userUID.value) &&
+          activity.status === 'completed'
+      )
+
+      const filterUpcoming = userDataArray.filter(
+        (activity) =>
+          activity.pendingUsers.includes(userUID.value) &&
+          activity.status === 'upcoming'
+      )
+
+      const filterPending = userDataArray.filter(
+        (activity) =>
+          activity.pendingUsers.includes(userUID.value) &&
+          activity.status === 'pending'
+      )
+
+      const filterCancelled = userDataArray.filter(
+        (activity) =>
+          activity.pendingUsers.includes(userUID.value) &&
+          activity.status === 'cancelled'
+      )
+
+      userActivityCompleted.value = filterComplete
+      userActivityPending.value = filterUpcoming
+      userActivityUpcoming.value = filterPending
+      userActivityCancelled.value = filterCancelled
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
   const getStudents = async () => {
     try {
       const studentsDataArray = await read('users')
@@ -168,14 +255,6 @@ export const useFirebaseAuth = () => {
       errorMessage.value = `${error}`
     }
   }
-
-  // const addCourse = async () => {
-  //   try {
-
-  //   } catch (error) {
-  //     errorMessage.value = `${error}`
-  //   }
-  // }
 
   const updateUserActivity = async (activityID: string, userID: string) => {
     try {
@@ -191,6 +270,10 @@ export const useFirebaseAuth = () => {
     try {
       await update('activities', activityID, {
         pendingUsers: arrayUnion(userID)
+      })
+
+      await update('users', userUID.value, {
+        joinedActivities: arrayUnion(userID)
       })
     } catch (error) {
       errorMessage.value = `${error}`
@@ -239,10 +322,14 @@ export const useFirebaseAuth = () => {
 
   const getNotification = async () => {
     try {
-      const notifDataArray = await read(`notifications/${userUID.value}/notificationList`)
+      const notifDataArray = await read(
+        `notifications/${userUID.value}/notificationList`
+      )
       notification.value = notifDataArray
 
-      const unread = notifDataArray.filter(notification => !notification.isRead).length
+      const unread = notifDataArray.filter(
+        (notification) => !notification.isRead
+      ).length
       unreadNotification.value = unread
     } catch (error) {
       errorMessage.value = `${error}`
@@ -254,11 +341,16 @@ export const useFirebaseAuth = () => {
       const notifDataArray = notification.value
 
       for (const notificationItem of notifDataArray) {
-        await updateSubcollection('notifications', userUID.value, 'notificationList', notificationItem.id, {
-          isRead: true
-        })
+        await updateSubcollection(
+          'notifications',
+          userUID.value,
+          'notificationList',
+          notificationItem.id,
+          {
+            isRead: true
+          }
+        )
       }
-      
     } catch (error) {
       errorMessage.value = `${error}`
     }
@@ -305,6 +397,14 @@ export const useFirebaseAuth = () => {
     dataFetched,
     register,
     addActivity,
+    getUserAcitivities,
+    userActivityCompleted,
+    userActivityPending,
+    userActivityUpcoming,
+    userActivityCancelled,
+    filterActivitiesByStatus,
+    filterAllActivities,
+    filteredActivities,
     addNotification,
     getNotification,
     updateNotification,
@@ -319,6 +419,8 @@ export const useFirebaseAuth = () => {
     students,
     getActivities,
     activity,
+    getActivityById,
+    specificActivity,
     getProfile,
     profile,
     updateUserActivity,

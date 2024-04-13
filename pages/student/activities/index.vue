@@ -48,17 +48,23 @@
       <div
         class="bg-red-400 py-3 px-4 flex items-start text-xl text-center w-full"
       >
-        <VButton class="w-34 mx-3"> All </VButton>
+        <VButton class="w-34 mx-3" @click="allActivities"> All </VButton>
 
-        <VButton class="w-34 mx-3"> Completed </VButton>
+        <VButton class="w-34 mx-3" @click="filterActivities('completed')">
+          Completed
+        </VButton>
 
-        <VButton class="w-34 mx-3"> Approval </VButton>
+        <VButton class="w-34 mx-3" @click="filterActivities('pending')">
+          Approval
+        </VButton>
 
-        <VButton class="w-34 mx-3"> Upcoming </VButton>
+        <VButton class="w-34 mx-3" @click="filterActivities('upcoming')">
+          Upcoming
+        </VButton>
       </div>
 
       <div class="bg-blue-200 w-full p-3">
-        <p class="pl-5">Hello</p>
+        <p class="pl-5">{{ tabName }}</p>
       </div>
     </div>
 
@@ -67,10 +73,11 @@
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
       >
         <activity-card
-          v-for="(item, index) in activity"
+          v-for="(item, index) in filteredActivities"
           :key="index"
           :card-data="item"
           @join="join(item.id)"
+          @full-page="redirectToApproved(item.id)"
         />
       </div>
     </div>
@@ -85,13 +92,21 @@
     activity,
     getActivities,
     joinActivity,
-    removeActivity
+    removeActivity,
+    specificActivity,
+    getActivityById,
+    filterActivitiesByStatus,
+    filteredActivities,
+    filterAllActivities
   } = useFirebaseAuth()
   const { add, read } = useFirestore()
 
   const readContent = ref([])
+  const tabName = ref('ALL')
   const pageTitle = ref('Activities')
   const isOpen = ref(false)
+
+  const router = useRouter()
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
@@ -99,6 +114,14 @@
   const join = async (activityId) => {
     try {
       await joinActivity(activityId, userUID.value)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const redirectToApproved = async (activityId) => {
+    try {
+      router.push(`/student/activities/id/${activityId}`)
     } catch (error) {
       errorMessage.value = `${error}`
     }
@@ -112,6 +135,24 @@
     }
   }
 
+  const allActivities = async () => {
+    try {
+      await filterAllActivities()
+      tabName.value = 'ALL'
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const filterActivities = async (status) => {
+    try {
+      await filterActivitiesByStatus(status)
+      tabName.value = `${status.toUpperCase()}`
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
   const logUserOut = async () => {
     await logout()
     navigateTo('/')
@@ -119,7 +160,7 @@
 
   onMounted(async () => {
     await authorizedUser()
-    await getActivities()
+    await filterAllActivities()
   })
 
   const fetchContent = async () => {
