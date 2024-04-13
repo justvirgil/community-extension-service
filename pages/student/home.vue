@@ -70,6 +70,8 @@
             :card-data="item"
             class="py-2"
             @join="join(item.id)"
+            @uploadImage="uploadActivity"
+            @uploadFiles="uploadActivity"
           />
         </div>
       </div>
@@ -137,10 +139,12 @@
     userActivityCompleted,
     userActivityPending,
     userActivityUpcoming,
-    userActivityCancelled
+    userActivityCancelled,
+    getUserUID
   } = useFirebaseAuth()
 
   const { generateUUID } = useTools()
+  const { uploadFiles } = useFirestorage()
 
   const pageTitle = ref('Home')
   const date = ref(new Date())
@@ -175,6 +179,18 @@
     try {
       await updateNotification()
       console.log('update notification')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const uploadActivity = async (event, activityId) => {
+    try {
+      const file = event.target.files[0]
+      const userId = getUserUID()
+      if (userId && file) {
+        await uploadFiles(userId, activityId, file)
+      }
     } catch (error) {
       console.log(error)
     }

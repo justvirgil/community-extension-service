@@ -11,26 +11,37 @@
       </button>
       <div class="flex flex-row mb-1 relative h-5">
         <div class="flex flex-row ml-7 justify-center items-center">
-          <VIcon
-            :alt="'ces-camera'"
-            :icon="'ces-camera'"
-            size="medium"
-            class="mr-3"
-          />
 
-          <VIcon
-            :alt="'ces-image'"
-            :icon="'ces-image'"
-            size="medium"
-            class="mr-3"
+         <input
+            type="file"
+            accept="image/*"
+            class="hidden"
+            ref="imageInput"
+            @change="event => emit('uploadImage', event, cardData.id)"
           />
+          <button @click="$refs.imageInput.click()">
+            <VIcon
+              :alt="'ces-image'"
+              :icon="'ces-image'"
+              size="medium"
+              class="mr-3"
+            />
+          </button>
 
-          <VIcon
-            :alt="'ces-file-text2'"
-            :icon="'ces-file-text2'"
-            size="medium"
-            class="mr-3"
+          <input
+            type="file"
+            class="hidden"
+            ref="fileInput"
+            @change="event => emit('uploadFiles', event, cardData.id)"
           />
+          <button @click="$refs.fileInput.click()">
+            <VIcon
+              :alt="'ces-file-text2'"
+              :icon="'ces-file-text2'"
+              size="medium"
+              class="mr-3"
+            />
+          </button> 
         </div>
         <div class="grow absolute right-8">
           <button @click="toggleCard">
@@ -56,6 +67,7 @@
 
   interface card {
     cardData: {
+      id?: string
       name?: string
       description?: string
       where?: string
@@ -68,13 +80,14 @@
   }
 
   interface Join {
-    (e: 'join' | 'fullPage'): void
+    (e: 'join' | 'fullPage' | 'uploadImage' | 'uploadFiles'): void
   }
 
   const emit = defineEmits<Join>()
 
   withDefaults(defineProps<card>(), () => ({
     cardData: {
+      id: '',
       name: '',
       description: '',
       where: '',
