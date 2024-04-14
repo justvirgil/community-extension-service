@@ -67,8 +67,6 @@
 
   onMounted(async () => {
     await authorizedUser()
-    await getStudents()
-    await getCourses()
   })
 
   definePageMeta({

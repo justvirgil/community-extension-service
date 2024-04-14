@@ -6,20 +6,21 @@
       <button
         class="flex grow justify-center items-center bg-red-200 px-3 overflow-auto"
         @click="toggleCard"
+        :disabled="disabled"
       >
         <p>{{ cardData.name }}</p>
       </button>
       <div class="flex flex-row mb-1 relative h-5">
         <div class="flex flex-row ml-7 justify-center items-center">
-
-         <input
+          <input
             type="file"
             accept="image/*"
             class="hidden"
             ref="imageInput"
-            @change="event => emit('uploadImage', event, cardData.id)"
+            @change="(event) => emit('uploadImage', event, cardData.id)"
+            :disabled="disabled"
           />
-          <button @click="$refs.imageInput.click()">
+          <button @click="$refs.imageInput.click()" :disabled="disabled">
             <VIcon
               :alt="'ces-image'"
               :icon="'ces-image'"
@@ -32,19 +33,20 @@
             type="file"
             class="hidden"
             ref="fileInput"
-            @change="event => emit('uploadFiles', event, cardData.id)"
+            @change="(event) => emit('uploadFiles', event, cardData.id)"
+            :disabled="disabled"
           />
-          <button @click="$refs.fileInput.click()">
+          <button @click="$refs.fileInput.click()" :disabled="disabled">
             <VIcon
               :alt="'ces-file-text2'"
               :icon="'ces-file-text2'"
               size="medium"
               class="mr-3"
             />
-          </button> 
+          </button>
         </div>
         <div class="grow absolute right-8">
-          <button @click="toggleCard">
+          <button @click="toggleCard" :disabled="disabled">
             <VIcon :alt="'ces-eye'" :icon="'ces-eye'" size="large" />
           </button>
         </div>
@@ -85,13 +87,14 @@
 
   const emit = defineEmits<Join>()
 
-  withDefaults(defineProps<card>(), () => ({
+  withDefaults(defineProps<card & { disabled?: boolean }>(), () => ({
     cardData: {
       id: '',
       name: '',
       description: '',
       where: '',
       when: ''
-    }
+    },
+    disabled: false
   }))
 </script>

@@ -1,4 +1,3 @@
-f
 <template>
   <div class="flex flex-col h-full w-full bg-yellow">
     <header class="flex flex-row bg-green border-2 border-red-700">
@@ -47,13 +46,13 @@ f
     </header>
     <div class="flex flex-row">
       <div class="grow flex flex-col items-center">
-        <div class="bg-red-400 p-3 text-xl text-center w-full">
+        <div class="bg-red-400 p-4 text-xl text-center w-full">
           <p>DATE</p>
         </div>
         <div class="pt-12 py-auto w-[800px]">
           <DatePicker
             v-model="date"
-            :color="calendarColor"
+            :color="'blue'"
             :is-dark="calendarColor"
             expanded
           />
@@ -81,7 +80,6 @@ f
 
   const calendarColor = ref(true)
   const date = ref(new Date())
-  const readContent = ref([])
   const pageTitle = ref('Calendar')
   const isOpen = ref(false)
   const toggleDropDown = () => {
@@ -93,19 +91,9 @@ f
     navigateTo('/')
   }
 
-  const fetchContent = async () => {
-    if (!authorizedUser()) {
-      throw new Error('Not authorized')
-    }
-    readContent.value = await read('pendingUsers')
-  }
-
   onMounted(async () => {
     await authorizedUser()
-    await fetchContent()
   })
-
-  console.log('content', readContent.value)
 
   definePageMeta({
     layout: 'member'

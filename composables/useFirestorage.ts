@@ -13,8 +13,11 @@ export const useFirestorage = () => {
 
   const uploadFiles = async (userId, activityId, file) => {
     try {
-    const storageRef = ref($storage, `submittedFiles/${activityId}/${userId}/${generateUUID()}`)
-    await uploadBytes(storageRef, file)
+      const storageRef = ref(
+        $storage,
+        `submittedFiles/${activityId}/${userId}/${generateUUID()}`
+      )
+      await uploadBytes(storageRef, file)
     } catch (error) {
       console.log(error)
     }

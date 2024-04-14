@@ -210,6 +210,20 @@ export const useFirebaseAuth = () => {
     }
   }
 
+  const filterActivitiesByLevel = async (year: number) => {
+    try {
+      const dataArray = await read('activities')
+
+      const filteredData = dataArray.filter(
+        (activity) => activity.yearLevel === year
+      )
+
+      filteredActivities.value = filteredData
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
   const getUserAcitivities = async () => {
     try {
       const userDataArray = await read('activities')
@@ -400,6 +414,13 @@ export const useFirebaseAuth = () => {
     return userUID.value
   }
 
+  const getUserYearLevel = () => {
+    if (profile.value && profile.value.yearLevel) {
+      return profile.value.yearLevel
+    }
+    return undefined
+  }
+
   return {
     errorMessage,
     dataFetched,
@@ -411,6 +432,7 @@ export const useFirebaseAuth = () => {
     userActivityUpcoming,
     userActivityCancelled,
     filterActivitiesByStatus,
+    filterActivitiesByLevel,
     filterAllActivities,
     filteredActivities,
     addNotification,
@@ -438,6 +460,7 @@ export const useFirebaseAuth = () => {
     authorizedUser,
     getUserProfile,
     getUserUID,
+    getUserYearLevel,
     userUID
   }
 }

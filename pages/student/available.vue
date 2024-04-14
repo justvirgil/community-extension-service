@@ -49,38 +49,89 @@
       <div
         class="bg-red-400 py-3 px-4 flex items-start text-sm text-center w-full"
       >
-        <VButton class="w-34 mx-3" :is-rounded="true"> 1st year </VButton>
+        <VButton
+          class="w-34 mx-3"
+          :is-rounded="true"
+          @click="filterActivities(1)"
+        >
+          1st year
+        </VButton>
 
-        <VButton class="w-34 mx-3" :is-rounded="true"> 2nd year </VButton>
+        <VButton
+          class="w-34 mx-3"
+          :is-rounded="true"
+          @click="filterActivities(2)"
+        >
+          2nd year
+        </VButton>
 
-        <VButton class="w-34 mx-3" :is-rounded="true"> 3rd year </VButton>
+        <VButton
+          class="w-34 mx-3"
+          :is-rounded="true"
+          @click="filterActivities(3)"
+        >
+          3rd year
+        </VButton>
 
-        <VButton class="w-34 mx-3" :is-rounded="true"> 4th year </VButton>
-      </div>
-
-      <div class="bg-blue-200 w-full p-3">
-        <p class="pl-5">Hello</p>
+        <VButton
+          class="w-34 mx-3"
+          :is-rounded="true"
+          @click="filterActivities(4)"
+        >
+          4th year
+        </VButton>
       </div>
     </div>
-    <div class="w-full h-full bg-white">
-      <p>Activities Content</p>
-      <div class="bg-orange-200">
-        <button @click="addActivity">Add activity</button>
+    <div class="m-3 h-full bg-white overflow-x-auto">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
+        <activity-card
+          v-for="(item, index) in filteredActivities"
+          :key="index"
+          :card-data="item"
+          :disabled="isDisabled(item.yearLevel)"
+          @join="join(item.id)"
+          @full-page="redirectToApproved(item.id)"
+        />
       </div>
-      <p>Display activities</p>
-      <p v-for="(item, index) in readContent" :key="index">{{ item.name }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-  const { authorizedUser, logout } = useFirebaseAuth()
+  const {
+    authorizedUser,
+    logout,
+    getProfile,
+    getUserYearLevel,
+    filterActivitiesByLevel,
+    filteredActivities,
+    getActivities,
+    activity
+  } = useFirebaseAuth()
 
   const readContent = ref([])
   const pageTitle = ref('Available')
   const isOpen = ref(false)
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
+  }
+
+  const filterActivities = async (year) => {
+    try {
+      await filterActivitiesByLevel(year)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const isDisabled = (year) => {
+    try {
+      return getUserYearLevel() !== year
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
   }
 
   const logUserOut = async () => {
@@ -90,6 +141,9 @@
 
   onMounted(async () => {
     await authorizedUser()
+    await getProfile()
+    await getActivities()
+    await filterActivitiesByLevel(1)
   })
 
   definePageMeta({
