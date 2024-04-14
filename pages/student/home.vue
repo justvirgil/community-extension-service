@@ -70,8 +70,8 @@
             :card-data="item"
             class="py-2"
             @join="join(item.id)"
-            @uploadImage="uploadActivity"
-            @uploadFiles="uploadActivity"
+            @upload-image="uploadActivity"
+            @upload-files="uploadActivity"
           />
         </div>
       </div>
