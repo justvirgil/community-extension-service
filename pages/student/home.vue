@@ -1,18 +1,20 @@
 <template>
-  <div class="flex flex-col h-full w-full bg-yellow">
-    <header class="flex flex-row bg-green border-2 border-red-700">
+  <div class="flex flex-col h-full w-full bg-light-blue">
+    <header
+      class="flex flex-row bg-dark-blue border-b border-l border-light-blue"
+    >
       <nav class="flex flex-row my-8 grow">
-        <div class="flex flex-row items-center grow ml-16">
+        <div class="flex flex-row items-center grow ml-16 text-white">
           <VIcon :alt="'ces-home'" :icon="'ces-home'" size="large" />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
-          <NuxtLink to="/student/faq" class="mx-3 text-xl">
+          <NuxtLink to="/student/faq" class="mx-3 text-xl text-white">
             <VIcon :alt="'ces-question'" :icon="'ces-question'" size="medium" />
           </NuxtLink>
           <NuxtLink
             to="/student/notification"
-            class="mx-3 text-xl flex flex-row items-center justify-center"
+            class="mx-3 text-xl text-white flex flex-row items-center justify-center"
           >
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
             <p
@@ -23,7 +25,7 @@
             </p>
           </NuxtLink>
           <div class="relative" @click="toggleDropDown">
-            <button class="mx-3 text-xl">
+            <button class="mx-3 text-xl text-white">
               <VIcon :alt="'ces-menu'" :icon="'ces-menu'" size="medium" />
             </button>
             <div
@@ -54,15 +56,18 @@
       </nav>
     </header>
 
-    <div class="bg-red-400 p-3 text-xl text-start w-full">
+    <div class="p-3 text-xl text-start w-full bg-dark-blue text-cream">
       <p>Hello user! Here are your recent activities!</p>
     </div>
-
     <div
-      class="flex flex-row m-5 bg-blue-200 h-full overflow-x-auto justify-center"
+      class="flex flex-row h-full overflow-x-auto justify-center bg-cream text-cream"
     >
       <div class="grow flex flex-col items-center">
-        <p class="mt-5 text-2xl">completed</p>
+        <p
+          class="flex rounded-2xl mt-5 text-2xl text-center items-center justify-center h-16 w-40 bg-dark-blue"
+        >
+          completed
+        </p>
         <div class="py-5">
           <activity-card
             v-for="(item, index) in userActivityCompleted"
@@ -77,7 +82,11 @@
       </div>
 
       <div class="grow flex flex-col items-center">
-        <p class="mt-5 text-2xl">pending</p>
+        <p
+          class="flex rounded-2xl mt-5 text-2xl text-center items-center justify-center h-16 w-40 bg-dark-blue"
+        >
+          pending
+        </p>
         <div class="py-5">
           <activity-card
             v-for="(item, index) in userActivityPending"
@@ -90,7 +99,11 @@
       </div>
 
       <div class="grow flex flex-col items-center">
-        <p class="mt-5 text-2xl">upcoming</p>
+        <p
+          class="flex rounded-2xl mt-5 text-2xl text-center items-center justify-center h-16 w-40 bg-dark-blue"
+        >
+          upcoming
+        </p>
         <div class="py-5">
           <activity-card
             v-for="(item, index) in userActivityUpcoming"
@@ -103,7 +116,11 @@
       </div>
 
       <div class="grow flex flex-col items-center">
-        <p class="mt-5 text-2xl">cancelled</p>
+        <p
+          class="flex rounded-2xl mt-5 text-2xl text-center items-center justify-center h-16 w-40 bg-dark-blue"
+        >
+          cancelled
+        </p>
         <div class="py-5">
           <activity-card
             v-for="(item, index) in userActivityCancelled"
@@ -125,12 +142,7 @@
     getUserProfile,
     addNotification,
     logout,
-    dataFetched,
-    activity,
-    getActivities,
     joinActivity,
-    getProfile,
-    profile,
     getNotification,
     updateNotification,
     notification,
@@ -143,7 +155,6 @@
     getUserUID
   } = useFirebaseAuth()
 
-  const { generateUUID } = useTools()
   const { uploadFiles } = useFirestorage()
 
   const pageTitle = ref('Home')
@@ -178,7 +189,6 @@
   const updateNotif = async () => {
     try {
       await updateNotification()
-      console.log('update notification')
     } catch (error) {
       console.log(error)
     }
@@ -204,13 +214,9 @@
   onMounted(async () => {
     await authorizedUser()
     await getUserProfile()
-    await getActivities()
-    await getProfile()
     await getNotification()
     await getUserAcitivities()
   })
-
-  console.log('content', activity)
 
   definePageMeta({
     layout: 'member'

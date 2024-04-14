@@ -1,20 +1,31 @@
 <template>
-  <div class="flex flex-col h-full w-full bg-yellow">
-    <header class="flex flex-row bg-green border-2 border-red-700">
+  <div class="flex flex-col h-full w-full bg-cream">
+    <header
+      class="flex flex-row bg-dark-blue border-b border-l border-light-blue"
+    >
       <nav class="flex flex-row my-8 grow">
-        <div class="flex flex-row items-center grow ml-16">
-          <VIcon :alt="'ces-home'" :icon="'ces-home'" size="large" />
+        <div class="flex flex-row items-center grow ml-16 text-white">
+          <VIcon :alt="'ces-power'" :icon="'ces-power'" size="large" />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
-          <NuxtLink to="/student/faq" class="mx-3 text-xl">
+          <NuxtLink to="/student/faq" class="mx-3 text-xl text-white">
             <VIcon :alt="'ces-question'" :icon="'ces-question'" size="medium" />
           </NuxtLink>
-          <NuxtLink to="/student/notification" class="mx-3 text-xl">
+          <NuxtLink
+            to="/student/notification"
+            class="mx-3 text-xl text-white flex flex-row items-center justify-center"
+          >
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
+            <p
+              v-if="unreadNotification > 0"
+              class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm"
+            >
+              {{ unreadNotification }}
+            </p>
           </NuxtLink>
           <div class="relative" @click="toggleDropDown">
-            <button class="mx-3 text-xl">
+            <button class="mx-3 text-xl text-white">
               <VIcon :alt="'ces-menu'" :icon="'ces-menu'" size="medium" />
             </button>
             <div
@@ -44,13 +55,14 @@
         </div>
       </nav>
     </header>
+
     <div class="flex flex-row">
       <div class="grow flex flex-col items-center">
-        <div class="bg-red-400 p-3 text-xl text-start w-full">
+        <div class="bg-light-blue text-cream p-3 text-xl text-start w-full">
           <p>COMPLETED ACTIVITIES</p>
         </div>
         <div class="pt-12 py-auto w-[600px] overflow-auto">
-          <div class="bg-white text-black h-fit">
+          <div class="bg-cream text-black h-fit">
             <chart
               :labels="chartLabels"
               :datasets="chartDatasets"
@@ -64,8 +76,14 @@
 </template>
 
 <script setup>
-  const { authorizedUser, logout, activity, getUserAllActivities } =
-    useFirebaseAuth()
+  const {
+    authorizedUser,
+    logout,
+    activity,
+    getUserAllActivities,
+    getNotification,
+    unreadNotification
+  } = useFirebaseAuth()
 
   const pageTitle = ref('Tracker')
   const isOpen = ref(false)
@@ -99,6 +117,7 @@
 
   onMounted(async () => {
     await authorizedUser()
+    await getNotification()
     await getUserAllActivities()
 
     chartLabels.value = activity.value

@@ -231,25 +231,37 @@ export const useFirebaseAuth = () => {
 
       const filterComplete = userDataArray.filter(
         (activity) =>
-          activity.pendingUsers.includes(userUID.value) &&
+          (activity.pendingUsers?.includes(userUID.value) ||
+            activity.approvedUsers?.includes(userUID.value) ||
+            !activity.pendingUsers ||
+            !activity.approvedUsers) &&
           activity.status === 'completed'
       )
 
       const filterUpcoming = userDataArray.filter(
         (activity) =>
-          activity.pendingUsers.includes(userUID.value) &&
+          (activity.pendingUsers?.includes(userUID.value) ||
+            activity.approvedUsers?.includes(userUID.value) ||
+            !activity.pendingUsers ||
+            !activity.approvedUsers) &&
           activity.status === 'upcoming'
       )
 
       const filterPending = userDataArray.filter(
         (activity) =>
-          activity.pendingUsers.includes(userUID.value) &&
+          (activity.pendingUsers?.includes(userUID.value) ||
+            activity.approvedUsers?.includes(userUID.value) ||
+            !activity.pendingUsers ||
+            !activity.approvedUsers) &&
           activity.status === 'pending'
       )
 
       const filterCancelled = userDataArray.filter(
         (activity) =>
-          activity.pendingUsers.includes(userUID.value) &&
+          (activity.pendingUsers?.includes(userUID.value) ||
+            activity.approvedUsers?.includes(userUID.value) ||
+            !activity.pendingUsers ||
+            !activity.approvedUsers) &&
           activity.status === 'cancelled'
       )
 
@@ -412,8 +424,10 @@ export const useFirebaseAuth = () => {
 
       const isMember = userDataArray.filter(
         (activity) =>
-          activity.pendingUsers.includes(userUID.value) ||
-          activity.approvedUsers.includes(userUID.value)
+          activity.pendingUsers?.includes(userUID.value) ||
+          activity.approvedUsers?.includes(userUID.value) ||
+          !activity.pendingUsers ||
+          !activity.approvedUsers
       )
 
       activity.value = isMember

@@ -1,16 +1,16 @@
 <template>
   <div class="flex flex-row">
     <div
-      class="flex flex-col bg-green w-[220px] h-[150px] relative p-1 rounded-lg"
+      class="flex flex-col bg-dark-blue w-[220px] h-[150px] relative p-1 rounded-lg"
     >
       <button
-        class="flex grow justify-center items-center bg-red-200 px-3 overflow-auto"
+        class="flex grow justify-center items-center bg-light-blue px-3 overflow-auto"
         @click="toggleCard"
         :disabled="disabled"
       >
-        <p>{{ cardData.name }}</p>
+        <p class="text-xl text-cream">{{ cardData.name }}</p>
       </button>
-      <div class="flex flex-row mb-1 relative h-5">
+      <div class="flex flex-row relative h-6 items-center">
         <div class="flex flex-row ml-7 justify-center items-center">
           <input
             type="file"
@@ -25,7 +25,7 @@
               :alt="'ces-image'"
               :icon="'ces-image'"
               size="medium"
-              class="mr-3"
+              class="mr-3 text-cream"
             />
           </button>
 
@@ -41,13 +41,18 @@
               :alt="'ces-file-text2'"
               :icon="'ces-file-text2'"
               size="medium"
-              class="mr-3"
+              class="mr-3 text-cream"
             />
           </button>
         </div>
         <div class="grow absolute right-8">
           <button @click="toggleCard" :disabled="disabled">
-            <VIcon :alt="'ces-eye'" :icon="'ces-eye'" size="large" />
+            <VIcon
+              :alt="'ces-eye'"
+              :icon="'ces-eye'"
+              size="large"
+              class="text-cream"
+            />
           </button>
         </div>
       </div>

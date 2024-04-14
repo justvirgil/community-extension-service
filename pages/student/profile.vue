@@ -1,21 +1,32 @@
 f
 <template>
-  <div class="flex flex-col h-full w-full bg-yellow">
-    <header class="flex flex-row bg-green border-2 border-red-700">
+  <div class="flex flex-col h-full w-full bg-cream">
+    <header
+      class="flex flex-row bg-dark-blue border-b border-l border-light-blue"
+    >
       <nav class="flex flex-row my-8 grow">
-        <div class="flex flex-row items-center grow ml-16">
-          <VIcon :alt="'ces-home'" :icon="'ces-home'" size="large" />
+        <div class="flex flex-row items-center grow ml-16 text-white">
+          <VIcon :alt="'ces-user'" :icon="'ces-user'" size="large" />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
-          <NuxtLink to="/student/faq" class="mx-3 text-xl">
+          <NuxtLink to="/student/faq" class="mx-3 text-xl text-white">
             <VIcon :alt="'ces-question'" :icon="'ces-question'" size="medium" />
           </NuxtLink>
-          <NuxtLink to="/student/notification" class="mx-3 text-xl">
+          <NuxtLink
+            to="/student/notification"
+            class="mx-3 text-xl text-white flex flex-row items-center justify-center"
+          >
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
+            <p
+              v-if="unreadNotification > 0"
+              class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm"
+            >
+              {{ unreadNotification }}
+            </p>
           </NuxtLink>
           <div class="relative" @click="toggleDropDown">
-            <button class="mx-3 text-xl">
+            <button class="mx-3 text-xl text-white">
               <VIcon :alt="'ces-menu'" :icon="'ces-menu'" size="medium" />
             </button>
             <div
@@ -48,9 +59,9 @@ f
 
     <div class="flex flex-row">
       <div
-        class="bg-red-400 py-3 pr-4 flex items-center text-xl text-center w-full h-10"
+        class="bg-light-blue text-cream py-3 pr-4 flex items-center text-xl text-center w-full h-10"
       >
-        <p class="pl-24">Greetings, {{ profile.name }}</p>
+        <p class="pl-24 text-xl">Greetings, {{ profile.name }}</p>
       </div>
     </div>
 
@@ -79,8 +90,8 @@ f
           </div>
           <div class="flex flex-col pr-20">
             <p>{{ profile.name }}</p>
-            <p>Year</p>
-            <p>Course</p>
+            <p>{{ profile.yearLevel }}</p>
+            <p>{{ profile.course }}</p>
             <p>{{ profile.email }}</p>
           </div>
         </div>
@@ -98,7 +109,9 @@ f
     getProfile,
     profile,
     getUserUID,
-    updateUserAvatar
+    updateUserAvatar,
+    getNotification,
+    unreadNotification
   } = useFirebaseAuth()
   const { uploadAvatar } = useFirestorage()
 
@@ -127,6 +140,7 @@ f
   onMounted(async () => {
     await authorizedUser()
     await getProfile()
+    await getNotification()
   })
 
   definePageMeta({

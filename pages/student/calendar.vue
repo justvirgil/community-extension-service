@@ -1,20 +1,31 @@
 <template>
-  <div class="flex flex-col h-full w-full bg-yellow">
-    <header class="flex flex-row bg-green border-2 border-red-700">
+  <div class="flex flex-col h-full w-full bg-cream">
+    <header
+      class="flex flex-row bg-dark-blue border-b border-l border-light-blue"
+    >
       <nav class="flex flex-row my-8 grow">
-        <div class="flex flex-row items-center grow ml-16">
-          <VIcon :alt="'ces-home'" :icon="'ces-home'" size="large" />
+        <div class="flex flex-row items-center grow ml-16 text-white">
+          <VIcon :alt="'ces-calendar'" :icon="'ces-calendar'" size="large" />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
-          <NuxtLink to="/student/faq" class="mx-3 text-xl">
+          <NuxtLink to="/student/faq" class="mx-3 text-xl text-white">
             <VIcon :alt="'ces-question'" :icon="'ces-question'" size="medium" />
           </NuxtLink>
-          <NuxtLink to="/student/notification" class="mx-3 text-xl">
+          <NuxtLink
+            to="/student/notification"
+            class="mx-3 text-xl text-white flex flex-row items-center justify-center"
+          >
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
+            <p
+              v-if="unreadNotification > 0"
+              class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm"
+            >
+              {{ unreadNotification }}
+            </p>
           </NuxtLink>
           <div class="relative" @click="toggleDropDown">
-            <button class="mx-3 text-xl">
+            <button class="mx-3 text-xl text-white">
               <VIcon :alt="'ces-menu'" :icon="'ces-menu'" size="medium" />
             </button>
             <div
@@ -44,10 +55,11 @@
         </div>
       </nav>
     </header>
+
     <div class="flex flex-row">
       <div class="grow flex flex-col items-center">
-        <div class="bg-red-400 p-3 text-xl text-center w-full">
-          <p>DATE</p>
+        <div class="bg-light-blue p-3 text-xl text-center w-full">
+          <p class="text-cream">CALENDAR</p>
         </div>
         <div class="pt-12 py-auto w-[600px]">
           <Calendar
@@ -60,10 +72,12 @@
       </div>
 
       <div class="grow">
-        <div class="bg-blue-400 p-3 text-xl text-center">
+        <div
+          class="bg-light-blue text-cream p-3 text-xl text-center overflow-y-auto"
+        >
           <p>AVAILABLE</p>
         </div>
-        <div class="text-center pt-12">
+        <div class="text-center pt-12 border-l-2 border-dark-blue">
           <p v-for="(date, index) in activity" :key="index" class="my-3">
             {{ date.name }}, {{ timeConverter(date.when) }}
           </p>
@@ -77,8 +91,14 @@
   import { DatePicker, Calendar } from 'v-calendar'
   import 'v-calendar/style.css'
 
-  const { authorizedUser, logout, activity, getUserAllActivities } =
-    useFirebaseAuth()
+  const {
+    authorizedUser,
+    logout,
+    activity,
+    getUserAllActivities,
+    getNotification,
+    unreadNotification
+  } = useFirebaseAuth()
   const { read } = useFirestore()
   const { timestampToDate, timeConverter } = useTools()
   const timestamps = ref([])
@@ -107,6 +127,7 @@
 
   onMounted(async () => {
     await authorizedUser()
+    await getNotification()
     await getUserAllActivities()
     timestamps.value = timestampToDate(activity.value.map((item) => item.when))
   })

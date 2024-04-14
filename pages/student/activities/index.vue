@@ -1,20 +1,31 @@
 <template>
-  <div class="flex flex-col h-full w-full bg-yellow">
-    <header class="flex flex-row bg-green border-2 border-red-700">
+  <div class="flex flex-col h-full w-full bg-cream">
+    <header
+      class="flex flex-row bg-dark-blue border-b border-l border-light-blue"
+    >
       <nav class="flex flex-row my-8 grow">
-        <div class="flex flex-row items-center grow ml-16">
-          <VIcon :alt="'ces-home'" :icon="'ces-home'" size="large" />
+        <div class="flex flex-row items-center grow ml-16 text-white">
+          <VIcon :alt="'ces-book'" :icon="'ces-book'" size="large" />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
-          <NuxtLink to="/student/faq" class="mx-3 text-xl">
+          <NuxtLink to="/student/faq" class="mx-3 text-xl text-white">
             <VIcon :alt="'ces-question'" :icon="'ces-question'" size="medium" />
           </NuxtLink>
-          <NuxtLink to="/student/notification" class="mx-3 text-xl">
+          <NuxtLink
+            to="/student/notification"
+            class="mx-3 text-xl text-white flex flex-row items-center justify-center"
+          >
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
+            <p
+              v-if="unreadNotification > 0"
+              class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm"
+            >
+              {{ unreadNotification }}
+            </p>
           </NuxtLink>
           <div class="relative" @click="toggleDropDown">
-            <button class="mx-3 text-xl">
+            <button class="mx-3 text-xl text-white">
               <VIcon :alt="'ces-menu'" :icon="'ces-menu'" size="medium" />
             </button>
             <div
@@ -46,24 +57,38 @@
     </header>
     <div class="grow flex flex-col items-center">
       <div
-        class="bg-red-400 py-3 px-4 flex items-start text-xl text-center w-full"
+        class="bg-light-blue py-3 px-4 flex items-start text-xl text-center w-full"
       >
-        <VButton class="w-34 mx-3" @click="allActivities"> All </VButton>
+        <button
+          class="w-36 rounded-xl mx-3 bg-light-blue text-cream ml-5 hover:bg-dark-blue"
+          @click="allActivities"
+        >
+          All
+        </button>
 
-        <VButton class="w-34 mx-3" @click="filterActivities('completed')">
+        <button
+          class="w-36 rounded-xl mx-3 bg-light-blue text-cream ml-5 hover:bg-dark-blue"
+          @click="filterActivities('completed')"
+        >
           Completed
-        </VButton>
+        </button>
 
-        <VButton class="w-34 mx-3" @click="filterActivities('pending')">
+        <button
+          class="w-36 rounded-xl mx-3 bg-light-blue text-cream ml-5 hover:bg-dark-blue"
+          @click="filterActivities('pending')"
+        >
           Approval
-        </VButton>
+        </button>
 
-        <VButton class="w-34 mx-3" @click="filterActivities('upcoming')">
+        <button
+          class="w-36 rounded-xl mx-3 bg-light-blue text-cream ml-5 hover:bg-dark-blue"
+          @click="filterActivities('upcoming')"
+        >
           Upcoming
-        </VButton>
+        </button>
       </div>
 
-      <div class="bg-blue-200 w-full p-3">
+      <div class="bg-dark-blue text-cream w-full p-3">
         <p class="pl-5">{{ tabName }}</p>
       </div>
     </div>
@@ -97,7 +122,9 @@
     getActivityById,
     filterActivitiesByStatus,
     filteredActivities,
-    filterAllActivities
+    filterAllActivities,
+    getNotification,
+    unreadNotification
   } = useFirebaseAuth()
   const { add, read } = useFirestore()
 
@@ -160,6 +187,7 @@
 
   onMounted(async () => {
     await authorizedUser()
+    await getNotification()
     await filterAllActivities()
   })
 

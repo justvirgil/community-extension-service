@@ -1,20 +1,31 @@
 <template>
-  <div class="flex flex-col h-full w-full bg-yellow">
-    <header class="flex flex-row bg-green border-2 border-red-700">
+  <div class="flex flex-col h-full w-full bg-cream">
+    <header
+      class="flex flex-row bg-dark-blue border-b border-l border-light-blue"
+    >
       <nav class="flex flex-row my-8 grow">
-        <div class="flex flex-row items-center grow ml-16">
-          <VIcon :alt="'ces-book'" :icon="'ces-info'" size="large" />
+        <div class="flex flex-row items-center grow ml-16 text-white">
+          <VIcon :alt="'ces-book'" :icon="'ces-book'" size="large" />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
-          <NuxtLink to="/student/faq" class="mx-3 text-xl">
+          <NuxtLink to="/student/faq" class="mx-3 text-xl text-white">
             <VIcon :alt="'ces-question'" :icon="'ces-question'" size="medium" />
           </NuxtLink>
-          <NuxtLink to="/student/notification" class="mx-3 text-xl">
+          <NuxtLink
+            to="/student/notification"
+            class="mx-3 text-xl text-white flex flex-row items-center justify-center"
+          >
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
+            <p
+              v-if="unreadNotification > 0"
+              class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm"
+            >
+              {{ unreadNotification }}
+            </p>
           </NuxtLink>
           <div class="relative" @click="toggleDropDown">
-            <button class="mx-3 text-xl">
+            <button class="mx-3 text-xl text-white">
               <VIcon :alt="'ces-menu'" :icon="'ces-menu'" size="medium" />
             </button>
             <div
@@ -22,14 +33,16 @@
               class="absolute top-full right-0 mt-2 w-28 bg-white border border-gray-300 shadow-lg"
             >
               <ul>
-                <li>
+                <li class="flex flex-row justify-center items-center">
+                  <VIcon :alt="'ces-user'" :icon="'ces-user'" size="medium" />
                   <NuxtLink
                     to="/student/profile"
                     class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200"
                     >Profile</NuxtLink
                   >
                 </li>
-                <li>
+                <li class="flex flex-row justify-center items-center">
+                  <VIcon :alt="'ces-exit'" :icon="'ces-exit'" size="medium" />
                   <a
                     class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200 cursor-pointer"
                     @click="logUserOut"
@@ -119,8 +132,14 @@
 </template>
 
 <script setup lang="ts">
-  const { authorizedUser, logout, specificActivity, getActivityById } =
-    useFirebaseAuth()
+  const {
+    authorizedUser,
+    logout,
+    specificActivity,
+    getActivityById,
+    getNotification,
+    unreadNotification
+  } = useFirebaseAuth()
   const { timeConverter } = useTools()
 
   const pageTitle = ref('CES ACTIVITY')
@@ -140,6 +159,7 @@
   onMounted(async () => {
     await authorizedUser()
     await getActivityById(routerID)
+    await getNotification()
   })
 
   definePageMeta({

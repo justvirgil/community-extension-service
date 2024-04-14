@@ -1,21 +1,32 @@
 f
 <template>
-  <div class="flex flex-col h-full w-full bg-yellow">
-    <header class="flex flex-row bg-green border-2 border-red-700">
+  <div class="flex flex-col h-full w-full bg-cream">
+    <header
+      class="flex flex-row bg-dark-blue border-b border-l border-light-blue"
+    >
       <nav class="flex flex-row my-8 grow">
-        <div class="flex flex-row items-center grow ml-16">
-          <VIcon :alt="'ces-home'" :icon="'ces-home'" size="large" />
+        <div class="flex flex-row items-center grow ml-16 text-white">
+          <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="large" />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
-          <NuxtLink to="/student/faq" class="mx-3 text-xl">
+          <NuxtLink to="/student/faq" class="mx-3 text-xl text-white">
             <VIcon :alt="'ces-question'" :icon="'ces-question'" size="medium" />
           </NuxtLink>
-          <NuxtLink to="/student/notification" class="mx-3 text-xl">
+          <NuxtLink
+            to="/student/notification"
+            class="mx-3 text-xl text-white flex flex-row items-center justify-center"
+          >
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
+            <p
+              v-if="unreadNotification > 0"
+              class="absolute top-[30px] right-[70px] rounded-full h-5 w-5 flex items-center justify-center text-sm"
+            >
+              {{ unreadNotification }}
+            </p>
           </NuxtLink>
           <div class="relative" @click="toggleDropDown">
-            <button class="mx-3 text-xl">
+            <button class="mx-3 text-xl text-white">
               <VIcon :alt="'ces-menu'" :icon="'ces-menu'" size="medium" />
             </button>
             <div
@@ -48,13 +59,13 @@ f
 
     <div class="flex flex-row">
       <div
-        class="bg-red-400 py-3 pr-4 flex items-start text-xl text-center w-full"
+        class="py-3 pr-4 flex items-start text-xl text-center w-full bg-light-blue text-cream"
       >
         <p class="pl-24">FREQUENTLY ASKED</p>
       </div>
     </div>
 
-    <div class="w-full h-full bg-white flex flex-col">
+    <div class="w-full h-full bg-cream flex flex-col">
       <div class="flex flex-col p-5 text-sm relative">
         <p>1. LOREM IPSUM</p>
         <p>
@@ -81,15 +92,14 @@ f
           nibh. Vivamus nec nisi arcu.
         </p>
       </div>
-      <button class="absolute right-20 bottom-5 bg-red-300 px-6 py-3">
-        CHAT
-      </button>
+      <button class="absolute right-20 bottom-5 px-6 py-3">CHAT</button>
     </div>
   </div>
 </template>
 
 <script setup>
-  const { authorizedUser, logout } = useFirebaseAuth()
+  const { authorizedUser, logout, getNotification, unreadNotification } =
+    useFirebaseAuth()
   const { read } = useFirestore()
 
   const readContent = ref([])
@@ -114,6 +124,7 @@ f
 
   onMounted(async () => {
     await authorizedUser()
+    await getNotification()
     await fetchContent()
   })
 

@@ -1,20 +1,35 @@
 <template>
-  <div class="flex flex-col h-full w-full bg-yellow">
-    <header class="flex flex-row bg-green border-2 border-red-700">
+  <div class="flex flex-col h-full w-full bg-cream">
+    <header
+      class="flex flex-row bg-dark-blue border-b border-l border-light-blue"
+    >
       <nav class="flex flex-row my-8 grow">
-        <div class="flex flex-row items-center grow ml-16">
-          <VIcon :alt="'ces-home'" :icon="'ces-home'" size="large" />
+        <div class="flex flex-row items-center grow ml-16 text-white">
+          <VIcon
+            :alt="'ces-checkbox-checked'"
+            :icon="'ces-checkbox-checked'"
+            size="large"
+          />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
-          <NuxtLink to="/student/faq" class="mx-3 text-xl">
+          <NuxtLink to="/student/faq" class="mx-3 text-xl text-white">
             <VIcon :alt="'ces-question'" :icon="'ces-question'" size="medium" />
           </NuxtLink>
-          <NuxtLink to="/student/notification" class="mx-3 text-xl">
+          <NuxtLink
+            to="/student/notification"
+            class="mx-3 text-xl text-white flex flex-row items-center justify-center"
+          >
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
+            <p
+              v-if="unreadNotification > 0"
+              class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm"
+            >
+              {{ unreadNotification }}
+            </p>
           </NuxtLink>
           <div class="relative" @click="toggleDropDown">
-            <button class="mx-3 text-xl">
+            <button class="mx-3 text-xl text-white">
               <VIcon :alt="'ces-menu'" :icon="'ces-menu'" size="medium" />
             </button>
             <div
@@ -47,39 +62,39 @@
 
     <div class="grow flex flex-col items-center">
       <div
-        class="bg-red-400 py-3 px-4 flex items-start text-sm text-center w-full"
+        class="bg-light-blue text-cream py-3 px-4 flex items-start text-xl text-center w-full"
       >
-        <VButton
-          class="w-34 mx-3"
+        <button
+          class="w-36 rounded-xl mx-3 bg-light-blue text-cream ml-5 hover:bg-dark-blue"
           :is-rounded="true"
           @click="filterActivities(1)"
         >
           1st year
-        </VButton>
+        </button>
 
-        <VButton
-          class="w-34 mx-3"
+        <button
+          class="w-36 rounded-xl mx-3 bg-light-blue text-cream ml-5 hover:bg-dark-blue"
           :is-rounded="true"
           @click="filterActivities(2)"
         >
           2nd year
-        </VButton>
+        </button>
 
-        <VButton
-          class="w-34 mx-3"
+        <button
+          class="w-36 rounded-xl mx-3 bg-light-blue text-cream ml-5 hover:bg-dark-blue"
           :is-rounded="true"
           @click="filterActivities(3)"
         >
           3rd year
-        </VButton>
+        </button>
 
-        <VButton
-          class="w-34 mx-3"
+        <button
+          class="w-36 rounded-xl mx-3 bg-light-blue text-cream ml-5 hover:bg-dark-blue"
           :is-rounded="true"
           @click="filterActivities(4)"
         >
           4th year
-        </VButton>
+        </button>
       </div>
     </div>
     <div class="m-3 h-full bg-white overflow-x-auto">
@@ -106,7 +121,9 @@
     getProfile,
     getUserYearLevel,
     filterActivitiesByLevel,
-    filteredActivities
+    filteredActivities,
+    getNotification,
+    unreadNotification
   } = useFirebaseAuth()
 
   const readContent = ref([])
@@ -140,6 +157,7 @@
   onMounted(async () => {
     await authorizedUser()
     await getProfile()
+    await getNotification()
     await filterActivitiesByLevel(1)
   })
 
