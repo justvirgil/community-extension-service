@@ -24,6 +24,7 @@ export const useFirebaseAuth = () => {
   const activity = useState(() => [])
   const specificActivity = useState(() => [])
   const filteredActivities = useState(() => [])
+  const activityLocations = useState(() => [])
   const students = useState(() => [])
   const profile = useState(() => [])
   const notification = useState(() => [])
@@ -389,6 +390,38 @@ export const useFirebaseAuth = () => {
     }
   }
 
+  const getActivityLocation = async () => {
+    try {
+      const userDataArray = await read('activities')
+
+      const isMember = userDataArray.filter(
+        (activity) =>
+          activity.pendingUsers.includes(userUID.value) ||
+          activity.approvedUsers.includes(userUID.value)
+      )
+
+      activityLocations.value = isMember
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const getUserAllActivities = async () => {
+    try {
+      const userDataArray = await read('activities')
+
+      const isMember = userDataArray.filter(
+        (activity) =>
+          activity.pendingUsers.includes(userUID.value) ||
+          activity.approvedUsers.includes(userUID.value)
+      )
+
+      activity.value = isMember
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
   const getUserProfile = () => {
     try {
       const auth = getAuth()
@@ -455,12 +488,15 @@ export const useFirebaseAuth = () => {
     getProfile,
     profile,
     updateUserActivity,
+    activityLocations,
+    getActivityLocation,
     joinActivity,
     removeActivity,
     authorizedUser,
     getUserProfile,
     getUserUID,
     getUserYearLevel,
-    userUID
+    userUID,
+    getUserAllActivities
   }
 }

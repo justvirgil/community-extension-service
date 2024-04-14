@@ -44,21 +44,53 @@
         </div>
       </nav>
     </header>
-
-    <div class="bg-white text-black [50px]">
-      <piechart />
+    <div class="flex flex-row">
+      <div class="grow flex flex-col items-center">
+        <div class="bg-red-400 p-3 text-xl text-start w-full">
+          <p>COMPLETED ACTIVITIES</p>
+        </div>
+        <div class="pt-12 py-auto w-[600px] overflow-auto">
+          <div class="bg-white text-black h-fit">
+            <chart
+              :labels="chartLabels"
+              :datasets="chartDatasets"
+              :options="chartOptions"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-  const { authorizedUser, logout } = useFirebaseAuth()
+  const { authorizedUser, logout, activity, getUserAllActivities } =
+    useFirebaseAuth()
 
   const pageTitle = ref('Tracker')
   const isOpen = ref(false)
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
+
+  const chartLabels = ref([])
+  const activityLength = ref(0)
+  const completedActivities = ref(0)
+  const completionPercentage = ref(0)
+  const remainingPercentage = ref(0)
+
+  const chartDatasets = ref([
+    {
+      backgroundColor: ['#FFFF00', '#00308C '],
+      data: [completionPercentage, remainingPercentage]
+    }
+  ])
+
+  const chartOptions = ref({
+    responsive: true,
+    maintainAspectRatio: false,
+    aspectRatio: 1
+  })
 
   const logUserOut = async () => {
     await logout()
@@ -67,6 +99,20 @@
 
   onMounted(async () => {
     await authorizedUser()
+    await getUserAllActivities()
+
+    chartLabels.value = activity.value
+      .filter((item) => item.status === 'completed')
+      .map((item) => item.name)
+
+    activityLength.value = activity.value.length
+    completedActivities.value = activity.value.filter(
+      (item) => item.status === 'completed'
+    ).length
+
+    completionPercentage.value =
+      (completedActivities.value / activityLength.value) * 100
+    remainingPercentage.value = 100 - completionPercentage.value
   })
 
   definePageMeta({

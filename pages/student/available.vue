@@ -106,9 +106,7 @@
     getProfile,
     getUserYearLevel,
     filterActivitiesByLevel,
-    filteredActivities,
-    getActivities,
-    activity
+    filteredActivities
   } = useFirebaseAuth()
 
   const readContent = ref([])
@@ -142,7 +140,6 @@
   onMounted(async () => {
     await authorizedUser()
     await getProfile()
-    await getActivities()
     await filterActivitiesByLevel(1)
   })
 

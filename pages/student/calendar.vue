@@ -46,15 +46,15 @@
     </header>
     <div class="flex flex-row">
       <div class="grow flex flex-col items-center">
-        <div class="bg-red-400 p-4 text-xl text-center w-full">
+        <div class="bg-red-400 p-3 text-xl text-center w-full">
           <p>DATE</p>
         </div>
-        <div class="pt-12 py-auto w-[800px]">
-          <DatePicker
-            v-model="date"
-            :color="'blue'"
-            :is-dark="calendarColor"
+        <div class="pt-12 py-auto w-[600px]">
+          <Calendar
+            :is-dark="true"
+            :attributes="attributes"
             expanded
+            multiple
           />
         </div>
       </div>
@@ -63,8 +63,10 @@
         <div class="bg-blue-400 p-3 text-xl text-center">
           <p>AVAILABLE</p>
         </div>
-        <div class="text-center">
-          <p>LIST</p>
+        <div class="text-center pt-12">
+          <p v-for="(date, index) in activity" :key="index" class="my-3">
+            {{ date.name }}, {{ timeConverter(date.when) }}
+          </p>
         </div>
       </div>
     </div>
@@ -72,14 +74,26 @@
 </template>
 
 <script setup>
-  import { DatePicker } from 'v-calendar'
+  import { DatePicker, Calendar } from 'v-calendar'
   import 'v-calendar/style.css'
 
-  const { authorizedUser, logout } = useFirebaseAuth()
+  const { authorizedUser, logout, activity, getUserAllActivities } =
+    useFirebaseAuth()
   const { read } = useFirestore()
+  const { timestampToDate, timeConverter } = useTools()
+  const timestamps = ref([])
+
+  const attributes = ref([
+    {
+      highlight: {
+        color: 'red',
+        fillMode: 'solid'
+      },
+      dates: timestamps
+    }
+  ])
 
   const calendarColor = ref(true)
-  const date = ref(new Date())
   const pageTitle = ref('Calendar')
   const isOpen = ref(false)
   const toggleDropDown = () => {
@@ -93,6 +107,8 @@
 
   onMounted(async () => {
     await authorizedUser()
+    await getUserAllActivities()
+    timestamps.value = timestampToDate(activity.value.map((item) => item.when))
   })
 
   definePageMeta({
