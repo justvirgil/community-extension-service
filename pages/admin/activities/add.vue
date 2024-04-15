@@ -232,18 +232,19 @@ const createActivity = async () => {
     if (!title.value || !description.value || !where.value || !when.value || !what.value || !yearLevel.value || !status.value) {
       errorMessage.value = "Please fill in all the required fields."
       return
+    } else {
+      await addActivity(activityID, {
+        name: title.value,
+        description: description.value,
+        where: where.value,
+        when: new Date(when.value),
+        what: what.value,
+        yearLevel: yearLevel.value,
+        createdAt: new Date(),
+        status: status.value
+      })
+      errorMessage.value = ""
     }
-
-    await addActivity(activityID, {
-      name: title.value,
-      description: description.value,
-      where: where.value,
-      when: when.value,
-      what: what.value,
-      yearLevel: yearLevel.value,
-      createdAt: new Date(),
-      status: status.value
-    })
   } catch (error) {
     errorMessage.value = `${error}`
   }
