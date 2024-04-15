@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row items-center justify-center min-h-screen">
+  <div class="flex flex-row items-center justify-center h-screen">
     <div class="flex flex-col items-center justify-center">
       <p class="bg-green-300 font-bold text-9xl text-green">CMS</p>
       <p class="bg-green-300 text-5xl text-dark-blue">ADMIN</p>

@@ -1,3 +1,4 @@
+f
 <template>
   <div class="flex flex-col h-full w-full bg-cream">
     <header
@@ -5,7 +6,7 @@
     >
       <nav class="flex flex-row my-8 grow">
         <div class="flex flex-row items-center grow ml-16 text-white">
-          <VIcon :alt="'ces-pending'" :icon="'ces-pending'" size="large" />
+          <VIcon :alt="'ces-user'" :icon="'ces-user'" size="large" />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
@@ -53,22 +54,87 @@
       </nav>
     </header>
 
-    <div class="bg-white text-black [50px]">
-      <p v-for="(course, index) in courses" :key="index">{{ course.name }}</p>
+    <div class="flex flex-row">
+      <div
+        class="bg-dark-blue text-cream py-3 pr-4 flex items-center text-xl text-center w-full h-10"
+      >
+        <p class="pl-24 text-xl">Greetings, {{ profile.name }}</p>
+      </div>
     </div>
+
+    <div class="w-full h-full bg-white flex items-center justify-center">
+      <div class="bg-yellow w-[40rem] h-[15rem] p-7 rounded-md relative">
+        <p>A D M I N</p>
+        <div class="flex flex-row items-center justify-between pt-3 px-10">
+          <div class="">
+            <VIcon
+              v-if="!profile.avatar"
+              :alt="'ces-user'"
+              :icon="'ces-user'"
+              class="text-[6rem]"
+            />
+            <img
+              v-if="profile.avatar"
+              :src="profile.avatar"
+              alt="Avatar"
+              class="h-24 w-24"
+            />
+            <input
+              type="file"
+              accept="image/png, image/jpeg"
+              @change="handleAvatarChange"
+            />
+          </div>
+          <div class="flex flex-col pr-20">
+            <p>{{ profile.name }}</p>
+            <p>{{ profile.email }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p>{{ userData }}</p>
   </div>
 </template>
 
 <script setup>
-  const { authorizedUser, getStudents, getCourses, students, courses } =
-    useFirebaseAuth()
+  const {
+    authorizedUser,
+    logout,
+    getProfile,
+    profile,
+    getUserUID,
+    updateUserAvatar,
+    getNotification,
+    unreadNotification
+  } = useFirebaseAuth()
+  const { uploadAvatar } = useFirestorage()
 
-  const pageTitle = ref('Pending')
+  const userData = ref('')
+  const pageTitle = ref('Profile')
+  const isOpen = ref(false)
+  const toggleDropDown = () => {
+    isOpen.value = !isOpen.value
+  }
+
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files[0]
+    const userId = getUserUID()
+    if (userId && file) {
+      const downloadURL = await uploadAvatar(userId, file)
+      await updateUserAvatar(userId, downloadURL)
+      await getProfile()
+    }
+  }
+
+  const logUserOut = async () => {
+    await logout()
+    navigateTo('/')
+  }
 
   onMounted(async () => {
     await authorizedUser()
-    await getStudents()
-    await getCourses()
+    await getProfile()
+    await getNotification()
   })
 
   definePageMeta({

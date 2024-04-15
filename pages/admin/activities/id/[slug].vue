@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col h-full w-full bg-cream">
     <header
-      class="flex flex-row bg-light-blue border-b border-l border-dark-blue"
+      class="flex flex-row bg-dark-blue border-b border-l border-light-blue"
     >
       <nav class="flex flex-row my-8 grow">
         <div class="flex flex-row items-center grow ml-16 text-white">
-          <VIcon :alt="'ces-calendar'" :icon="'ces-calendar'" size="large" />
+          <VIcon :alt="'ces-book'" :icon="'ces-book'" size="large" />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
@@ -53,66 +53,97 @@
       </nav>
     </header>
 
-    <div class="flex flex-row">
-      <div class="grow flex flex-col items-center">
-        <div class="bg-dark-blue p-3 text-xl text-center w-full">
-          <p class="text-cream">CALENDAR</p>
+    <div class="grow flex flex-col">
+      <div class="flex flex-row items-center">
+        <div
+          class="bg-red-400 py-3 px-4 flex items-start text-xl text-center w-full"
+        >
+          <p>{{ specificActivity.name }}</p>
         </div>
-        <div class="pt-12 py-auto w-[600px]">
-          <Calendar
-            :is-dark="true"
-            :attributes="attributes"
-            expanded
-            multiple
+        <button
+          v-if="
+            specificActivity.status !== 'completed' &&
+            specificActivity.status !== 'pending' &&
+            specificActivity.status !== 'cancelled'
+          "
+          class="rounded-full bg-green h-12 w-56 px-3 mr-3"
+          @click="emit('join')"
+        >
+          JOIN ACTIVITY
+        </button>
+        <div
+          v-if="
+            specificActivity.status === 'completed' ||
+            specificActivity.status === 'pending'
+          "
+          class="flex flex-row ml-7 justify-between items-center"
+        >
+          <VIcon
+            :alt="'ces-image'"
+            :icon="'ces-image'"
+            size="x-large"
+            class="mr-3"
+          />
+
+          <VIcon
+            :alt="'ces-file-text2'"
+            :icon="'ces-file-text2'"
+            size="x-large"
+            class="mr-3"
+          />
+
+          <VIcon
+            :alt="'ces-checkmark'"
+            :icon="'ces-checkmark'"
+            size="x-large"
+            class="mr-3"
           />
         </div>
       </div>
 
-      <div class="grow">
-        <div
-          class="bg-dark-blue text-cream p-3 text-xl text-center overflow-y-auto"
-        >
-          <p>AVAILABLE</p>
-        </div>
-        <div class="text-center pt-12 border-l-2 border-dark-blue">
-          <p v-for="(date, index) in activity" :key="index" class="my-3">
-            {{ date.name }}, {{ timeConverter(date.when) }}
-          </p>
-        </div>
+      <div class="bg-blue-200 w-full h-40 p-3 overflow-x-auto bg-green">
+        <p class="py-5">Description</p>
+        <p class="pl-5">{{ specificActivity.description }}</p>
+      </div>
+
+      <div class="bg-blue-200 w-full h-24 p-3">
+        <p class="pb-5">When</p>
+        <p class="pl-5">
+          {{
+            specificActivity?.when ? timeConverter(specificActivity.when) : ''
+          }}
+        </p>
+      </div>
+
+      <div class="bg-blue-200 w-full h-24 p-3">
+        <p class="pb-5">What</p>
+        <p class="pl-5">{{ specificActivity.what }}</p>
+      </div>
+
+      <div class="bg-blue-200 w-full h-24 p-3">
+        <p class="pb-5">Where</p>
+        <p class="pl-5">{{ specificActivity.where }}</p>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-  import { DatePicker, Calendar } from 'v-calendar'
-  import 'v-calendar/style.css'
-
+<script setup lang="ts">
   const {
     authorizedUser,
     logout,
-    activity,
-    getUserAllActivities,
+    specificActivity,
+    getActivityById,
     getNotification,
     unreadNotification
   } = useFirebaseAuth()
-  const { read } = useFirestore()
-  const { timestampToDate, timeConverter } = useTools()
-  const timestamps = ref([])
+  const { timeConverter } = useTools()
 
-  const attributes = ref([
-    {
-      highlight: {
-        color: 'red',
-        fillMode: 'solid'
-      },
-      dates: timestamps
-    }
-  ])
-
-  const calendarColor = ref(true)
-  const pageTitle = ref('Calendar')
+  const pageTitle = ref('CES ACTIVITY')
   const isOpen = ref(false)
+  const route = useRoute()
+  const routerID = route.params.slug
+
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
@@ -124,9 +155,8 @@
 
   onMounted(async () => {
     await authorizedUser()
+    await getActivityById(routerID)
     await getNotification()
-    await getUserAllActivities()
-    timestamps.value = timestampToDate(activity.value.map((item) => item.when))
   })
 
   definePageMeta({

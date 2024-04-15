@@ -114,9 +114,9 @@ export const useFirebaseAuth = () => {
         error.code === 'auth/user-not-found' ||
         error.code === 'auth/wrong-password'
       ) {
-        errorMessage.value = 'Invalid email or password1'
+        errorMessage.value = 'Invalid email or password'
       } else {
-        errorMessage.value = 'Invalid email or password2'
+        errorMessage.value = 'Invalid email or password'
       }
     }
   }
@@ -129,8 +129,16 @@ export const useFirebaseAuth = () => {
         password
       )
       const admin = adminCredentials.user
-      if (admin && admin.emailVerified) {
-        const adminDataArray = await readById('pendingUsers', admin.email)
+      const adminDataArray = await readById('pendingUsers', admin.email)
+      if (adminDataArray.length === 0 || adminDataArray[0].isAdmin === false) {
+        errorMessage.value = 'Unauthorized role'
+      } else if (!admin.emailVerified) {
+        errorMessage.value = 'Email not verified'
+      } else if (
+        admin &&
+        admin.emailVerified &&
+        adminDataArray[0].isAdmin === true
+      ) {
         const adminData = adminDataArray[0]
         await addUser('admins', admin.uid, {
           isAdmin: adminData.isAdmin,
@@ -139,9 +147,9 @@ export const useFirebaseAuth = () => {
           createdAt: adminData.createdAt
         })
         console.log('admin data', adminData)
-        await navigateTo('/admin')
+        await navigateTo('/admin/home')
       } else {
-        await navigateTo('/adminLogin')
+        await navigateTo('/admin/login')
       }
       console.log('logged admin', admin)
     } catch (error) {

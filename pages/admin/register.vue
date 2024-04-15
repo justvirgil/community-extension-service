@@ -118,7 +118,7 @@
             lastName: lastName.value,
             createdAt: new Date()
           })
-          navigateTo('/adminLogin')
+          navigateTo('/admin/login')
         }
       }
     } catch (error) {

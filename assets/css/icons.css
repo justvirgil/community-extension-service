@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'ces';
-  src: url('./../../public/icons/ces.eot?80wot');
+  src: url('./../../public/icons/ces.eot?tjmpbs');
   src:
-    url('./../../public/icons/ces.eot?80wot#iefix') format('embedded-opentype'),
-    url('./../../public/icons/ces.ttf?80wot') format('truetype'),
-    url('./../../public/icons/ces.woff?80wot') format('woff'),
-    url('./../../public/icons/ces.svg?80wot#ces') format('svg');
+    url('./../../public/icons/ces.eot?tjmpbs#iefix') format('embedded-opentype'),
+    url('./../../public/icons/ces.ttf?tjmpbs') format('truetype'),
+    url('./../../public/icons/ces.woff?tjmpbs') format('woff'),
+    url('./../../public/icons/ces.svg?tjmpbs#ces') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -39,7 +39,7 @@
 .ces-book:before {
   content: '\e91f';
 }
-.ces-file-text2:before {
+.ces-file-text:before {
   content: '\e926';
 }
 .ces-bell:before {
@@ -80,4 +80,28 @@
 }
 .ces-checkbox-checked:before {
   content: '\ea52';
+}
+.ces-chat:before {
+  content: '\e96d';
+}
+.ces-chat-2:before {
+  content: '\e970';
+}
+.ces-student:before {
+  content: '\e976';
+}
+.ces-pending:before {
+  content: '\e984';
+}
+.ces-plus:before {
+  content: '\ea0a';
+}
+.ces-cancel-circle:before {
+  content: '\ea0d';
+}
+.ces-cross:before {
+  content: '\ea0f';
+}
+.ces-circle-left:before {
+  content: '\ea44';
 }

@@ -1,11 +1,12 @@
+f
 <template>
   <div class="flex flex-col h-full w-full bg-cream">
     <header
-      class="flex flex-row bg-light-blue border-b border-l border-dark-blue"
+      class="flex flex-row bg-dark-blue border-b border-l border-light-blue"
     >
       <nav class="flex flex-row my-8 grow">
         <div class="flex flex-row items-center grow ml-16 text-white">
-          <VIcon :alt="'ces-calendar'" :icon="'ces-calendar'" size="large" />
+          <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="large" />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
@@ -16,7 +17,7 @@
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
             <p
               v-if="unreadNotification > 0"
-              class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm"
+              class="absolute top-[30px] right-[70px] rounded-full h-5 w-5 flex items-center justify-center text-sm"
             >
               {{ unreadNotification }}
             </p>
@@ -54,64 +55,53 @@
     </header>
 
     <div class="flex flex-row">
-      <div class="grow flex flex-col items-center">
-        <div class="bg-dark-blue p-3 text-xl text-center w-full">
-          <p class="text-cream">CALENDAR</p>
-        </div>
-        <div class="pt-12 py-auto w-[600px]">
-          <Calendar
-            :is-dark="true"
-            :attributes="attributes"
-            expanded
-            multiple
-          />
-        </div>
+      <div
+        class="py-3 pr-4 flex items-start text-xl text-center w-full bg-light-blue text-cream"
+      >
+        <p class="pl-24">FREQUENTLY ASKED</p>
       </div>
+    </div>
 
-      <div class="grow">
-        <div
-          class="bg-dark-blue text-cream p-3 text-xl text-center overflow-y-auto"
-        >
-          <p>AVAILABLE</p>
-        </div>
-        <div class="text-center pt-12 border-l-2 border-dark-blue">
-          <p v-for="(date, index) in activity" :key="index" class="my-3">
-            {{ date.name }}, {{ timeConverter(date.when) }}
-          </p>
-        </div>
+    <div class="w-full h-full bg-cream flex flex-col">
+      <div class="flex flex-col p-5 text-sm relative">
+        <p>1. LOREM IPSUM</p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta
+          lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo
+          pellentesque faucibus interdum a neque. Nam lobortis, nulla ut
+          consequat aliquet, lorem justo accumsan dui, non maximus ex erat at
+          nibh. Vivamus nec nisi arcu.
+        </p>
+        <p>2. LOREM IPSUM</p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta
+          lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo
+          pellentesque faucibus interdum a neque. Nam lobortis, nulla ut
+          consequat aliquet, lorem justo accumsan dui, non maximus ex erat at
+          nibh. Vivamus nec nisi arcu.
+        </p>
+        <p>3. LOREM IPSUM</p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta
+          lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo
+          pellentesque faucibus interdum a neque. Nam lobortis, nulla ut
+          consequat aliquet, lorem justo accumsan dui, non maximus ex erat at
+          nibh. Vivamus nec nisi arcu.
+        </p>
       </div>
+      <button class="absolute right-20 bottom-5 px-6 py-3">CHAT</button>
     </div>
   </div>
 </template>
 
 <script setup>
-  import { DatePicker, Calendar } from 'v-calendar'
-  import 'v-calendar/style.css'
-
-  const {
-    authorizedUser,
-    logout,
-    activity,
-    getUserAllActivities,
-    getNotification,
-    unreadNotification
-  } = useFirebaseAuth()
+  const { authorizedUser, logout, getNotification, unreadNotification } =
+    useFirebaseAuth()
   const { read } = useFirestore()
-  const { timestampToDate, timeConverter } = useTools()
-  const timestamps = ref([])
 
-  const attributes = ref([
-    {
-      highlight: {
-        color: 'red',
-        fillMode: 'solid'
-      },
-      dates: timestamps
-    }
-  ])
+  const readContent = ref([])
+  const pageTitle = ref('Notifications')
 
-  const calendarColor = ref(true)
-  const pageTitle = ref('Calendar')
   const isOpen = ref(false)
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
@@ -122,11 +112,17 @@
     navigateTo('/')
   }
 
+  const fetchContent = async () => {
+    if (!authorizedUser()) {
+      throw new Error('Not authorized')
+    }
+    readContent.value = await read('pendingUsers')
+  }
+
   onMounted(async () => {
     await authorizedUser()
     await getNotification()
-    await getUserAllActivities()
-    timestamps.value = timestampToDate(activity.value.map((item) => item.when))
+    await fetchContent()
   })
 
   definePageMeta({
