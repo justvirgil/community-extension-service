@@ -38,8 +38,8 @@
           />
           <button @click="$refs.fileInput.click()" :disabled="disabled">
             <VIcon
-              :alt="'ces-file-text2'"
-              :icon="'ces-file-text2'"
+              :alt="'ces-file-text'"
+              :icon="'ces-file-text'"
               size="medium"
               class="mr-3 text-cream"
             />

@@ -92,8 +92,6 @@
 
   const emailRegex = /^[\w.+-]+@([\w-]+\.)+[\w-]{2,4}$/
 
-  // const emailRegex = /^[\w\-\+\.]+@([\w-]+\.)+[\w-]{2,4}$/
-
   const handleSubmit = async () => {
     try {
       if (

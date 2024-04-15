@@ -102,6 +102,31 @@
           @full-page="redirectToApproved(item.id)"
         />
       </div>
+      <div class="flex flex-row justify-end mr-8 mt-10">
+        <NuxtLink
+          to="/admin/activities/add"
+          class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
+        >
+          <VIcon
+            :alt="'ces-plus'"
+            :icon="'ces-plus'"
+            size="medium"
+            class="text-cream flex items-center justify-center"
+          />
+        </NuxtLink>
+
+        <NuxtLink
+          to="/admin/activities/delete"
+          class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
+        >
+          <VIcon
+            :alt="'ces-bin'"
+            :icon="'ces-bin'"
+            size="medium"
+            class="text-cream flex items-center justify-center"
+          />
+        </NuxtLink>
+      </div>
     </div>
   </div>
 </template>
