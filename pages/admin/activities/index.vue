@@ -94,7 +94,7 @@
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
       >
-        <activity-card
+        <admin-activity-card
           v-for="(item, index) in filteredActivities"
           :key="index"
           :card-data="item"
@@ -110,18 +110,6 @@
           <VIcon
             :alt="'ces-plus'"
             :icon="'ces-plus'"
-            size="medium"
-            class="text-cream flex items-center justify-center"
-          />
-        </NuxtLink>
-
-        <NuxtLink
-          to="/admin/activities/delete"
-          class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
-        >
-          <VIcon
-            :alt="'ces-bin'"
-            :icon="'ces-bin'"
             size="medium"
             class="text-cream flex items-center justify-center"
           />

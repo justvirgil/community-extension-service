@@ -67,7 +67,10 @@
         >
           <div>
             <div class="flex items-center justify-center">
-              <p v-if="errorMessage" class="text-red-500 text-xs text-center font-bold">
+              <p
+                v-if="errorMessage"
+                class="text-red-500 text-xs text-center font-bold"
+              >
                 {{ errorMessage }}
               </p>
             </div>
@@ -226,29 +229,35 @@
     }
   }
 
-const createActivity = async () => {
-  try {
-    
-    if (!title.value || !description.value || !where.value || !when.value || !what.value || !yearLevel.value || !status.value) {
-      errorMessage.value = "Please fill in all the required fields."
-      return
-    } else {
-      await addActivity(activityID, {
-        name: title.value,
-        description: description.value,
-        where: where.value,
-        when: new Date(when.value),
-        what: what.value,
-        yearLevel: yearLevel.value,
-        createdAt: new Date(),
-        status: status.value
-      })
-      errorMessage.value = ""
+  const createActivity = async () => {
+    try {
+      if (
+        !title.value ||
+        !description.value ||
+        !where.value ||
+        !when.value ||
+        !what.value ||
+        !yearLevel.value ||
+        !status.value
+      ) {
+        errorMessage.value = 'Please fill in all the required fields.'
+      } else {
+        await addActivity(activityID, {
+          name: title.value,
+          description: description.value,
+          where: where.value,
+          when: new Date(when.value),
+          what: what.value,
+          yearLevel: yearLevel.value,
+          createdAt: new Date(),
+          status: status.value
+        })
+        errorMessage.value = ''
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
     }
-  } catch (error) {
-    errorMessage.value = `${error}`
   }
-}
 
   const logUserOut = async () => {
     await logout()

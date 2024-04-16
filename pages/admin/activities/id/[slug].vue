@@ -53,76 +53,140 @@
       </nav>
     </header>
 
-    <div class="grow flex flex-col">
-      <div class="flex flex-row items-center">
-        <div
-          class="bg-red-400 py-3 px-4 flex items-start text-xl text-center w-full"
+    <div class="flex flex-col items-center">
+      <div class="bg-dark-blue text-cream text-center text-2xl w-full p-3">
+        <p class="pl-5">{{ tabName }}</p>
+      </div>
+    </div>
+    <div class="flex items-center justify-center mt-10">
+      <div
+        class="mt-2 rounded-xl h-full p-10 w-[60rem] flex items-center justify-center bg-dark-blue"
+      >
+        <form
+          class="flex flex-row items-center justify-center"
+          @submit.prevent="updateCurrentActivity"
         >
-          <p>{{ specificActivity.name }}</p>
-        </div>
-        <button
-          v-if="
-            specificActivity.status !== 'completed' &&
-            specificActivity.status !== 'pending' &&
-            specificActivity.status !== 'cancelled'
-          "
-          class="rounded-full bg-green h-12 w-56 px-3 mr-3"
-          @click="emit('join')"
-        >
-          JOIN ACTIVITY
-        </button>
-        <div
-          v-if="
-            specificActivity.status === 'completed' ||
-            specificActivity.status === 'pending'
-          "
-          class="flex flex-row ml-7 justify-between items-center"
-        >
-          <VIcon
-            :alt="'ces-image'"
-            :icon="'ces-image'"
-            size="x-large"
-            class="mr-3"
-          />
-
-          <VIcon
-            :alt="'ces-file-text2'"
-            :icon="'ces-file-text2'"
-            size="x-large"
-            class="mr-3"
-          />
-
-          <VIcon
-            :alt="'ces-checkmark'"
-            :icon="'ces-checkmark'"
-            size="x-large"
-            class="mr-3"
-          />
-        </div>
-      </div>
-
-      <div class="bg-blue-200 w-full h-40 p-3 overflow-x-auto bg-green">
-        <p class="py-5">Description</p>
-        <p class="pl-5">{{ specificActivity.description }}</p>
-      </div>
-
-      <div class="bg-blue-200 w-full h-24 p-3">
-        <p class="pb-5">When</p>
-        <p class="pl-5">
-          {{
-            specificActivity?.when ? timeConverter(specificActivity.when) : ''
-          }}
-        </p>
-      </div>
-
-      <div class="bg-blue-200 w-full h-24 p-3">
-        <p class="pb-5">What</p>
-        <p class="pl-5">{{ specificActivity.what }}</p>
-      </div>
-
-      <div class="bg-blue-200 w-full h-24 p-3">
-        <p class="pb-5">Where</p>
-        <p class="pl-5">{{ specificActivity.where }}</p>
+          <div>
+            <div class="flex items-center justify-center">
+              <p
+                v-if="errorMessage"
+                class="text-red-500 text-xs text-center font-bold"
+              >
+                {{ errorMessage }}
+              </p>
+            </div>
+            <VTextField
+              v-model="title"
+              type="text"
+              placeholder="CES TITLE"
+              class="w-[25rem] h-8 text-black m-2"
+            />
+            <VTextField
+              v-model="description"
+              type="text"
+              placeholder="CES DESCRIPTION"
+              class="w-[25rem] h-24 rounded-xl text-black m-2"
+            />
+            <VTextField
+              v-model="where"
+              type="text"
+              placeholder="CES WHERE"
+              class="w-[25rem] h-8 text-black m-2"
+            />
+            <VTextField
+              v-model="what"
+              type="text"
+              placeholder="CES WHAT"
+              class="w-[25rem] h-8 text-black m-2"
+            />
+            <div
+              class="flex flex-row items-center w-[25rem] h-8 text-black m-2"
+            >
+              <label class="text-cream pl-3">CES WHEN:</label>
+              <input
+                v-model="when"
+                type="datetime-local"
+                name="when"
+                placeholder="CES WHEN"
+                class="ml-3 rounded-xl"
+              />
+            </div>
+          </div>
+          <div class="ml-3 mt-10">
+            <div class="flex flex-row p-5">
+              <div class="mr-2">
+                <label for="yearLevel" class="text-cream mr-2"
+                  >Year Level:
+                </label>
+                <select id="yearLevel" v-model="yearLevel" name="yearLevel">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </div>
+              <label for="status" class="text-cream mr-2">Status: </label>
+              <select id="status" v-model="status" name="status">
+                <option value="Pending">Pending</option>
+                <option value="Upcoming">Upcoming</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="flex flex-col items-center justity-between my-5">
+              <div class="flex flex-col bg-cream w-80 h-32 rounded-xl mb-5">
+                <input
+                  ref="fileInput"
+                  type="file"
+                  class="hidden"
+                  @change.prevent="handleFileSubmit($event)"
+                />
+                <button
+                  type="button"
+                  class="w-full h-full bg-gray-500 rounded-xl"
+                  @click="$refs.fileInput.click()"
+                >
+                  <p class="text-cream">CES PARENTAL FORMS</p>
+                  <VIcon
+                    class="text-cream w-full h-full"
+                    :alt="'ces-file-text'"
+                    :icon="'ces-file-text'"
+                    size="x-large"
+                  />
+                </button>
+              </div>
+              <div class="flex flex-row justify-end mr-8 mt-2 mb-2">
+                <VButton
+                  class="w-24 mr-10"
+                  :is-bold="true"
+                  :is-rounded="true"
+                  type="submit"
+                >
+                  UPDATE
+                </VButton>
+                <NuxtLink
+                  to="/admin/activities/"
+                  class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
+                >
+                  <VIcon
+                    :alt="'ces-cross'"
+                    :icon="'ces-cross'"
+                    size="medium"
+                    class="text-cream flex items-center justify-center"
+                  />
+                </NuxtLink>
+              </div>
+              <button class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10" @click="deleteCurrentActivity">
+                  <VIcon
+                    :alt="'ces-bin'"
+                    :icon="'ces-bin'"
+                    size="medium"
+                    class="text-cream flex items-center justify-center"
+                  />
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -135,18 +199,83 @@
     specificActivity,
     getActivityById,
     getNotification,
-    unreadNotification
+    unreadNotification,
+    updateActivity,
+    deleteActivity
   } = useFirebaseAuth()
-  const { timeConverter } = useTools()
+  const { timeConverter, timeToDate } = useTools()
+  const { uploadFiles } = useFirestorage()
 
+  const title = ref('')
+  const description = ref('')
+  const where = ref('')
+  const what = ref('')
+  const when = ref('')
+  const yearLevel = ref(1)
+  const status = ref('Upcoming')
+
+  const errorMessage = ref('')
+  const readContent = ref([])
+  const tabName = ref('EDIT ACTIVITY')
   const pageTitle = ref('CES ACTIVITY')
   const isOpen = ref(false)
+  const isEdit = ref(true)
   const route = useRoute()
   const routerID = route.params.slug
 
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
+
+const handleFileSubmit = async (event) => {
+    try {
+      const file = event.target.files[0]
+      if (file) {
+        await uploadFiles(userId, activityID, file)
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const updateCurrentActivity = async () => {
+    try {
+      if (
+        !title.value ||
+        !description.value ||
+        !where.value ||
+        !when.value ||
+        !what.value ||
+        !yearLevel.value ||
+        !status.value
+      ) {
+        errorMessage.value = 'Please fill in all the required fields.'
+      } else {
+        await updateActivity(routerID, {
+          name: title.value,
+          description: description.value,
+          where: where.value,
+          when: new Date(when.value),
+          what: what.value,
+          yearLevel: yearLevel.value,
+          createdAt: new Date(),
+          status: status.value
+        })
+        errorMessage.value = ''
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const deleteCurrentActivity = async () => {
+      try {
+        await deleteActivity(routerID)
+        await navigateTo('/admin/activities/')
+      } catch (error) {
+        errorMessage.value = `${error}`
+      }
+    }
 
   const logUserOut = async () => {
     await logout()
@@ -156,6 +285,16 @@
   onMounted(async () => {
     await authorizedUser()
     await getActivityById(routerID)
+
+  if (specificActivity.value) {
+    title.value = specificActivity.value.name
+    description.value = specificActivity.value.description
+    where.value = specificActivity.value.where
+    what.value = specificActivity.value.what
+    when.value = timeToDate(specificActivity.value.when)
+    yearLevel.value = specificActivity.value.yearLevel
+    status.value = specificActivity.value.status
+  }
     await getNotification()
   })
 

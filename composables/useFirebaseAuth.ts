@@ -14,7 +14,8 @@ export const useFirebaseAuth = () => {
     updateSubcollection,
     readById,
     read,
-    update
+    update,
+    del
   } = useFirestore()
   const { generateUUID } = useTools()
   const { $auth } = useNuxtApp()
@@ -68,18 +69,6 @@ export const useFirebaseAuth = () => {
           errorMessage.value = 'Registration failed. Please try again later'
           break
       }
-    }
-  }
-
-  const addActivity = async (uid: string, data: Object) => {
-    try {
-      // const auth = getAuth()
-      // const userCredentials = auth.currentUser
-      // const user = userCredentials.uid
-      await addUser('activities', uid, data)
-      console.log('created activities user', user)
-    } catch (error) {
-      errorMessage.value = `${error}`
     }
   }
 
@@ -161,6 +150,30 @@ export const useFirebaseAuth = () => {
       } else {
         errorMessage.value = 'Invalid email or password'
       }
+    }
+  }
+
+  const addActivity = async (uid: string, data: Object) => {
+    try {
+      await addUser('activities', uid, data)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const updateActivity = async (uid: string, data: Object) => {
+    try {
+      await update('activities', uid, data)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const deleteActivity = async (uid: string) => {
+    try {
+      await del('activities', uid)
+    } catch (error) {
+      errorMessage.value = `${error}`
     }
   }
 
@@ -481,6 +494,8 @@ export const useFirebaseAuth = () => {
     dataFetched,
     register,
     addActivity,
+    updateActivity,
+    deleteActivity,
     getUserAcitivities,
     userActivityCompleted,
     userActivityPending,
