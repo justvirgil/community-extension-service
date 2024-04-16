@@ -9,9 +9,6 @@
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
-          <NuxtLink to="/admin/faq" class="mx-3 text-xl text-white">
-            <VIcon :alt="'ces-question'" :icon="'ces-question'" size="medium" />
-          </NuxtLink>
           <NuxtLink
             to="/admin/notification"
             class="mx-3 text-xl text-white flex flex-row items-center justify-center"
@@ -55,23 +52,85 @@
         </div>
       </nav>
     </header>
+    <div class="grow flex flex-col items-center">
+      <div class="bg-light-blue py-3 px-4 flex items-start justify-between text-xl text-center w-full text-nowrap">
+        <p class="w-36 rounded-xl mx-3 bg-light-blue text-cream hover:bg-dark-blue">
+          ID NUMBER
+        </p>
+        <p class="w-36 rounded-xl mx-3 bg-light-blue text-cream hover:bg-dark-blue">
+          STUDENT NAME
+        </p>
+        <p class="w-36 rounded-xl mr-10 bg-light-blue text-cream hover:bg-dark-blue">
+          COURSE & YEAR
+        </p>
+      </div>
+      
+      <div class="p-2 flex flex-col items-start text-sm text-center w-full">
+        <div class="flex flex-col w-full items-start overflow-y-scroll overflow-x-hidden bg-cream">
 
-    <div class="bg-white text-black [50px]">
-      <p v-for="(course, index) in courses" :key="index">{{ course.name }}</p>
+          <button v-for="(student, index) in students" :key="index" class="flex flex-row w-full items-center text-nowrap rounded-xl mx-3 hover:bg-dark-blue hover:text-cream" @click="redirection(student.id)">
+   
+            <p class="grow w-fit mr-3">
+              {{ student.id }}
+            </p>
+     
+            <p class="grow w-fit ml-3">
+              {{ student.name }}
+            </p>
+        
+            <p class="grow w-fit ml-3" v-if="student.course && student.yearLevel">
+              {{ student.course }} - {{ student.yearLevel }}
+            </p>
+
+            <p class="grow w-fit ml-3" v-else>
+              {{ student.course }} {{ student.yearLevel }}
+            </p>
+          </button>
+
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-  const { authorizedUser, getStudents, getCourses, students, courses } =
-    useFirebaseAuth()
+  const {
+    authorizedUser,
+    logout,
+    getStudents,
+    students,
+    getNotification,
+    updateNotification,
+    notification,
+    unreadNotification
+  } = useFirebaseAuth()
 
   const pageTitle = ref('Student')
+  const date = ref(new Date())
+  const isOpen = ref(false)
+  const toggleDropDown = () => {
+    isOpen.value = !isOpen.value
+  }
+
+  const router = useRouter()
+
+  const redirection = async (studentId) => {
+    try {
+      router.push(`/admin/students/id/${studentId}`)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const logUserOut = async () => {
+    await logout()
+    navigateTo('/admin/login')
+  }
 
   onMounted(async () => {
     await authorizedUser()
+    await getNotification()
     await getStudents()
-    await getCourses()
   })
 
   definePageMeta({

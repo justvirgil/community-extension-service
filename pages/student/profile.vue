@@ -98,7 +98,6 @@ f
         <p class="pt-6 absolute right-10 bottom-5">{{ profile.id }}</p>
       </div>
     </div>
-    <p>{{ userData }}</p>
   </div>
 </template>
 

@@ -176,13 +176,16 @@
                   />
                 </NuxtLink>
               </div>
-              <button class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10" @click="deleteCurrentActivity">
-                  <VIcon
-                    :alt="'ces-bin'"
-                    :icon="'ces-bin'"
-                    size="medium"
-                    class="text-cream flex items-center justify-center"
-                  />
+              <button
+                class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
+                @click="deleteCurrentActivity"
+              >
+                <VIcon
+                  :alt="'ces-bin'"
+                  :icon="'ces-bin'"
+                  size="medium"
+                  class="text-cream flex items-center justify-center"
+                />
               </button>
             </div>
           </div>
@@ -227,7 +230,7 @@
     isOpen.value = !isOpen.value
   }
 
-const handleFileSubmit = async (event) => {
+  const handleFileSubmit = async (event) => {
     try {
       const file = event.target.files[0]
       if (file) {
@@ -269,13 +272,13 @@ const handleFileSubmit = async (event) => {
   }
 
   const deleteCurrentActivity = async () => {
-      try {
-        await deleteActivity(routerID)
-        await navigateTo('/admin/activities/')
-      } catch (error) {
-        errorMessage.value = `${error}`
-      }
+    try {
+      await deleteActivity(routerID)
+      await navigateTo('/admin/activities/')
+    } catch (error) {
+      errorMessage.value = `${error}`
     }
+  }
 
   const logUserOut = async () => {
     await logout()
@@ -286,15 +289,15 @@ const handleFileSubmit = async (event) => {
     await authorizedUser()
     await getActivityById(routerID)
 
-  if (specificActivity.value) {
-    title.value = specificActivity.value.name
-    description.value = specificActivity.value.description
-    where.value = specificActivity.value.where
-    what.value = specificActivity.value.what
-    when.value = timeToDate(specificActivity.value.when)
-    yearLevel.value = specificActivity.value.yearLevel
-    status.value = specificActivity.value.status
-  }
+    if (specificActivity.value) {
+      title.value = specificActivity.value.name
+      description.value = specificActivity.value.description
+      where.value = specificActivity.value.where
+      what.value = specificActivity.value.what
+      when.value = timeToDate(specificActivity.value.when)
+      yearLevel.value = specificActivity.value.yearLevel
+      status.value = specificActivity.value.status
+    }
     await getNotification()
   })
 

@@ -295,6 +295,55 @@ export const useFirebaseAuth = () => {
     }
   }
 
+  const getStudentAcitivities = async (studentId: string) => {
+    try {
+      const userDataArray = await read('activities')
+
+      const filterComplete = userDataArray.filter(
+        (activity) =>
+          (activity.pendingUsers?.includes(studentId) ||
+            activity.approvedUsers?.includes(studentId) ||
+            !activity.pendingUsers ||
+            !activity.approvedUsers) &&
+          activity.status === 'completed'
+      )
+
+      const filterUpcoming = userDataArray.filter(
+        (activity) =>
+          (activity.pendingUsers?.includes(studentId) ||
+            activity.approvedUsers?.includes(studentId) ||
+            !activity.pendingUsers ||
+            !activity.approvedUsers) &&
+          activity.status === 'upcoming'
+      )
+
+      const filterPending = userDataArray.filter(
+        (activity) =>
+          (activity.pendingUsers?.includes(studentId) ||
+            activity.approvedUsers?.includes(studentId) ||
+            !activity.pendingUsers ||
+            !activity.approvedUsers) &&
+          activity.status === 'pending'
+      )
+
+      const filterCancelled = userDataArray.filter(
+        (activity) =>
+          (activity.pendingUsers?.includes(studentId) ||
+            activity.approvedUsers?.includes(studentId) ||
+            !activity.pendingUsers ||
+            !activity.approvedUsers) &&
+          activity.status === 'cancelled'
+      )
+
+      userActivityCompleted.value = filterComplete
+      userActivityPending.value = filterUpcoming
+      userActivityUpcoming.value = filterPending
+      userActivityCancelled.value = filterCancelled
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
   const getStudents = async () => {
     try {
       const studentsDataArray = await read('users')
@@ -423,6 +472,17 @@ export const useFirebaseAuth = () => {
     }
   }
 
+  const getStudentProfile = async (uid: string) => {
+    try {
+      const studentsDataArray = await read('users')
+      profile.value = studentsDataArray.find(
+        (student) => student.id === uid
+      )
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
   const getActivityLocation = async () => {
     try {
       const userDataArray = await read('activities')
@@ -497,6 +557,7 @@ export const useFirebaseAuth = () => {
     updateActivity,
     deleteActivity,
     getUserAcitivities,
+    getStudentAcitivities,
     userActivityCompleted,
     userActivityPending,
     userActivityUpcoming,
@@ -523,6 +584,7 @@ export const useFirebaseAuth = () => {
     getActivityById,
     specificActivity,
     getProfile,
+    getStudentProfile,
     profile,
     updateUserActivity,
     activityLocations,

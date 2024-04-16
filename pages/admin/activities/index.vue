@@ -82,8 +82,8 @@
           @click="filterActivities('upcoming')"
         >
           Upcoming
-        </button>
-      </div>
+          </button>
+        </div>
 
       <div class="bg-dark-blue text-cream w-full p-3">
         <p class="pl-5">{{ tabName }}</p>
@@ -99,7 +99,7 @@
           :key="index"
           :card-data="item"
           @join="join(item.id)"
-          @full-page="redirectToApproved(item.id)"
+          @full-page="redirection(item.id)"
         />
       </div>
       <div class="flex flex-row justify-end mr-8 mt-10">
@@ -156,7 +156,7 @@
     }
   }
 
-  const redirectToApproved = async (activityId) => {
+  const redirection = async (activityId) => {
     try {
       router.push(`/admin/activities/id/${activityId}`)
     } catch (error) {
