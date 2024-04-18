@@ -30,7 +30,7 @@
               class="rounded-full bg-light-green text-cream w-fit px-5"
               @click="emit('join')"
             >
-              JOIN ACTIVITY
+              {{ buttonName }}
             </button>
           </div>
           <div>
@@ -70,12 +70,13 @@
 
   const emit = defineEmits<Emit>()
 
-  withDefaults(defineProps<card>(), () => ({
+  withDefaults(defineProps<card & { buttonName?: string}>(), () => ({
     cardData: {
       name: '',
       description: '',
       where: '',
       when: ''
-    }
+    },
+    buttonName: 'JOIN ACTIVITY'
   }))
 </script>

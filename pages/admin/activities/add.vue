@@ -126,10 +126,8 @@
               </div>
               <label for="status" class="text-cream mr-2">Status: </label>
               <select id="status" v-model="status" name="status">
-                <option value="Pending">Pending</option>
-                <option value="Upcoming">Upcoming</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
+                <option value="PENDING">Pending</option>
+                <option value="APPROVED">Approved</option>
               </select>
             </div>
             <div class="flex flex-col items-center justity-between my-5">
@@ -203,7 +201,7 @@
   const what = ref('')
   const when = ref('')
   const yearLevel = ref(1)
-  const status = ref('Upcoming')
+  const status = ref('APPROVED')
 
   const errorMessage = ref('')
   const readContent = ref([])
@@ -253,6 +251,7 @@
           status: status.value
         })
         errorMessage.value = ''
+        navigateTo('/admin/activities/')
       }
     } catch (error) {
       errorMessage.value = `${error}`

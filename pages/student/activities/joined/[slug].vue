@@ -61,10 +61,37 @@
         <div class="py-3 px-4 flex items-start text-xl text-center w-full">
           <p class="text-cream">{{ specificActivity.name }}</p>
         </div>
-        <button class="rounded-full bg-green h-12 w-56 px-3 mr-3" @click="join">
-          <p class="text-cream">JOIN ACTIVITY</p>
-        </button>
-        <NuxtLink to="/student/activities/" class="mx-3 text-xl text-white">
+        <div class="flex flex-row ml-7 justify-center items-center">
+          <input
+            type="file"
+            class="hidden"
+            ref="imageInput"
+            @change="handleFileSubmit($event)"            
+          />
+          <button @click="$refs.imageInput.click()" >
+            <VIcon
+              :alt="'ces-image'"
+              :icon="'ces-image'"
+              size="medium"
+              class="mr-3 text-cream"
+            />
+          </button>
+
+          <input
+            type="file"
+            class="hidden"
+            ref="fileInput"
+            @change="handleFileSubmit($event)"            
+          />
+          <button @click="$refs.fileInput.click()" >
+            <VIcon
+              :alt="'ces-file-text'"
+              :icon="'ces-file-text'"
+              size="medium"
+              class="mr-3 text-cream"
+            />
+          </button>
+        </div>        <NuxtLink to="/student/activities/" class="mx-3 text-xl text-white">
           <VIcon
             :alt="'ces-cross'"
             :icon="'ces-cross'"
@@ -72,34 +99,6 @@
             class="text-red-600"
           />
         </NuxtLink>
-        <div
-          v-if="
-            specificActivity.status === 'completed' ||
-            specificActivity.status === 'pending'
-          "
-          class="flex flex-row ml-7 justify-between items-center"
-        >
-          <VIcon
-            :alt="'ces-image'"
-            :icon="'ces-image'"
-            size="x-large"
-            class="mr-3"
-          />
-
-          <VIcon
-            :alt="'ces-file-text2'"
-            :icon="'ces-file-text2'"
-            size="x-large"
-            class="mr-3"
-          />
-
-          <VIcon
-            :alt="'ces-checkmark'"
-            :icon="'ces-checkmark'"
-            size="x-large"
-            class="mr-3"
-          />
-        </div>
       </div>
 
       <div class="bg-dark-blue text-cream">
@@ -142,6 +141,8 @@
     getUserUID
   } = useFirebaseAuth()
   const { timeConverter } = useTools()
+  const { uploadFiles } = useFirestorage()
+
 
   const pageTitle = ref('CES ACTIVITY')
   const isOpen = ref(false)
@@ -149,58 +150,24 @@
   const routerID = route.params.slug
   const errorMessage = ref('')
 
-  const activityId = ref('')
-  const name = ref('')
-  const description = ref('')
-  const where = ref('')
-  const what = ref('')
-  const when = ref('')
-  const createdAt = ref('')
-  const yearLevel = ref('')
-  const status = ref('')
-  const pendingUsers = ref([])
-  const approvedUsers = ref([])
-  const rejectedUsers = ref([])
-
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
 
-  const join = async () => {
+ const userId = getUserUID()
+
+  const handleFileSubmit = async (event) => {
     try {
-      const userID = getUserUID()
+      const file = event.target.files[0]
 
-      const data = {
-        activityId: activityId.value,
-        createdAt: createdAt.value,
-        description: description.value,
-        name: name.value,
-        what: what.value,
-        when: when.value,
-        where: where.value,
-        points: 0,
-        isCompleted: false,
-        joinedAt: new Date(),
-        pendingUsers: pendingUsers.value || [],
-        approvedUsers: approvedUsers.value || [],
-        rejectedUsers: rejectedUsers.value || []
+      if (file) {
+        await uploadFiles(userId, routerID, file)
       }
-
-      if (yearLevel.value != null) {
-        data.yearLevel = yearLevel.value
-      }
-
-      if (status.value != null && status.value !== '') {
-        data.status = status.value
-      }
-
-      await joinActivity(routerID, userID, data)
-      navigateTo('/student/activities/')
     } catch (error) {
       errorMessage.value = `${error}`
-      console.log(error)
     }
   }
+
 
   const logUserOut = async () => {
     await logout()
@@ -211,21 +178,6 @@
     await authorizedUser()
     await getActivityById(routerID)
     await getNotification()
-
-    if (specificActivity.value) {
-      activityId.value = specificActivity.value.id
-      name.value = specificActivity.value.name
-      description.value = specificActivity.value.description
-      where.value = specificActivity.value.where
-      what.value = specificActivity.value.what
-      when.value = specificActivity.value.when
-      createdAt.value = specificActivity.value.createdAt
-      yearLevel.value = specificActivity.value.yearLevel
-      status.value = specificActivity.value.status
-      pendingUsers.value = specificActivity.value.pendingUsers
-      approvedUsers.value = specificActivity.value.approvedUsers
-      rejectedUsers.value = specificActivity.value.rejectedUsers
-    }
   })
 
   definePageMeta({

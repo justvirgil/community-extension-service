@@ -61,6 +61,7 @@
     <cardDescription
       v-if="showCard"
       :card-data="cardData"
+      :button-name="buttonName"
       class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-light-blue w-[380px] p-5 justify-center rounded-[30px] z-50"
       @click="toggleCard"
       @join="emit('join')"
@@ -71,6 +72,7 @@
 
 <script setup lang="ts">
   const showCard = ref(false)
+  const buttonName = ref('View Activity')
 
   interface card {
     cardData: {
@@ -92,7 +94,7 @@
 
   const emit = defineEmits<Join>()
 
-  withDefaults(defineProps<card & { disabled?: boolean }>(), () => ({
+  withDefaults(defineProps<card & { disabled?: boolean, buttonName?: string }>(), () => ({
     cardData: {
       id: '',
       name: '',
@@ -100,6 +102,7 @@
       where: '',
       when: ''
     },
-    disabled: false
+    disabled: false,
+    buttonName: 'JOIN ACTIVITY'
   }))
 </script>

@@ -59,6 +59,7 @@
     <div class="p-3 text-xl text-start w-full bg-dark-blue text-cream">
       <p>Hello user! Here are your recent activities!</p>
     </div>
+
     <div
       class="flex flex-row h-full overflow-x-auto justify-center bg-cream text-cream"
     >
@@ -106,15 +107,17 @@
         </p>
         <div class="py-5">
           <activity-card
-            v-for="(item, index) in userActivityUpcoming"
+            v-for="(item, index) in profileActivity"
             :key="index"
             :card-data="item"
+            :button-name="'VIEW ACTIVITY'"
             class="py-2"
-            @join="join(item.id)"
+            @join="redirection(item.activityId)"
+            @full-page="redirection(item.activityId)"
           />
         </div>
       </div>
-
+        <p class="text-black">{{ profileActivity}}</p>
       <div class="grow flex flex-col items-center">
         <p
           class="flex rounded-2xl mt-5 text-2xl text-center items-center justify-center h-16 w-40 bg-dark-blue"
@@ -151,8 +154,11 @@
     userActivityCompleted,
     userActivityPending,
     userActivityUpcoming,
+    profileActivity,
     userActivityCancelled,
-    getUserUID
+    getUserUID,
+    getProfile,
+profile
   } = useFirebaseAuth()
 
   const { uploadFiles } = useFirestorage()
@@ -164,9 +170,11 @@
     isOpen.value = !isOpen.value
   }
 
-  const join = async (activityId) => {
+  const router = useRouter()
+
+  const redirection = async (activityId) => {
     try {
-      await joinActivity(activityId, userUID.value)
+      router.push(`/student/activities/joined/${activityId}`)
     } catch (error) {
       errorMessage.value = `${error}`
     }
@@ -216,6 +224,7 @@
     await getUserProfile()
     await getNotification()
     await getUserAcitivities()
+    await getProfile()
   })
 
   definePageMeta({

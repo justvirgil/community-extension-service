@@ -29,6 +29,7 @@ export const useFirebaseAuth = () => {
   const activityLocations = useState(() => [])
   const students = useState(() => [])
   const profile = useState(() => [])
+  const profileActivity = useState(() => {})
   const notification = useState(() => [])
   const notificationMessage = useState(() => [])
   const userActivityCompleted = useState(() => [])
@@ -504,16 +505,31 @@ export const useFirebaseAuth = () => {
     }
   }
 
-  const getProfile = async () => {
-    try {
-      const studentsDataArray = await read('users')
-      profile.value = studentsDataArray.find(
-        (student) => student.id === userUID.value
-      )
-    } catch (error) {
-      errorMessage.value = `${error}`
+const getProfile = async () => {
+  try {
+    const studentsDataArray = await read('users');
+    
+    // Find the user's profile
+    const userProfile = studentsDataArray.find(
+      (student) => student.id === userUID.value
+    );
+
+    // Set the user profile
+    profile.value = userProfile;
+
+    // Extract joined activities and store them in profileActivity.value
+    if (userProfile && userProfile.joinedActivities) {
+      // Extract values from the map
+      profileActivity.value = Object.values(userProfile.joinedActivities);
+    } else {
+      // Handle case where user profile or joinedActivities is not found
+      profileActivity.value = [];
+      console.error('User profile or joinedActivities not found');
     }
+  } catch (error) {
+    errorMessage.value = `${error}`;
   }
+};
 
   const getStudentProfile = async (uid: string) => {
     try {
@@ -622,6 +638,7 @@ export const useFirebaseAuth = () => {
     getStudents,
     students,
     getActivities,
+    profileActivity,
     activity,
     getActivityById,
     specificActivity,
