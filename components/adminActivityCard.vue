@@ -2,6 +2,8 @@
   <div class="flex flex-row">
     <div
       class="flex flex-col bg-dark-blue w-[220px] h-[150px] relative p-1 rounded-lg"
+      :class="{ 'bg-[#631689]': isSelected }"
+      @click="selectActivity(cardData.id)"
     >
       <button
         class="flex grow justify-center items-center bg-light-blue px-3 overflow-auto"
@@ -70,8 +72,23 @@
     }
   }
 
+  const selectedActivityId = ref<string | null>('')
+  const isSelected = ref(false)
+
+  const selectActivity = (activityId: string) => {
+    if (selectedActivityId.value === activityId) {
+      selectedActivityId.value = null
+      isSelected.value = false
+      console.log('deselect')
+    } else {
+      selectedActivityId.value = activityId
+      isSelected.value = true
+      console.log(selectedActivityId.value)
+    }
+  }
+
   interface Join {
-    (e: 'join' | 'fullPage' | 'uploadImage' | 'uploadFiles'): void
+    (e: 'join' | 'fullPage' | 'uploadImage' | 'uploadFiles' | 'selected'): void
   }
 
   const emit = defineEmits<Join>()

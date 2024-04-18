@@ -55,10 +55,18 @@
 
     <div class="overflow-y-auto">
       <div class="flex flex-col items-center">
-
-        <div class="bg-dark-blue py-3 px-4 flex items-start justify-between text-xl text-center w-full text-nowrap">
-          <NuxtLink class="flex flex-row justify-center items-center w-36 rounded-xl mx-3 bg-dark-blue text-cream hover:bg-light-blue" to="/admin/students/">
-            <VIcon :alt="'ces-circle-left'" :icon="'ces-circle-left'" size="large" />
+        <div
+          class="bg-dark-blue py-3 px-4 flex items-start justify-between text-xl text-center w-full text-nowrap"
+        >
+          <NuxtLink
+            class="flex flex-row justify-center items-center w-36 rounded-xl mx-3 bg-dark-blue text-cream hover:bg-light-blue"
+            to="/admin/students/"
+          >
+            <VIcon
+              :alt="'ces-circle-left'"
+              :icon="'ces-circle-left'"
+              size="large"
+            />
             <p class="ml-3">BACK</p>
           </NuxtLink>
         </div>
@@ -71,7 +79,7 @@
                 v-if="!profile.avatar"
                 :alt="'ces-user'"
                 :icon="'ces-user'"
-                class="text-[7rem]"
+                class="text-[7.01rem] mr-2"
               />
               <img
                 v-if="profile.avatar"
@@ -90,8 +98,9 @@
           <p class="pt-6 absolute right-10 bottom-5">{{ profile.id }}</p>
         </div>
 
-
-        <div class="bg-dark-blue py-3 px-4 flex items-start text-xl text-center w-full text-nowrap">
+        <div
+          class="bg-dark-blue py-3 px-4 flex items-start text-xl text-center w-full text-nowrap"
+        >
           <button
             class="w-36 rounded-xl mx-3 bg-dark-blue text-cream ml-5 hover:bg-light-blue"
             @click="filterActivities('completed')"
@@ -111,35 +120,53 @@
             @click="filterActivities('cancelled')"
           >
             Cancelled
-            </button>
+          </button>
         </div>
       </div>
 
-      <div class="flex flex-row">
-        <activity-card
+      <div class="flex flex-row h-[166px]">
+        <admin-activity-card
           v-for="(item, index) in filteredUserActivity"
           :key="index"
           :card-data="item"
           class="py-2 mx-2"
-          @join="join(item.id)"
+          @click="handleActivitySelection(item.id)"
         />
+        <p>{{ specificActivity }}</p>
       </div>
-      <div class="bg-dark-blue py-3 px-4 flex items-start justify-between text-xl text-center w-full text-nowrap">
-        <div class="flex flex-row justify-center items-center w-36 rounded-xl mx-3 bg-dark-blue text-cream">
-         <p class="ml-3">POINTS</p>
+      <div
+        class="bg-dark-blue py-3 px-4 flex items-start justify-between text-xl text-center w-full text-nowrap"
+      >
+        <div
+          class="flex flex-row justify-center items-center w-36 rounded-xl mx-3 bg-dark-blue text-cream"
+        >
+          <p class="ml-3">POINTS</p>
         </div>
       </div>
 
       <div class="h-16 flex flex-row items-center justify-center">
-        <button class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10">
-          <VIcon class="text-cream flex items-center justify-center" :alt="'ces-menu'" :icon="'ces-menu'" size="medium" />
+        <button
+          class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
+        >
+          <VIcon
+            class="text-cream flex items-center justify-center"
+            :alt="'ces-minus'"
+            :icon="'ces-minus'"
+            size="medium"
+          />
         </button>
 
-        <button class="bg-light-green mx-1 flex items-center justify-center rounded-full h-10 w-10">
-          <VIcon class="text-cream flex items-center justify-center" :alt="'ces-plus'" :icon="'ces-plus'" size="medium" />
+        <button
+          class="bg-light-green mx-1 flex items-center justify-center rounded-full h-10 w-10"
+        >
+          <VIcon
+            class="text-cream flex items-center justify-center"
+            :alt="'ces-plus'"
+            :icon="'ces-plus'"
+            size="medium"
+          />
         </button>
       </div>
-
     </div>
   </div>
 </template>
@@ -159,29 +186,44 @@
     getStudentAcitivities,
     userActivityCompleted,
     userActivityPending,
-    userActivityCancelled
+    userActivityCancelled,
+    selectedActivityId,
+    getActivityById,
+    specificActivity
   } = useFirebaseAuth()
 
   const pageTitle = ref('Student')
   const date = ref(new Date())
   const isOpen = ref(false)
   const route = useRoute()
-  const filteredUserActivity = ref(userActivityCompleted)
+  const anchor = useState(() => [])
+  const filteredUserActivity = ref(
+    anchor === null ? userActivityCompleted : anchor
+  )
   const routerID = route.params.slug
-  
 
-  const filterActivities = computed((status) => {
+  const handleActivitySelection = async (activityId) => {
+    selectedActivityId.value = activityId
+    console.log('Selected activity ID:', selectedActivityId.value)
+    await getActivityById(selectedActivityId.value)
+  }
+
+  const filterActivities = (status) => {
     switch (status) {
-      case 'completed': 
-        return filteredUserActivity.value = userActivityCompleted
+      case 'completed':
+        filteredUserActivity.value = userActivityCompleted
+        break
       case 'pending':
-        return filteredUserActivity.value = userActivityPending
-      case 'cancelled': 
-        return filteredUserActivity.value = userActivityCancelled
-      default: 
-        return filteredUserActivity.value = userActivityCompleted
+        filteredUserActivity.value = userActivityPending
+        break
+      case 'cancelled':
+        filteredUserActivity.value = userActivityCancelled
+        break
+      default:
+        filteredUserActivity.value = userActivityCompleted
+        break
     }
-  })
+  }
 
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value

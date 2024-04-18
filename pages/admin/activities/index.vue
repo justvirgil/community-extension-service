@@ -82,8 +82,8 @@
           @click="filterActivities('upcoming')"
         >
           Upcoming
-          </button>
-        </div>
+        </button>
+      </div>
 
       <div class="bg-dark-blue text-cream w-full p-3">
         <p class="pl-5">{{ tabName }}</p>

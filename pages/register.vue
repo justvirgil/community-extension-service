@@ -32,6 +32,33 @@
             placeholder="last name"
             class="w-80 h-12 text-black m-2"
           />
+          <div class="flex flex-col my-2">
+            <div class="mb-2 flex-row w-56">
+              <label for="yearLevel" class="text-cream mr-2"
+                >Year Level:
+              </label>
+              <select id="yearLevel" v-model="yearLevel" name="yearLevel">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+            <div class="flex flex-row">
+              <label for="course" class="text-cream mr-2">Course: </label>
+              <select id="course" v-model="course" name="course" class="w-60">
+                <option value="Information and Communication Technologies">
+                  Information and Communication Technologies
+                </option>
+                <option value="Information Technology">
+                  Information Technology
+                </option>
+                <option value="Information System">Information System</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Computer Science">Computer Science</option>
+              </select>
+            </div>
+          </div>
           <VTextField
             v-model="email"
             type="email"
@@ -77,6 +104,8 @@
   const lastName = ref('')
   const email = ref('')
   const password = ref('')
+  const yearLevel = ref(1)
+  const course = ref('')
   const confirmPassword = ref('')
   const errorMessage = ref('')
 
@@ -98,6 +127,8 @@
         firstName.value === '' ||
         lastName.value === '' ||
         email.value === '' ||
+        yearLevel.value === '' ||
+        course.value === '' ||
         password.value === '' ||
         confirmPassword.value === ''
       ) {
@@ -117,6 +148,8 @@
             email: email.value,
             firstName: firstName.value,
             lastName: lastName.value,
+            course: course.value,
+            yearLevel: yearLevel.value,
             createdAt: new Date()
           })
           navigateTo('/')

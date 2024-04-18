@@ -67,20 +67,22 @@ f
 
     <div class="w-full h-full bg-white flex items-center justify-center">
       <div class="bg-yellow w-[40rem] h-[15rem] p-7 rounded-md relative">
-        <p>Student</p>
-        <div class="flex flex-row items-center justify-between pt-3 px-10">
+        <div class="flex flex-row items-center justify-between">
+          <p class="ml-12">S T U D E N T</p>
+        </div>
+        <div class="flex flex-row items-center justify-between px-3">
           <div class="">
             <VIcon
               v-if="!profile.avatar"
               :alt="'ces-user'"
               :icon="'ces-user'"
-              class="text-[6rem]"
+              class="text-8xl"
             />
             <img
               v-if="profile.avatar"
               :src="profile.avatar"
               alt="Avatar"
-              class="h-24 w-24"
+              class="h-28 w-28"
             />
             <input
               type="file"
@@ -89,10 +91,24 @@ f
             />
           </div>
           <div class="flex flex-col pr-20">
-            <p>{{ profile.name }}</p>
-            <p>{{ profile.yearLevel }}</p>
-            <p>{{ profile.course }}</p>
-            <p>{{ profile.email }}</p>
+            <div class="flex flex-row">
+              <label for="name" class="mr-2">name: </label>
+              <p>{{ profile.name }}</p>
+            </div>
+            <div class="flex flex-col text-nowrap">
+              <div class="mr-2 flex flex-row">
+                <label for="yearLevel" class="mr-2">year: </label>
+                <p>{{ profile.yearLevel }}</p>
+              </div>
+              <div class="flex flex-row">
+                <label for="course" class="mr-2">course: </label>
+                <p>{{ profile.course }}</p>
+              </div>
+            </div>
+            <div class="flex flex-row">
+              <label for="email" class="mr-2">email: </label>
+              <p>{{ profile.email }}</p>
+            </div>
           </div>
         </div>
         <p class="pt-6 absolute right-10 bottom-5">{{ profile.id }}</p>
@@ -110,16 +126,26 @@ f
     getUserUID,
     updateUserAvatar,
     getNotification,
-    unreadNotification
+    unreadNotification,
+    getCourses,
+    courses
   } = useFirebaseAuth()
   const { uploadAvatar } = useFirestorage()
 
   const userData = ref('')
   const pageTitle = ref('Profile')
   const isOpen = ref(false)
+  const errorMessage = ref('')
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
+
+  const name = ref('')
+  const email = ref('')
+  const isAdmin = ref(false)
+  const createdAt = ref(null)
+  const yearLevel = ref(1)
+  const courseName = ref('Information System')
 
   const handleAvatarChange = async (event) => {
     const file = event.target.files[0]
@@ -140,6 +166,16 @@ f
     await authorizedUser()
     await getProfile()
     await getNotification()
+    await getCourses()
+
+    if (profile.value) {
+      name.value = courses.value.name
+      email.value = courses.value.email
+      isAdmin.value = courses.value.isAdmin
+      createdAt.value = courses.value.createdAt
+      yearLevel.value = courses.value.yearLevel || 1
+      courseName.value = courses.value.courseName || ''
+    }
   })
 
   definePageMeta({

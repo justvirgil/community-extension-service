@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full w-full bg-cream">
+  <div class="flex flex-col h-full w-full bg-cream overflow-y-auto">
     <header
       class="flex flex-row bg-light-blue border-b border-l border-dark-blue"
     >
@@ -74,7 +74,9 @@
         >
           <p>AVAILABLE</p>
         </div>
-        <div class="text-center pt-12 border-l-2 border-dark-blue">
+        <div
+          class="text-center pt-12 border-l-2 border-dark-blue h-screen overflow-y-auto"
+        >
           <p v-for="(date, index) in activity" :key="index" class="my-3">
             {{ date.name }}, {{ timeConverter(date.when) }}
           </p>

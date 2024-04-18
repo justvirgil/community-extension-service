@@ -18,7 +18,7 @@ export const useFirestore = () => {
     const docRef = await addDoc(colRef, data)
     return docRef
   }
-
+  // set replaces the entire document with current data: Object
   const addUser = async (col: string, userId: string, data: Object) => {
     const colRef = doc($firestoreDb, col, userId)
     await setDoc(colRef, data)
@@ -36,7 +36,8 @@ export const useFirestore = () => {
     await setDoc(colRef, data)
     return colRef
   }
-
+  // update adds a new field to an existing document
+  // use { merge: true } option to ensure new data is merged with existing data
   const update = async (col: string, userId: string, data: Object) => {
     const docRef = doc($firestoreDb, col, userId)
     return await updateDoc(docRef, data)

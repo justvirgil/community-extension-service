@@ -53,40 +53,55 @@
       </nav>
     </header>
     <div class="grow flex flex-col items-center">
-      <div class="bg-light-blue py-3 px-4 flex items-start justify-between text-xl text-center w-full text-nowrap">
-        <p class="w-36 rounded-xl mx-3 bg-light-blue text-cream hover:bg-dark-blue">
+      <div
+        class="bg-light-blue py-3 px-4 flex items-start justify-between text-xl text-center w-full text-nowrap"
+      >
+        <p
+          class="w-36 rounded-xl mx-3 bg-light-blue text-cream hover:bg-dark-blue"
+        >
           ID NUMBER
         </p>
-        <p class="w-36 rounded-xl mx-3 bg-light-blue text-cream hover:bg-dark-blue">
+        <p
+          class="w-36 rounded-xl mx-3 bg-light-blue text-cream hover:bg-dark-blue"
+        >
           STUDENT NAME
         </p>
-        <p class="w-36 rounded-xl mr-10 bg-light-blue text-cream hover:bg-dark-blue">
+        <p
+          class="w-36 rounded-xl mr-10 bg-light-blue text-cream hover:bg-dark-blue"
+        >
           COURSE & YEAR
         </p>
       </div>
-      
-      <div class="p-2 flex flex-col items-start text-sm text-center w-full">
-        <div class="flex flex-col w-full items-start overflow-y-scroll overflow-x-hidden bg-cream">
 
-          <button v-for="(student, index) in students" :key="index" class="flex flex-row w-full items-center text-nowrap rounded-xl mx-3 hover:bg-dark-blue hover:text-cream" @click="redirection(student.id)">
-   
+      <div class="p-2 flex flex-col items-start text-sm text-center w-full">
+        <div
+          class="flex flex-col w-full items-start overflow-y-scroll overflow-x-hidden bg-cream"
+        >
+          <button
+            v-for="(student, index) in students"
+            :key="index"
+            class="flex flex-row w-full items-center text-nowrap rounded-xl mx-3 hover:bg-dark-blue hover:text-cream"
+            @click="redirection(student.id)"
+          >
             <p class="grow w-fit mr-3">
               {{ student.id }}
             </p>
-     
+
             <p class="grow w-fit ml-3">
               {{ student.name }}
             </p>
-        
-            <p class="grow w-fit ml-3" v-if="student.course && student.yearLevel">
+
+            <p
+              v-if="student.course && student.yearLevel"
+              class="grow w-fit ml-3"
+            >
               {{ student.course }} - {{ student.yearLevel }}
             </p>
 
-            <p class="grow w-fit ml-3" v-else>
+            <p v-else class="grow w-fit ml-3">
               {{ student.course }} {{ student.yearLevel }}
             </p>
           </button>
-
         </div>
       </div>
     </div>

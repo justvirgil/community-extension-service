@@ -23,12 +23,14 @@ export const useFirebaseAuth = () => {
   const dataFetched = useState(() => [])
   const courses = useState(() => [])
   const activity = useState(() => [])
+  const selectedActivityId = useState(() => '')
   const specificActivity = useState(() => [])
   const filteredActivities = useState(() => [])
   const activityLocations = useState(() => [])
   const students = useState(() => [])
   const profile = useState(() => [])
   const notification = useState(() => [])
+  const notificationMessage = useState(() => [])
   const userActivityCompleted = useState(() => [])
   const userActivityPending = useState(() => [])
   const userActivityUpcoming = useState(() => [])
@@ -82,22 +84,37 @@ export const useFirebaseAuth = () => {
       const user = userCredentials.user
       if (user && user.emailVerified) {
         const userDataArray = await readById('pendingUsers', user.email)
-        const userData = userDataArray[0]
-        dataFetched.value = userData
-        await addUser('users', user.uid, {
-          isAdmin: userData.isAdmin,
-          email: userData.email,
-          name: `${userData.firstName} ${userData.lastName}`,
-          createdAt: userData.createdAt,
-          joinedActivities: {}
-        })
-        console.log('user data', userData)
-        await navigateTo('/student/home')
+        const userExistArray = await readById('users', user.email)
+
+        const userExist = userExistArray[0]
+
+        if (userExistArray.length !== 0) {
+          await navigateTo('/student/home')
+        } else {
+          const userData = userDataArray[0]
+          dataFetched.value = userData
+
+          const userObject = {
+            isAdmin: userData.isAdmin,
+            email: userData.email,
+            name: userData.name,
+            createdAt: userData?.createdAt
+          }
+
+          if (userData.course && userData.yearLevel) {
+            userObject.course = userData.course
+            userObject.yearLevel = userData.yearLevel
+          }
+
+          await addUser('users', user.uid, userObject)
+          errorMessage.value = ''
+          await navigateTo('/student/home')
+        }
       } else {
-        console.log('not verified', user)
+        errorMessage.value = 'User not verified'
         await navigateTo('/')
       }
-      console.log('logged user', user)
+      errorMessage.value = ''
     } catch (error) {
       if (
         error.code === 'auth/user-not-found' ||
@@ -118,7 +135,7 @@ export const useFirebaseAuth = () => {
         password
       )
       const admin = adminCredentials.user
-      const adminDataArray = await readById('pendingUsers', admin.email)
+      const adminDataArray = await readById('admins', admin.email)
       if (adminDataArray.length === 0 || adminDataArray[0].isAdmin === false) {
         errorMessage.value = 'Unauthorized role'
       } else if (!admin.emailVerified) {
@@ -129,18 +146,16 @@ export const useFirebaseAuth = () => {
         adminDataArray[0].isAdmin === true
       ) {
         const adminData = adminDataArray[0]
-        await addUser('admins', admin.uid, {
+        await addUser('pendingUsers', admin.uid, {
           isAdmin: adminData.isAdmin,
           email: adminData.email,
           name: `${adminData.firstName} ${adminData.lastName}`,
           createdAt: adminData.createdAt
         })
-        console.log('admin data', adminData)
         await navigateTo('/admin/home')
       } else {
         await navigateTo('/admin/login')
       }
-      console.log('logged admin', admin)
     } catch (error) {
       if (
         error.code === 'auth/user-not-found' ||
@@ -363,6 +378,14 @@ export const useFirebaseAuth = () => {
     }
   }
 
+  const updateProfile = async (userID: string, data: Object) => {
+    try {
+      await update('users', userID, data)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
   const updateUserAvatar = async (userId, avatarPath) => {
     try {
       await update('users', userId, { avatar: avatarPath })
@@ -371,20 +394,36 @@ export const useFirebaseAuth = () => {
     }
   }
 
-  const joinActivity = async (activityID: string, userID: string) => {
+  const joinActivity = async (
+    activityID: string,
+    userID: string,
+    data: Object
+  ) => {
     try {
+      // Add the user to the pending users list of the activity
       await update('activities', activityID, {
         pendingUsers: arrayUnion(userID)
       })
 
+      // Fetch the current joinedActivities map
+      const userDoc = await readById('users', userUID.value)
+      const joinedActivities = userDoc.joinedActivities || {}
+
+      // Update the joinedActivities object
+      const updatedJoinedActivities = {
+        ...joinedActivities,
+        [activityID]: data
+      }
+
       await update('users', userUID.value, {
-        joinedActivities: arrayUnion(userID)
+        joinedActivities: updatedJoinedActivities
       })
+
+      errorMessage.value = ''
     } catch (error) {
       errorMessage.value = `${error}`
     }
   }
-
   const removeActivity = async (activityID: string, userID: string) => {
     try {
       await update('activities', activityID, {
@@ -432,10 +471,14 @@ export const useFirebaseAuth = () => {
       )
       notification.value = notifDataArray
 
-      const unread = notifDataArray.filter(
+      const unreadLength = notifDataArray.filter(
         (notification) => !notification.isRead
       ).length
-      unreadNotification.value = unread
+
+      const unreadMessage = notifDataArray
+
+      unreadNotification.value = unreadLength
+      notificationMessage.value = unreadMessage
     } catch (error) {
       errorMessage.value = `${error}`
     }
@@ -475,9 +518,7 @@ export const useFirebaseAuth = () => {
   const getStudentProfile = async (uid: string) => {
     try {
       const studentsDataArray = await read('users')
-      profile.value = studentsDataArray.find(
-        (student) => student.id === uid
-      )
+      profile.value = studentsDataArray.find((student) => student.id === uid)
     } catch (error) {
       errorMessage.value = `${error}`
     }
@@ -572,6 +613,7 @@ export const useFirebaseAuth = () => {
     updateUserAvatar,
     notification,
     unreadNotification,
+    notificationMessage,
     loginUser,
     loginAdmin,
     logout,
@@ -583,8 +625,10 @@ export const useFirebaseAuth = () => {
     activity,
     getActivityById,
     specificActivity,
+    selectedActivityId,
     getProfile,
     getStudentProfile,
+    updateProfile,
     profile,
     updateUserActivity,
     activityLocations,

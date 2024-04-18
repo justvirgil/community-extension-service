@@ -52,23 +52,17 @@
         </div>
       </nav>
     </header>
-
-    <div class="bg-white text-black [50px]">
-      <p v-for="(course, index) in courses" :key="index">{{ course.name }}</p>
-    </div>
   </div>
 </template>
 
 <script setup>
-  const { authorizedUser, getStudents, getCourses, students, courses } =
-    useFirebaseAuth()
+  const { authorizedUser, getStudents, students } = useFirebaseAuth()
 
   const pageTitle = ref('Pending')
 
   onMounted(async () => {
     await authorizedUser()
     await getStudents()
-    await getCourses()
   })
 
   definePageMeta({

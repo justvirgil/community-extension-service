@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'ces';
-  src: url('./../../public/icons/ces.eot?tjmpbs');
+  src: url('./../../public/icons/ces.eot?r1el4m');
   src:
-    url('./../../public/icons/ces.eot?tjmpbs#iefix') format('embedded-opentype'),
-    url('./../../public/icons/ces.ttf?tjmpbs') format('truetype'),
-    url('./../../public/icons/ces.woff?tjmpbs') format('woff'),
-    url('./../../public/icons/ces.svg?tjmpbs#ces') format('svg');
+    url('./../../public/icons/ces.eot?r1el4m#iefix') format('embedded-opentype'),
+    url('./../../public/icons/ces.ttf?r1el4m') format('truetype'),
+    url('./../../public/icons/ces.woff?r1el4m') format('woff'),
+    url('./../../public/icons/ces.svg?r1el4m#ces') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -81,6 +81,9 @@
 .ces-checkbox-checked:before {
   content: '\ea52';
 }
+.ces-edit:before {
+  content: '\e905';
+}
 .ces-chat:before {
   content: '\e96d';
 }
@@ -95,6 +98,9 @@
 }
 .ces-plus:before {
   content: '\ea0a';
+}
+.ces-minus:before {
+  content: '\ea0b';
 }
 .ces-cancel-circle:before {
   content: '\ea0d';

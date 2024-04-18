@@ -140,7 +140,7 @@
 
   const join = async (activityId) => {
     try {
-      await joinActivity(activityId, userUID.value)
+      router.push(`/student/activities/id/${activityId}`)
     } catch (error) {
       errorMessage.value = `${error}`
     }

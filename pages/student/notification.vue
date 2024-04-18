@@ -20,7 +20,7 @@ f
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
             <p
               v-if="unreadNotification > 0"
-              class="absolute top-[30px] right-[70px] rounded-full h-5 w-5 flex items-center justify-center text-sm"
+              class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm"
             >
               {{ unreadNotification }}
             </p>
@@ -61,48 +61,40 @@ f
       <div
         class="py-3 pr-4 flex items-start text-xl text-center w-full bg-light-blue text-cream"
       >
-        <p class="pl-24">FREQUENTLY ASKED</p>
+        <p class="pl-24">NOTIFICATION</p>
       </div>
     </div>
 
-    <div class="w-full h-full bg-cream flex flex-col">
-      <div class="flex flex-col p-5 text-sm relative">
-        <p>1. LOREM IPSUM</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta
-          lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo
-          pellentesque faucibus interdum a neque. Nam lobortis, nulla ut
-          consequat aliquet, lorem justo accumsan dui, non maximus ex erat at
-          nibh. Vivamus nec nisi arcu.
-        </p>
-        <p>2. LOREM IPSUM</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta
-          lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo
-          pellentesque faucibus interdum a neque. Nam lobortis, nulla ut
-          consequat aliquet, lorem justo accumsan dui, non maximus ex erat at
-          nibh. Vivamus nec nisi arcu.
-        </p>
-        <p>3. LOREM IPSUM</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta
-          lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo
-          pellentesque faucibus interdum a neque. Nam lobortis, nulla ut
-          consequat aliquet, lorem justo accumsan dui, non maximus ex erat at
-          nibh. Vivamus nec nisi arcu.
-        </p>
+    <div class="overflow-y-auto">
+      <div class="w-full h-full bg-cream flex flex-col">
+        <div
+          v-for="(item, index) in notificationMessage"
+          :key="index"
+          class="border-2 border-light-blue flex flex-col p-5 text-sm relative"
+        >
+          <p class="3xl">Message</p>
+          <p>{{ item.message }}</p>
+          <p class="3xl">Sender</p>
+          <p>{{ item.sender }}</p>
+          <p class="3xl">Time</p>
+          <p>{{ timeConverter(item.timestamp) }}</p>
+        </div>
       </div>
-      <button class="absolute right-20 bottom-5 px-6 py-3">CHAT</button>
     </div>
   </div>
 </template>
 
 <script setup>
-  const { authorizedUser, logout, getNotification, unreadNotification } =
-    useFirebaseAuth()
-  const { read } = useFirestore()
+  const {
+    authorizedUser,
+    logout,
+    getNotification,
+    unreadNotification,
+    notificationMessage,
+    updateNotification
+  } = useFirebaseAuth()
+  const { timeConverter } = useTools()
 
-  const readContent = ref([])
   const pageTitle = ref('Notifications')
 
   const isOpen = ref(false)
@@ -115,20 +107,11 @@ f
     navigateTo('/')
   }
 
-  const fetchContent = async () => {
-    if (!authorizedUser()) {
-      throw new Error('Not authorized')
-    }
-    readContent.value = await read('pendingUsers')
-  }
-
   onMounted(async () => {
     await authorizedUser()
     await getNotification()
-    await fetchContent()
+    await updateNotification()
   })
-
-  console.log('content', readContent.value)
 
   definePageMeta({
     layout: 'member'

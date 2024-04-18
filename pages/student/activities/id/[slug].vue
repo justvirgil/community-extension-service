@@ -56,24 +56,22 @@
       </nav>
     </header>
 
-    <div class="grow flex flex-col">
-      <div class="flex flex-row items-center">
-        <div
-          class="bg-red-400 py-3 px-4 flex items-start text-xl text-center w-full"
-        >
-          <p>{{ specificActivity.name }}</p>
+    <div class="grow flex flex-col bg-dark-blue">
+      <div class="flex flex-row items-center bg-light-blue">
+        <div class="py-3 px-4 flex items-start text-xl text-center w-full">
+          <p class="text-cream">{{ specificActivity.name }}</p>
         </div>
-        <button
-          v-if="
-            specificActivity.status !== 'completed' &&
-            specificActivity.status !== 'pending' &&
-            specificActivity.status !== 'cancelled'
-          "
-          class="rounded-full bg-green h-12 w-56 px-3 mr-3"
-          @click="emit('join')"
-        >
-          JOIN ACTIVITY
+        <button class="rounded-full bg-green h-12 w-56 px-3 mr-3" @click="join">
+          <p class="text-cream">JOIN ACTIVITY</p>
         </button>
+        <NuxtLink to="/student/activities/" class="mx-3 text-xl text-white">
+          <VIcon
+            :alt="'ces-cross'"
+            :icon="'ces-cross'"
+            size="medium"
+            class="text-red-600"
+          />
+        </NuxtLink>
         <div
           v-if="
             specificActivity.status === 'completed' ||
@@ -104,28 +102,29 @@
         </div>
       </div>
 
-      <div class="bg-blue-200 w-full h-40 p-3 overflow-x-auto bg-green">
-        <p class="py-5">Description</p>
-        <p class="pl-5">{{ specificActivity.description }}</p>
-      </div>
+      <div class="bg-dark-blue text-cream">
+        <div class="w-full h-40 p-3 overflow-x-auto">
+          <p class="py-5 text-xl">Description</p>
+          <p class="pl-5 text-l">{{ specificActivity.description }}</p>
+        </div>
 
-      <div class="bg-blue-200 w-full h-24 p-3">
-        <p class="pb-5">When</p>
-        <p class="pl-5">
-          {{
-            specificActivity?.when ? timeConverter(specificActivity.when) : ''
-          }}
-        </p>
-      </div>
+        <div class="w-full h-24 p-3">
+          <p class="pb-5 text-xl">When</p>
+          <p class="pl-5 text-l">
+            {{
+              specificActivity?.when ? timeConverter(specificActivity.when) : ''
+            }}
+          </p>
+        </div>
 
-      <div class="bg-blue-200 w-full h-24 p-3">
-        <p class="pb-5">What</p>
-        <p class="pl-5">{{ specificActivity.what }}</p>
-      </div>
-
-      <div class="bg-blue-200 w-full h-24 p-3">
-        <p class="pb-5">Where</p>
-        <p class="pl-5">{{ specificActivity.where }}</p>
+        <div class="w-full h-24 p-3">
+          <p class="pb-5 text-xl">What</p>
+          <p class="pl-5 text-l">{{ specificActivity.what }}</p>
+        </div>
+        <div class="w-full h-24 p-3">
+          <p class="pb-5 text-xl">Where</p>
+          <p class="pl-5 text-l">{{ specificActivity.where }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -135,10 +134,12 @@
   const {
     authorizedUser,
     logout,
-    specificActivity,
     getActivityById,
+    joinActivity,
+    specificActivity,
     getNotification,
-    unreadNotification
+    unreadNotification,
+    getUserUID
   } = useFirebaseAuth()
   const { timeConverter } = useTools()
 
@@ -146,9 +147,59 @@
   const isOpen = ref(false)
   const route = useRoute()
   const routerID = route.params.slug
+  const errorMessage = ref('')
+
+  const activityId = ref('')
+  const name = ref('')
+  const description = ref('')
+  const where = ref('')
+  const what = ref('')
+  const when = ref('')
+  const createdAt = ref('')
+  const yearLevel = ref('')
+  const status = ref('')
+  const pendingUsers = ref([])
+  const approvedUsers = ref([])
+  const rejectedUsers = ref([])
 
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
+  }
+
+  const join = async () => {
+    try {
+      const userID = getUserUID()
+
+      const data = {
+        activityId: activityId.value,
+        createdAt: createdAt.value,
+        description: description.value,
+        name: name.value,
+        what: what.value,
+        when: when.value,
+        where: where.value,
+        points: 0,
+        isCompleted: false,
+        joinedAt: new Date(),
+        pendingUsers: pendingUsers.value || [],
+        approvedUsers: approvedUsers.value || [],
+        rejectedUsers: rejectedUsers.value || []
+      }
+
+      if (yearLevel.value != null) {
+        data.yearLevel = yearLevel.value
+      }
+
+      if (status.value != null && status.value !== '') {
+        data.status = status.value
+      }
+
+      await joinActivity(routerID, userID, data)
+      // navigateTo('/student/activities/')
+    } catch (error) {
+      errorMessage.value = `${error}`
+      console.log(error)
+    }
   }
 
   const logUserOut = async () => {
@@ -160,6 +211,21 @@
     await authorizedUser()
     await getActivityById(routerID)
     await getNotification()
+
+    if (specificActivity.value) {
+      activityId.value = specificActivity.value.id
+      name.value = specificActivity.value.name
+      description.value = specificActivity.value.description
+      where.value = specificActivity.value.where
+      what.value = specificActivity.value.what
+      when.value = specificActivity.value.when
+      createdAt.value = specificActivity.value.createdAt
+      yearLevel.value = specificActivity.value.yearLevel
+      status.value = specificActivity.value.status
+      pendingUsers.value = specificActivity.value.pendingUsers
+      approvedUsers.value = specificActivity.value.approvedUsers
+      rejectedUsers.value = specificActivity.value.rejectedUsers
+    }
   })
 
   definePageMeta({
