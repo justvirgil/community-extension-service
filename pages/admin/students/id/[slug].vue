@@ -133,7 +133,6 @@
           @click="handleActivitySelection(item.activityId)"
         />
       </div>
-      <p>{{ profileActivity }}</p>
       <div
         class="bg-dark-blue py-3 px-4 flex items-start justify-between text-xl text-center w-full text-nowrap"
       >
@@ -143,7 +142,6 @@
           <p class="ml-3">POINTS</p>
         </div>
       </div>
-      <p>{{ profile }}</p>
       <div class="h-16 flex flex-row items-center justify-center">
         <button
           class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
