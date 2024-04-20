@@ -158,6 +158,9 @@
   const createdAt = ref('')
   const yearLevel = ref('')
   const status = ref('')
+  const points = ref(0)
+  const isCompleted = ref(false)
+  const joinedAt = ref('')
   const pendingUsers = ref([])
   const approvedUsers = ref([])
   const rejectedUsers = ref([])
@@ -178,9 +181,9 @@
         what: what.value,
         when: when.value,
         where: where.value,
-        points: 0,
-        isCompleted: false,
-        joinedAt: new Date(),
+        points: points.value || 0,
+        isCompleted: isCompleted.value || false,
+        joinedAt: joinedAt.value || new Date(),
         pendingUsers: pendingUsers.value || [],
         approvedUsers: approvedUsers.value || [],
         rejectedUsers: rejectedUsers.value || []
@@ -222,6 +225,9 @@
       createdAt.value = specificActivity.value.createdAt
       yearLevel.value = specificActivity.value.yearLevel
       status.value = specificActivity.value.status
+      points.value = specificActivity.value.points
+      isCompleted.value = specificActivity.value.isCompleted
+      joinedAt.value = specificActivity.value.joinedAt
       pendingUsers.value = specificActivity.value.pendingUsers
       approvedUsers.value = specificActivity.value.approvedUsers
       rejectedUsers.value = specificActivity.value.rejectedUsers

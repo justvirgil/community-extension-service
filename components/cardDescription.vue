@@ -70,7 +70,7 @@
 
   const emit = defineEmits<Emit>()
 
-  withDefaults(defineProps<card & { buttonName?: string}>(), () => ({
+  withDefaults(defineProps<card & { buttonName?: string }>(), () => ({
     cardData: {
       name: '',
       description: '',

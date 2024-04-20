@@ -53,14 +53,14 @@
       </nav>
     </header>
 
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col items-center overflow-y-auto">
       <div class="bg-dark-blue text-cream text-center text-2xl w-full p-3">
         <p class="pl-5">{{ tabName }}</p>
       </div>
     </div>
     <div class="flex items-center justify-center mt-10">
       <div
-        class="mt-2 rounded-xl h-full p-10 w-[60rem] flex items-center justify-center bg-dark-blue"
+        class="mt-2 rounded-xl h-full p-10 w-[60rem] flex items-center justify-center bg-dark-blue relative"
       >
         <form
           class="flex flex-row items-center justify-center"
@@ -113,6 +113,19 @@
             </div>
           </div>
           <div class="ml-3 mt-10">
+            <div class="absolute right-12 top-12">
+              <NuxtLink
+                to="/admin/activities/"
+                class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
+              >
+                <VIcon
+                  :alt="'ces-cross'"
+                  :icon="'ces-cross'"
+                  size="medium"
+                  class="text-cream flex items-center justify-center"
+                />
+              </NuxtLink>
+            </div>
             <div class="flex flex-row p-5">
               <div class="mr-2">
                 <label for="yearLevel" class="text-cream mr-2"
@@ -155,7 +168,9 @@
                   />
                 </button>
               </div>
-              <div class="flex flex-row justify-end mr-8 mt-2 mb-2">
+              <div
+                class="flex flex-row items-center w-62 justify-end mr-8 mt-2 mb-2"
+              >
                 <VButton
                   class="w-24 mr-10"
                   :is-bold="true"
@@ -164,29 +179,18 @@
                 >
                   UPDATE
                 </VButton>
-                <NuxtLink
-                  to="/admin/activities/"
+                <button
                   class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
+                  @click="deleteCurrentActivity"
                 >
                   <VIcon
-                    :alt="'ces-cross'"
-                    :icon="'ces-cross'"
+                    :alt="'ces-bin'"
+                    :icon="'ces-bin'"
                     size="medium"
                     class="text-cream flex items-center justify-center"
                   />
-                </NuxtLink>
+                </button>
               </div>
-              <button
-                class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
-                @click="deleteCurrentActivity"
-              >
-                <VIcon
-                  :alt="'ces-bin'"
-                  :icon="'ces-bin'"
-                  size="medium"
-                  class="text-cream flex items-center justify-center"
-                />
-              </button>
             </div>
           </div>
         </form>

@@ -2,8 +2,8 @@
   <div class="flex flex-row">
     <div
       class="flex flex-col bg-dark-blue w-[220px] h-[150px] relative p-1 rounded-lg"
-      :class="{ 'bg-[#631689]': isSelected }"
-      @click="selectActivity(cardData.id)"
+      :class="{ 'bg-green': isSelected }"
+      @click="selectActivity(cardData.activityId)"
     >
       <button
         class="flex grow justify-center items-center bg-light-blue px-3 overflow-auto"
@@ -18,7 +18,7 @@
             accept="image/*"
             class="hidden"
             ref="imageInput"
-            @change="(event) => emit('uploadImage', event, cardData.id)"
+            @change="(event) => emit('uploadImage', event, cardData.activityId)"
           />
           <button @click="$refs.imageInput.click()">
             <VIcon
@@ -33,7 +33,7 @@
             type="file"
             class="hidden"
             ref="fileInput"
-            @change="(event) => emit('uploadFiles', event, cardData.id)"
+            @change="(event) => emit('uploadFiles', event, cardData.activityId)"
           />
           <button @click="$refs.fileInput.click()">
             <VIcon
@@ -61,18 +61,17 @@
 
 <script setup lang="ts">
   const showCard = ref(false)
+  const { selectedActivityId } = useFirebaseAuth()
 
   interface card {
     cardData: {
-      id?: string
+      activityId?: string
       name?: string
       description?: string
       where?: string
       when?: string
     }
   }
-
-  const selectedActivityId = ref<string | null>('')
   const isSelected = ref(false)
 
   const selectActivity = (activityId: string) => {
@@ -83,7 +82,7 @@
     } else {
       selectedActivityId.value = activityId
       isSelected.value = true
-      console.log(selectedActivityId.value)
+      console.log('selected', selectedActivityId.value)
     }
   }
 

@@ -52,7 +52,7 @@
         </div>
       </nav>
     </header>
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col items-center overflow-y-auto">
       <div class="bg-dark-blue text-cream text-center text-2xl w-full p-3">
         <p class="pl-5">{{ tabName }}</p>
       </div>

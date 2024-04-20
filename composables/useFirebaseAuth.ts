@@ -27,6 +27,7 @@ export const useFirebaseAuth = () => {
   const specificActivity = useState(() => [])
   const filteredActivities = useState(() => [])
   const activityLocations = useState(() => [])
+  const studentActivityWithinProfile = useState(() => {})
   const students = useState(() => [])
   const profile = useState(() => [])
   const profileActivity = useState(() => {})
@@ -401,16 +402,16 @@ export const useFirebaseAuth = () => {
     data: Object
   ) => {
     try {
-      // Add the user to the pending users list of the activity
       await update('activities', activityID, {
         pendingUsers: arrayUnion(userID)
       })
 
-      // Fetch the current joinedActivities map
-      const userDoc = await readById('users', userUID.value)
-      const joinedActivities = userDoc.joinedActivities || {}
+      const studentsDataArray = await read('users')
+      const userProfile = studentsDataArray.find(
+        (student) => student.id === userID
+      )
+      const joinedActivities = userProfile.joinedActivities || {}
 
-      // Update the joinedActivities object
       const updatedJoinedActivities = {
         ...joinedActivities,
         [activityID]: data
@@ -425,6 +426,7 @@ export const useFirebaseAuth = () => {
       errorMessage.value = `${error}`
     }
   }
+
   const removeActivity = async (activityID: string, userID: string) => {
     try {
       await update('activities', activityID, {
@@ -505,36 +507,105 @@ export const useFirebaseAuth = () => {
     }
   }
 
-const getProfile = async () => {
-  try {
-    const studentsDataArray = await read('users');
-    
-    // Find the user's profile
-    const userProfile = studentsDataArray.find(
-      (student) => student.id === userUID.value
-    );
-
-    // Set the user profile
-    profile.value = userProfile;
-
-    // Extract joined activities and store them in profileActivity.value
-    if (userProfile && userProfile.joinedActivities) {
-      // Extract values from the map
-      profileActivity.value = Object.values(userProfile.joinedActivities);
-    } else {
-      // Handle case where user profile or joinedActivities is not found
-      profileActivity.value = [];
-      console.error('User profile or joinedActivities not found');
-    }
-  } catch (error) {
-    errorMessage.value = `${error}`;
-  }
-};
-
-  const getStudentProfile = async (uid: string) => {
+  const getProfile = async () => {
     try {
       const studentsDataArray = await read('users')
-      profile.value = studentsDataArray.find((student) => student.id === uid)
+
+      const userProfile = studentsDataArray.find(
+        (student) => student.id === userUID.value
+      )
+
+      profile.value = userProfile
+
+      if (userProfile && userProfile.joinedActivities) {
+        profileActivity.value = Object.values(userProfile.joinedActivities)
+      } else {
+        profileActivity.value = []
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const getProfileById = async (uid: string) => {
+    try {
+      const studentsDataArray = await read('users')
+      const userProfile = studentsDataArray.find(
+        (student) => student.id === uid
+      )
+      profile.value = userProfile
+
+      if (userProfile && userProfile.joinedActivities) {
+        profileActivity.value = userProfile.joinedActivities
+      } else {
+        profileActivity.value = {}
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const getProfileActivityById = async (uid: string, activityId: string) => {
+    try {
+      const studentsDataArray = await read('users')
+      const userProfile = studentsDataArray.find(
+        (student) => student.id === uid
+      )
+
+      if (userProfile && userProfile.joinedActivities) {
+        const joinedActivity = userProfile.joinedActivities[activityId]
+        if (joinedActivity) {
+          studentActivityWithinProfile.value = joinedActivity
+        } else {
+          studentActivityWithinProfile.value = {}
+        }
+      } else {
+        studentActivityWithinProfile.value = {}
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const addActivityPoints = async (uid: string, activityId: string) => {
+    try {
+      const studentsDataArray = await read('users')
+      const userProfile = studentsDataArray.find(
+        (student) => student.id === uid
+      )
+
+      if (userProfile && userProfile.joinedActivities) {
+        const joinedActivity = userProfile.joinedActivities[activityId]
+        if (joinedActivity) {
+          joinedActivity.points += 1
+
+          userProfile.joinedActivities[activityId] = joinedActivity
+
+          await update('users', userProfile.id, userProfile)
+        }
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const minusActivityPoints = async (uid: string, activityId: string) => {
+    try {
+      const studentsDataArray = await read('users')
+      const userProfile = studentsDataArray.find(
+        (student) => student.id === uid
+      )
+
+      if (userProfile && userProfile.joinedActivities) {
+        const joinedActivity = userProfile.joinedActivities[activityId]
+        if (joinedActivity) {
+          joinedActivity.points -= 1
+
+          userProfile.joinedActivities[activityId] = joinedActivity
+
+          await update('users', userProfile.id, userProfile)
+        }
+      }
     } catch (error) {
       errorMessage.value = `${error}`
     }
@@ -644,7 +715,7 @@ const getProfile = async () => {
     specificActivity,
     selectedActivityId,
     getProfile,
-    getStudentProfile,
+    getProfileById,
     updateProfile,
     profile,
     updateUserActivity,
@@ -657,6 +728,10 @@ const getProfile = async () => {
     getUserUID,
     getUserYearLevel,
     userUID,
-    getUserAllActivities
+    getUserAllActivities,
+    getProfileActivityById,
+    studentActivityWithinProfile,
+    addActivityPoints,
+    minusActivityPoints
   }
 }

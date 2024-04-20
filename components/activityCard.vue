@@ -94,15 +94,18 @@
 
   const emit = defineEmits<Join>()
 
-  withDefaults(defineProps<card & { disabled?: boolean, buttonName?: string }>(), () => ({
-    cardData: {
-      id: '',
-      name: '',
-      description: '',
-      where: '',
-      when: ''
-    },
-    disabled: false,
-    buttonName: 'JOIN ACTIVITY'
-  }))
+  withDefaults(
+    defineProps<card & { disabled?: boolean; buttonName?: string }>(),
+    () => ({
+      cardData: {
+        id: '',
+        name: '',
+        description: '',
+        where: '',
+        when: ''
+      },
+      disabled: false,
+      buttonName: 'JOIN ACTIVITY'
+    })
+  )
 </script>

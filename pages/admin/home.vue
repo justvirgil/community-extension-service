@@ -77,7 +77,7 @@
           />
         </div>
       </div>
-        
+
       <div class="grow flex flex-col items-center">
         <p
           class="flex rounded-2xl mt-5 text-2xl text-center items-center justify-center h-16 w-40 bg-dark-blue"

@@ -63,12 +63,12 @@
         </div>
         <div class="flex flex-row ml-7 justify-center items-center">
           <input
+            ref="imageInput"
             type="file"
             class="hidden"
-            ref="imageInput"
-            @change="handleFileSubmit($event)"            
+            @change="handleFileSubmit($event)"
           />
-          <button @click="$refs.imageInput.click()" >
+          <button @click="$refs.imageInput.click()">
             <VIcon
               :alt="'ces-image'"
               :icon="'ces-image'"
@@ -78,12 +78,12 @@
           </button>
 
           <input
+            ref="fileInput"
             type="file"
             class="hidden"
-            ref="fileInput"
-            @change="handleFileSubmit($event)"            
+            @change="handleFileSubmit($event)"
           />
-          <button @click="$refs.fileInput.click()" >
+          <button @click="$refs.fileInput.click()">
             <VIcon
               :alt="'ces-file-text'"
               :icon="'ces-file-text'"
@@ -91,7 +91,8 @@
               class="mr-3 text-cream"
             />
           </button>
-        </div>        <NuxtLink to="/student/activities/" class="mx-3 text-xl text-white">
+        </div>
+        <NuxtLink to="/student/activities/" class="mx-3 text-xl text-white">
           <VIcon
             :alt="'ces-cross'"
             :icon="'ces-cross'"
@@ -143,7 +144,6 @@
   const { timeConverter } = useTools()
   const { uploadFiles } = useFirestorage()
 
-
   const pageTitle = ref('CES ACTIVITY')
   const isOpen = ref(false)
   const route = useRoute()
@@ -154,7 +154,7 @@
     isOpen.value = !isOpen.value
   }
 
- const userId = getUserUID()
+  const userId = getUserUID()
 
   const handleFileSubmit = async (event) => {
     try {
@@ -167,7 +167,6 @@
       errorMessage.value = `${error}`
     }
   }
-
 
   const logUserOut = async () => {
     await logout()

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row bg-cream min-h-screen w-full">
+  <div class="flex flex-row bg-cream min-h-screen w-full overflow-y-hidden">
     <aside
       class="flex flex-col justify-between bg-dark-blue h-screen basis-1/6 md:basis-2/12"
     >

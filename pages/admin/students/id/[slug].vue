@@ -74,12 +74,12 @@
         <div class="bg-yellow w-[30rem] h-[13rem] p-7 rounded-md relative my-2">
           <p class="ml-12">S T U D E N T</p>
           <div class="flex flex-row items-center pt-3 px-10">
-            <div>
+            <div class="h-28 w-28">
               <VIcon
                 v-if="!profile.avatar"
                 :alt="'ces-user'"
                 :icon="'ces-user'"
-                class="text-[7.01rem] mr-2"
+                class="text-[7rem] mr-2 h-full w-full"
               />
               <img
                 v-if="profile.avatar"
@@ -124,16 +124,16 @@
         </div>
       </div>
 
-      <div class="flex flex-row h-[166px]">
+      <div class="flex flex-row h-[166px] overflow-x-auto">
         <admin-activity-card
-          v-for="(item, index) in filteredUserActivity"
+          v-for="(item, index) in profileActivity"
           :key="index"
           :card-data="item"
           class="py-2 mx-2"
-          @click="handleActivitySelection(item.id)"
+          @click="handleActivitySelection(item.activityId)"
         />
-        <p>{{ specificActivity }}</p>
       </div>
+      <p>{{ profileActivity }}</p>
       <div
         class="bg-dark-blue py-3 px-4 flex items-start justify-between text-xl text-center w-full text-nowrap"
       >
@@ -143,10 +143,11 @@
           <p class="ml-3">POINTS</p>
         </div>
       </div>
-
+      <p>{{ profile }}</p>
       <div class="h-16 flex flex-row items-center justify-center">
         <button
           class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
+          @click="minusPoint"
         >
           <VIcon
             class="text-cream flex items-center justify-center"
@@ -158,6 +159,7 @@
 
         <button
           class="bg-light-green mx-1 flex items-center justify-center rounded-full h-10 w-10"
+          @click="addPoint"
         >
           <VIcon
             class="text-cream flex items-center justify-center"
@@ -189,23 +191,30 @@
     userActivityCancelled,
     selectedActivityId,
     getActivityById,
-    specificActivity
+    specificActivity,
+    profileActivity,
+    getProfileById,
+    getProfileActivityById,
+    studentActivityWithinProfile,
+    addActivityPoints,
+    minusActivityPoints,
+    joinActivity
   } = useFirebaseAuth()
 
   const pageTitle = ref('Student')
   const date = ref(new Date())
   const isOpen = ref(false)
+  const selectedActivityId2 = ref('')
   const route = useRoute()
   const anchor = useState(() => [])
   const filteredUserActivity = ref(
     anchor === null ? userActivityCompleted : anchor
   )
   const routerID = route.params.slug
+  const errorMessage = ref('')
 
   const handleActivitySelection = async (activityId) => {
-    selectedActivityId.value = activityId
-    console.log('Selected activity ID:', selectedActivityId.value)
-    await getActivityById(selectedActivityId.value)
+    await getActivityById(activityId)
   }
 
   const filterActivities = (status) => {
@@ -225,6 +234,32 @@
     }
   }
 
+  const addPoint = async () => {
+    try {
+      if (selectedActivityId.value) {
+        await addActivityPoints(routerID, selectedActivityId.value)
+      } else {
+        console.log('No activity selected.')
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+      console.log(error)
+    }
+  }
+
+  const minusPoint = async () => {
+    try {
+      if (selectedActivityId.value) {
+        await minusActivityPoints(routerID, selectedActivityId.value)
+      } else {
+        console.log('No activity selected.')
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+      console.log(error)
+    }
+  }
+
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
@@ -237,7 +272,8 @@
   onMounted(async () => {
     await authorizedUser()
     await getNotification()
-    await getStudentProfile(routerID)
+    await getProfileById(routerID)
+    await getProfileActivityById(routerID, selectedActivityId.value)
     await getStudentAcitivities(routerID)
   })
 
