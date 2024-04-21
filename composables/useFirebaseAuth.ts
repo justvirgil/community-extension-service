@@ -29,6 +29,7 @@ export const useFirebaseAuth = () => {
   const activityLocations = useState(() => [])
   const studentActivityWithinProfile = useState(() => {})
   const students = useState(() => [])
+  const allStudentId = useState(() => [])
   const profile = useState(() => [])
   const profileActivity = useState(() => {})
   const notification = useState(() => [])
@@ -370,6 +371,18 @@ export const useFirebaseAuth = () => {
     }
   }
 
+  const getStudentsIds = async () => {
+    try {
+      const studentsDataArray = await read('users')
+      const studentIds = studentsDataArray.map((student) => student.id)
+      allStudentId.value = studentIds
+      return studentIds
+    } catch (error) {
+      errorMessage.value = `${error}`
+      return []
+    }
+  }
+
   const updateUserActivity = async (activityID: string, userID: string) => {
     try {
       await update('users', userID, {
@@ -490,17 +503,20 @@ export const useFirebaseAuth = () => {
   const updateNotification = async () => {
     try {
       const notifDataArray = notification.value
+      const studentIds = await getStudentsIds() // Assuming you have defined getStudentsIds function
 
-      for (const notificationItem of notifDataArray) {
-        await updateSubcollection(
-          'notifications',
-          userUID.value,
-          'notificationList',
-          notificationItem.id,
-          {
-            isRead: true
-          }
-        )
+      for (const studentId of studentIds) {
+        for (const notificationItem of notifDataArray) {
+          await updateSubcollection(
+            'notifications',
+            studentId,
+            'notificationList',
+            notificationItem.id,
+            {
+              isRead: true
+            }
+          )
+        }
       }
     } catch (error) {
       errorMessage.value = `${error}`
@@ -577,7 +593,7 @@ export const useFirebaseAuth = () => {
       if (userProfile && userProfile.joinedActivities) {
         const joinedActivity = userProfile.joinedActivities[activityId]
         if (joinedActivity) {
-          joinedActivity.points += 1
+          joinedActivity.points += 0.5
 
           userProfile.joinedActivities[activityId] = joinedActivity
 
@@ -599,7 +615,7 @@ export const useFirebaseAuth = () => {
       if (userProfile && userProfile.joinedActivities) {
         const joinedActivity = userProfile.joinedActivities[activityId]
         if (joinedActivity) {
-          joinedActivity.points -= 1
+          joinedActivity.points -= 0.5
 
           userProfile.joinedActivities[activityId] = joinedActivity
 
@@ -732,6 +748,8 @@ export const useFirebaseAuth = () => {
     getProfileActivityById,
     studentActivityWithinProfile,
     addActivityPoints,
-    minusActivityPoints
+    minusActivityPoints,
+    getStudentsIds,
+    allStudentId
   }
 }

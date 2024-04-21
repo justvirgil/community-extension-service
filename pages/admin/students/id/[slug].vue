@@ -97,7 +97,7 @@
           </div>
           <p class="pt-6 absolute right-10 bottom-5">{{ profile.id }}</p>
         </div>
-
+        <p>{{ allStudentId }}</p>
         <div
           class="bg-dark-blue py-3 px-4 flex items-start text-xl text-center w-full text-nowrap"
         >
@@ -123,7 +123,7 @@
           </button>
         </div>
       </div>
-
+      <p>{{}}</p>
       <div class="flex flex-row h-[166px] overflow-x-auto">
         <admin-activity-card
           v-for="(item, index) in profileActivity"
@@ -175,8 +175,8 @@
   const {
     authorizedUser,
     logout,
-    getStudents,
-    students,
+    getStudentsIds,
+    allStudentId,
     getNotification,
     updateNotification,
     notification,
@@ -273,6 +273,7 @@
     await getProfileById(routerID)
     await getProfileActivityById(routerID, selectedActivityId.value)
     await getStudentAcitivities(routerID)
+    await getStudentsIds()
   })
 
   definePageMeta({

@@ -52,16 +52,32 @@
         </div>
       </nav>
     </header>
+    <studentCard
+      v-for="(item, index) in students"
+      :key="index"
+      :card-data="item"
+    />
   </div>
 </template>
 
 <script setup>
-  const { authorizedUser, getStudents, students } = useFirebaseAuth()
+  const {
+    authorizedUser,
+    getStudents,
+    students,
+    getNotification,
+    unreadNotification
+  } = useFirebaseAuth()
 
   const pageTitle = ref('Pending')
+  const isOpen = ref(false)
+  const toggleDropDown = () => {
+    isOpen.value = !isOpen.value
+  }
 
   onMounted(async () => {
     await authorizedUser()
+    await getNotification()
     await getStudents()
   })
 
