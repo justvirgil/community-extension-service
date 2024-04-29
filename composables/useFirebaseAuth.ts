@@ -542,6 +542,70 @@ export const useFirebaseAuth = () => {
       errorMessage.value = `${error}`
     }
   }
+  // returns inside joinedActivities with status "PENDING'
+  // const getAllActivityStatus = async () => {
+  //   try {
+  //     const studentsDataArray = await read('users')
+  //     profile.value = studentsDataArray
+
+  //     const joinedActivities = studentsDataArray.reduce((acc, student) => {
+  //       if (student.joinedActivities) {
+  //         const pending = Object.values(student.joinedActivities).filter(activity => activity.status === "PENDING")
+  //         return acc.concat(pending)
+  //       }
+  //       return acc
+  //     }, [])
+
+  //     profileActivity.value = joinedActivities
+  //   } catch (error) {
+  //     errorMessage.value = `${error}`
+  //   }
+  // }
+  const getAllActivityStatus = async () => {
+    try {
+      const studentsDataArray = await read('users')
+      profile.value = studentsDataArray
+
+      const studentsWithPendingActivities = studentsDataArray.flatMap(student => {
+        if (student.joinedActivities) {
+          const pendingActivities = Object.entries(student.joinedActivities).filter(([_, activity]) => activity.status === "PENDING")
+          if (pendingActivities.length > 0) {
+            return pendingActivities.map(([activityId, activity]) => ({
+              ...student,
+              joinedActivities: { [activityId]: activity }
+            }))
+          }
+        }
+        return []
+      })
+
+      profileActivity.value = studentsWithPendingActivities
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const updateActivityStatus = async (uid: string, activityId: string, newStatus: string) => {
+    try {
+      const studentsDataArray = await read('users')
+      const userProfile = studentsDataArray.find(
+        (student) => student.id === uid
+      )
+
+      if (userProfile && userProfile.joinedActivities) {
+        const joinedActivity = userProfile.joinedActivities[activityId]
+        if (joinedActivity) {
+          joinedActivity.status = newStatus
+
+          userProfile.joinedActivities[activityId] = joinedActivity
+
+          await update('users', userProfile.id, userProfile)
+        }
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
 
   const getProfileById = async (uid: string) => {
     try {
@@ -750,6 +814,8 @@ export const useFirebaseAuth = () => {
     addActivityPoints,
     minusActivityPoints,
     getStudentsIds,
-    allStudentId
+    allStudentId,
+    getAllActivityStatus,
+    updateActivityStatus
   }
 }

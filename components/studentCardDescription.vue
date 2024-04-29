@@ -19,14 +19,21 @@
           <p class="mb-2 w-full h-6 text-cream">
             Course: {{ cardData.course }}
           </p>
+          <div v-if="cardData.joinedActivities" class="mt-5">
+            <p class="mb-2 w-full h-6 text-cream">Activity Details:</p>
+            <div v-for="(activity, index) in cardData.joinedActivities" :key="index">
+              <p class="mb-2 w-full h-6 text-cream">Name: {{ activity.name }}</p>
+              <p class="mb-2 w-full h-6 text-cream">Location: {{ activity.where }}</p>
+            </div>
+          </div>
         </div>
-        <div class="flex flex-row justify-center items-center mt-16 relative">
+        <div class="flex flex-row justify-center items-center mt-4 relative">
           <div class="flex flex-row items-center justify-center">
             <button
               class="rounded-full bg-light-green text-cream w-24 p-2 mr-10"
               @click="emit('accept')"
             >
-              ACCEPT
+              APPROVE
             </button>
             <button
               class="rounded-full bg-red-600 text-cream w-24 p-2"
@@ -63,6 +70,7 @@
       name?: string
       yearLevel?: string
       course?: string
+      joinedActivities?: { [key: string]: { name?: string; where?: string }}
     }
   }
 

@@ -52,32 +52,89 @@
         </div>
       </nav>
     </header>
-    <studentCard
-      v-for="(item, index) in students"
-      :key="index"
-      :card-data="item"
-    />
+    <div class="p-5 grid grid-cols-4 gap-4">
+      <studentCard
+        v-for="(item, index) in profileActivity"
+        :key="index"
+        :card-data="item"
+        @accept="approveStudent(item.id, item)"
+        @reject="rejectStudent(item.id, item)"
+        @fullPage="redirection(item.id)"
+        class="w-full"
+      />
+    </div>
   </div>
 </template>
-
+s
 <script setup>
   const {
     authorizedUser,
     getStudents,
     students,
     getNotification,
-    unreadNotification
+    unreadNotification,
+    getUserUID,
+    getAllActivityStatus,
+    profileActivity,
+    updateActivityStatus
   } = useFirebaseAuth()
+
+  console.log(profileActivity)
 
   const pageTitle = ref('Pending')
   const isOpen = ref(false)
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
+  const errorMessage = ref('')
+  const router = useRouter()
+
+  const redirection = async (studentId) => {
+    try {
+      router.push(`/admin/students/pending/${studentId}`)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const approveStudent = async (userId, item) => {
+    try {
+      const joinedActivityKeys = Object.keys(item.joinedActivities);
+      if (joinedActivityKeys.length > 0) {
+        const firstJoinedActivityKey = joinedActivityKeys[0];
+        const activityId = item.joinedActivities[firstJoinedActivityKey].activityId;
+        await updateActivityStatus(userId, activityId, "APPROVED");
+        router.push('/admin/pending')
+      } else {
+        throw new Error('No joined activities found');
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`;
+      console.log(error);
+    }
+  }
+
+  const rejectStudent = async (userId, item) => {
+    try {
+      const joinedActivityKeys = Object.keys(item.joinedActivities);
+      if (joinedActivityKeys.length > 0) {
+        const firstJoinedActivityKey = joinedActivityKeys[0];
+        const activityId = item.joinedActivities[firstJoinedActivityKey].activityId;
+        await updateActivityStatus(userId, activityId, "REJECTED");
+        router.push('/admin/pending')
+      } else {
+        throw new Error('No joined activities found');
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`;
+      console.log(error);
+    }
+  }
 
   onMounted(async () => {
     await authorizedUser()
     await getNotification()
+    await getAllActivityStatus()
     await getStudents()
   })
 
