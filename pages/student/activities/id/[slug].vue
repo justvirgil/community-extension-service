@@ -196,7 +196,7 @@
       }
 
       if (status.value != null && status.value !== '') {
-        data.status = "PENDING"
+        data.status = 'PENDING'
       }
 
       await joinActivity(routerID, userID, data)

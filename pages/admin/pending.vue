@@ -114,7 +114,7 @@ s
           sender: `${myId}`,
           timestamp: date.value
         })
-       await router.push('/admin/students')
+        await router.push('/admin/students')
       } else {
         throw new Error('No joined activities found')
       }

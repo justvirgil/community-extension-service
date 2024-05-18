@@ -53,7 +53,6 @@
       </nav>
     </header>
 
-
     <div class="grow flex flex-col items-center w-full">
       <div
         class="bg-light-blue py-3 px-4 flex items-start justify-between text-xl text-center w-full text-nowrap"
@@ -74,45 +73,46 @@
           COURSE & YEAR
         </p>
       </div>
-     <div class=" flex flex-col items-center w-full">
-      <div class=" flex items-center justify-center w-full">
-        <input type="text" v-model="search" class="w-full mx-2 my-1" placeholder="search student" />
-      </div>  
-      <div class="p-2 flex flex-col items-start text-sm text-center w-full">
-        <div
-          class="flex flex-col w-full items-start overflow-y-scroll overflow-x-hidden bg-cream"
-        >
-          <button
-            v-for="(student, index) in filteredStudent"
-            :key="index"
-            class="flex flex-row w-full items-center text-nowrap rounded-xl mx-3 hover:bg-dark-blue hover:text-cream"
-            @click="redirection(student.id)"
+      <div class="flex flex-col items-center w-full">
+        <div class="flex items-center justify-center w-full">
+          <input
+            v-model="search"
+            type="text"
+            class="w-full mx-2 my-1"
+            placeholder="search student"
+          />
+        </div>
+        <div class="p-2 flex flex-col items-start text-sm text-center w-full">
+          <div
+            class="flex flex-col w-full items-start overflow-y-scroll overflow-x-hidden bg-cream"
           >
-            <div class="grow flex flex-col items-center w-24">
-              <p>
-                {{ student.id }}
-              </p>
-            </div>
-            <div class="grow flex flex-col items-center w-24">
-              <p>
-                {{ student.name }}
-              </p>
-            </div>
-            <div class="grow flex flex-col items-center w-24">
-              <p
-                v-if="student.course && student.yearLevel"
-              >
-                {{ student.course }} - {{ student.yearLevel }}
-              </p>
+            <button
+              v-for="(student, index) in filteredStudent"
+              :key="index"
+              class="flex flex-row w-full items-center text-nowrap rounded-xl mx-3 hover:bg-dark-blue hover:text-cream"
+              @click="redirection(student.id)"
+            >
+              <div class="grow flex flex-col items-center w-24">
+                <p>
+                  {{ student.id }}
+                </p>
+              </div>
+              <div class="grow flex flex-col items-center w-24">
+                <p>
+                  {{ student.name }}
+                </p>
+              </div>
+              <div class="grow flex flex-col items-center w-24">
+                <p v-if="student.course && student.yearLevel">
+                  {{ student.course }} - {{ student.yearLevel }}
+                </p>
 
-              <p v-else>  
-                -
-              </p>
-            </div>
-          </button>
+                <p v-else>-</p>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -139,8 +139,10 @@
 
   const filteredStudent = computed(() => {
     return students.value.filter((student) => {
-      return student.name.toLowerCase().includes(search.value.toLowerCase()) || 
-      student.id.toLowerCase().includes(search.value.toLowerCase())
+      return (
+        student.name.toLowerCase().includes(search.value.toLowerCase()) ||
+        student.id.toLowerCase().includes(search.value.toLowerCase())
+      )
     })
   })
 
@@ -163,8 +165,7 @@
     await authorizedUser()
     await getNotification()
     await getStudents()
-      console.log("test", students.value)
-
+    console.log('test', students.value)
   })
 
   definePageMeta({

@@ -86,7 +86,7 @@
                 :src="profile.avatar"
                 alt="Avatar"
                 class="h-28 w-28"
-              />  
+              />
             </div>
             <div class="flex flex-col ml-5">
               <p>{{ profile.name }}</p>
@@ -176,10 +176,12 @@
             />
           </button>
 
-          <button class="bg-gray-500 hover:bg-gray-600 mx-1 flex items-center justify-center rounded-full h-10 w-40 transition-colors duration-300 ease-in-out" @click="submitPoints">
+          <button
+            class="bg-gray-500 hover:bg-gray-600 mx-1 flex items-center justify-center rounded-full h-10 w-40 transition-colors duration-300 ease-in-out"
+            @click="submitPoints"
+          >
             <p class="text-white">Submit Points</p>
           </button>
-
         </div>
       </div>
     </div>
@@ -247,20 +249,22 @@
     }
   }
 
-
   const addPoint = async () => {
-    return points.value < 3 ? points.value += 1 : points.value
+    return points.value < 3 ? (points.value += 1) : points.value
   }
 
   const minusPoint = async () => {
-    return points.value > 0 ? points.value -= 1 : points.value
+    return points.value > 0 ? (points.value -= 1) : points.value
   }
-
 
   const submitPoints = async () => {
     try {
       if (selectedActivityId.value) {
-        await submitActivityPoints(routerID, selectedActivityId.value, points.value)
+        await submitActivityPoints(
+          routerID,
+          selectedActivityId.value,
+          points.value
+        )
       }
       points.value = 0
     } catch (error) {

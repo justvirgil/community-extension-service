@@ -655,7 +655,11 @@ export const useFirebaseAuth = () => {
     }
   }
 
-  const submitActivityPoints = async (uid: string, activityId: string, points: number) => {
+  const submitActivityPoints = async (
+    uid: string,
+    activityId: string,
+    points: number
+  ) => {
     try {
       const studentsDataArray = await read('users')
       const userProfile = studentsDataArray.find(
@@ -676,7 +680,6 @@ export const useFirebaseAuth = () => {
       errorMessage.value = `${error}`
     }
   }
-
 
   const addActivityPoints = async (uid: string, activityId: string) => {
     try {
