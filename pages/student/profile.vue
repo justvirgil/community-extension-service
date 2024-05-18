@@ -132,10 +132,8 @@ f
   } = useFirebaseAuth()
   const { uploadAvatar } = useFirestorage()
 
-  const userData = ref('')
   const pageTitle = ref('Profile')
   const isOpen = ref(false)
-  const errorMessage = ref('')
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }

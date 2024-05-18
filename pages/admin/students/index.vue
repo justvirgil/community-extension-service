@@ -52,12 +52,14 @@
         </div>
       </nav>
     </header>
-    <div class="grow flex flex-col items-center">
+
+
+    <div class="grow flex flex-col items-center w-full">
       <div
         class="bg-light-blue py-3 px-4 flex items-start justify-between text-xl text-center w-full text-nowrap"
       >
         <p
-          class="w-36 rounded-xl mx-3 bg-light-blue text-cream hover:bg-dark-blue"
+          class="w-36 rounded-xl ml-[100px] bg-light-blue text-cream hover:bg-dark-blue"
         >
           ID NUMBER
         </p>
@@ -67,43 +69,50 @@
           STUDENT NAME
         </p>
         <p
-          class="w-36 rounded-xl mr-10 bg-light-blue text-cream hover:bg-dark-blue"
+          class="w-36 rounded-xl mr-[100px] bg-light-blue text-cream hover:bg-dark-blue"
         >
           COURSE & YEAR
         </p>
       </div>
-
+     <div class=" flex flex-col items-center w-full">
+      <div class=" flex items-center justify-center w-full">
+        <input type="text" v-model="search" class="w-full mx-2 my-1" placeholder="search student" />
+      </div>  
       <div class="p-2 flex flex-col items-start text-sm text-center w-full">
         <div
           class="flex flex-col w-full items-start overflow-y-scroll overflow-x-hidden bg-cream"
         >
           <button
-            v-for="(student, index) in students"
+            v-for="(student, index) in filteredStudent"
             :key="index"
             class="flex flex-row w-full items-center text-nowrap rounded-xl mx-3 hover:bg-dark-blue hover:text-cream"
             @click="redirection(student.id)"
           >
-            <p class="grow w-fit mr-3">
-              {{ student.id }}
-            </p>
+            <div class="grow flex flex-col items-center w-24">
+              <p>
+                {{ student.id }}
+              </p>
+            </div>
+            <div class="grow flex flex-col items-center w-24">
+              <p>
+                {{ student.name }}
+              </p>
+            </div>
+            <div class="grow flex flex-col items-center w-24">
+              <p
+                v-if="student.course && student.yearLevel"
+              >
+                {{ student.course }} - {{ student.yearLevel }}
+              </p>
 
-            <p class="grow w-fit ml-3">
-              {{ student.name }}
-            </p>
-
-            <p
-              v-if="student.course && student.yearLevel"
-              class="grow w-fit ml-3"
-            >
-              {{ student.course }} - {{ student.yearLevel }}
-            </p>
-
-            <p v-else class="grow w-fit ml-3">
-              {{ student.course }} {{ student.yearLevel }}
-            </p>
+              <p v-else>  
+                -
+              </p>
+            </div>
           </button>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -123,9 +132,17 @@
   const pageTitle = ref('Student')
   const date = ref(new Date())
   const isOpen = ref(false)
+  const search = ref('')
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
+
+  const filteredStudent = computed(() => {
+    return students.value.filter((student) => {
+      return student.name.toLowerCase().includes(search.value.toLowerCase()) || 
+      student.id.toLowerCase().includes(search.value.toLowerCase())
+    })
+  })
 
   const router = useRouter()
 
@@ -146,6 +163,8 @@
     await authorizedUser()
     await getNotification()
     await getStudents()
+      console.log("test", students.value)
+
   })
 
   definePageMeta({

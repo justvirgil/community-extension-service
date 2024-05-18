@@ -566,18 +566,22 @@ export const useFirebaseAuth = () => {
       const studentsDataArray = await read('users')
       profile.value = studentsDataArray
 
-      const studentsWithPendingActivities = studentsDataArray.flatMap(student => {
-        if (student.joinedActivities) {
-          const pendingActivities = Object.entries(student.joinedActivities).filter(([_, activity]) => activity.status === "PENDING")
-          if (pendingActivities.length > 0) {
-            return pendingActivities.map(([activityId, activity]) => ({
-              ...student,
-              joinedActivities: { [activityId]: activity }
-            }))
+      const studentsWithPendingActivities = studentsDataArray.flatMap(
+        (student) => {
+          if (student.joinedActivities) {
+            const pendingActivities = Object.entries(
+              student.joinedActivities
+            ).filter(([_, activity]) => activity.status === 'PENDING')
+            if (pendingActivities.length > 0) {
+              return pendingActivities.map(([activityId, activity]) => ({
+                ...student,
+                joinedActivities: { [activityId]: activity }
+              }))
+            }
           }
+          return []
         }
-        return []
-      })
+      )
 
       profileActivity.value = studentsWithPendingActivities
     } catch (error) {
@@ -585,7 +589,11 @@ export const useFirebaseAuth = () => {
     }
   }
 
-  const updateActivityStatus = async (uid: string, activityId: string, newStatus: string) => {
+  const updateActivityStatus = async (
+    uid: string,
+    activityId: string,
+    newStatus: string
+  ) => {
     try {
       const studentsDataArray = await read('users')
       const userProfile = studentsDataArray.find(
@@ -646,6 +654,29 @@ export const useFirebaseAuth = () => {
       errorMessage.value = `${error}`
     }
   }
+
+  const submitActivityPoints = async (uid: string, activityId: string, points: number) => {
+    try {
+      const studentsDataArray = await read('users')
+      const userProfile = studentsDataArray.find(
+        (student) => student.id === uid
+      )
+
+      if (userProfile && userProfile.joinedActivities) {
+        const joinedActivity = userProfile.joinedActivities[activityId]
+        if (joinedActivity) {
+          joinedActivity.points = points
+
+          userProfile.joinedActivities[activityId] = joinedActivity
+
+          await update('users', userProfile.id, userProfile)
+        }
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
 
   const addActivityPoints = async (uid: string, activityId: string) => {
     try {
@@ -811,6 +842,7 @@ export const useFirebaseAuth = () => {
     getUserAllActivities,
     getProfileActivityById,
     studentActivityWithinProfile,
+    submitActivityPoints,
     addActivityPoints,
     minusActivityPoints,
     getStudentsIds,

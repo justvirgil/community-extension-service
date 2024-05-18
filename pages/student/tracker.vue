@@ -121,12 +121,12 @@
     await getUserAllActivities()
 
     chartLabels.value = activity.value
-      .filter((item) => item.status === 'completed')
+      .filter((item) => item.status === 'COMPLETED')
       .map((item) => item.name)
 
     activityLength.value = activity.value.length
     completedActivities.value = activity.value.filter(
-      (item) => item.status === 'completed'
+      (item) => item.status === 'COMPLETED'
     ).length
 
     completionPercentage.value =

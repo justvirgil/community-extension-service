@@ -86,7 +86,7 @@
                 :src="profile.avatar"
                 alt="Avatar"
                 class="h-28 w-28"
-              />
+              />  
             </div>
             <div class="flex flex-col ml-5">
               <p>{{ profile.name }}</p>
@@ -97,7 +97,7 @@
           </div>
           <p class="pt-6 absolute right-10 bottom-5">{{ profile.id }}</p>
         </div>
-        <p>{{ allStudentId }}</p>
+
         <div
           class="bg-dark-blue py-3 px-4 flex items-start text-xl text-center w-full text-nowrap"
         >
@@ -123,7 +123,7 @@
           </button>
         </div>
       </div>
-      <p>{{}}</p>
+
       <div class="flex flex-row h-[166px] overflow-x-auto">
         <admin-activity-card
           v-for="(item, index) in profileActivity"
@@ -143,29 +143,44 @@
         </div>
       </div>
       <div class="h-16 flex flex-row items-center justify-center">
-        <button
-          class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
-          @click="minusPoint"
-        >
-          <VIcon
-            class="text-cream flex items-center justify-center"
-            :alt="'ces-minus'"
-            :icon="'ces-minus'"
-            size="medium"
-          />
-        </button>
+        <div class="flex items-center justify-center">
+          <button
+            class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
+            @click="minusPoint"
+          >
+            <VIcon
+              class="text-cream flex items-center justify-center"
+              :alt="'ces-minus'"
+              :icon="'ces-minus'"
+              size="medium"
+            />
+          </button>
 
-        <button
-          class="bg-light-green mx-1 flex items-center justify-center rounded-full h-10 w-10"
-          @click="addPoint"
-        >
-          <VIcon
-            class="text-cream flex items-center justify-center"
-            :alt="'ces-plus'"
-            :icon="'ces-plus'"
-            size="medium"
+          <VTextField
+            v-model="points"
+            type="number"
+            placeholder="Enter Points"
+            class="w-20 h-12 text-black"
+            disabled
           />
-        </button>
+
+          <button
+            class="bg-light-green mx-1 flex items-center justify-center rounded-full h-10 w-10"
+            @click="addPoint"
+          >
+            <VIcon
+              class="text-cream flex items-center justify-center"
+              :alt="'ces-plus'"
+              :icon="'ces-plus'"
+              size="medium"
+            />
+          </button>
+
+          <button class="bg-gray-500 hover:bg-gray-600 mx-1 flex items-center justify-center rounded-full h-10 w-40 transition-colors duration-300 ease-in-out" @click="submitPoints">
+            <p class="text-white">Submit Points</p>
+          </button>
+
+        </div>
       </div>
     </div>
   </div>
@@ -194,8 +209,7 @@
     getProfileById,
     getProfileActivityById,
     studentActivityWithinProfile,
-    addActivityPoints,
-    minusActivityPoints,
+    submitActivityPoints,
     joinActivity
   } = useFirebaseAuth()
 
@@ -203,6 +217,7 @@
   const date = ref(new Date())
   const isOpen = ref(false)
   const selectedActivityId2 = ref('')
+  const points = ref(0)
   const route = useRoute()
   const anchor = useState(() => [])
   const filteredUserActivity = ref(
@@ -232,26 +247,22 @@
     }
   }
 
+
   const addPoint = async () => {
-    try {
-      if (selectedActivityId.value) {
-        await addActivityPoints(routerID, selectedActivityId.value)
-      } else {
-        console.log('No activity selected.')
-      }
-    } catch (error) {
-      errorMessage.value = `${error}`
-      console.log(error)
-    }
+    return points.value < 3 ? points.value += 1 : points.value
   }
 
   const minusPoint = async () => {
+    return points.value > 0 ? points.value -= 1 : points.value
+  }
+
+
+  const submitPoints = async () => {
     try {
       if (selectedActivityId.value) {
-        await minusActivityPoints(routerID, selectedActivityId.value)
-      } else {
-        console.log('No activity selected.')
+        await submitActivityPoints(routerID, selectedActivityId.value, points.value)
       }
+      points.value = 0
     } catch (error) {
       errorMessage.value = `${error}`
       console.log(error)

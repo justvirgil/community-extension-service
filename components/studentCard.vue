@@ -59,7 +59,7 @@
       name?: string
       yearLevel?: string
       course?: string
-      joinedActivities?: { [key: string]: { name?: string }}
+      joinedActivities?: { [key: string]: { name?: string } }
     }
   }
 

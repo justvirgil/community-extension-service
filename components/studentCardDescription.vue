@@ -21,9 +21,16 @@
           </p>
           <div v-if="cardData.joinedActivities" class="mt-5">
             <p class="mb-2 w-full h-6 text-cream">Activity Details:</p>
-            <div v-for="(activity, index) in cardData.joinedActivities" :key="index">
-              <p class="mb-2 w-full h-6 text-cream">Name: {{ activity.name }}</p>
-              <p class="mb-2 w-full h-6 text-cream">Location: {{ activity.where }}</p>
+            <div
+              v-for="(activity, index) in cardData.joinedActivities"
+              :key="index"
+            >
+              <p class="mb-2 w-full h-6 text-cream">
+                Name: {{ activity.name }}
+              </p>
+              <p class="mb-2 w-full h-6 text-cream">
+                Location: {{ activity.where }}
+              </p>
             </div>
           </div>
         </div>
@@ -70,7 +77,7 @@
       name?: string
       yearLevel?: string
       course?: string
-      joinedActivities?: { [key: string]: { name?: string; where?: string }}
+      joinedActivities?: { [key: string]: { name?: string; where?: string } }
     }
   }
 
