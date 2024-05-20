@@ -133,9 +133,27 @@
     isOpen.value = !isOpen.value
   }
 
+  const router = useRouter()
+
+  const join = async (activityId) => {
+    try {
+      router.push(`/student/activities/id/${activityId}`)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
   const filterActivities = async (year) => {
     try {
       await filterActivitiesByLevel(year)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const redirectToApproved = async (activityId) => {
+    try {
+      router.push(`/student/activities/id/${activityId}`)
     } catch (error) {
       errorMessage.value = `${error}`
     }

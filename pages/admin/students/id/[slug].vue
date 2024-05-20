@@ -250,11 +250,11 @@
   }
 
   const addPoint = async () => {
-    return points.value < 3 ? (points.value += 1) : points.value
+    return points.value < 1 ? (points.value += 0.5) : points.value
   }
 
   const minusPoint = async () => {
-    return points.value > 0 ? (points.value -= 1) : points.value
+    return points.value > 0 ? (points.value -= 0.5) : points.value
   }
 
   const submitPoints = async () => {

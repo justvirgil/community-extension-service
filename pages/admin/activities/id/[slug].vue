@@ -54,11 +54,22 @@
     </header>
 
     <div class="flex flex-col items-center overflow-y-auto">
-      <div class="bg-dark-blue text-cream text-center text-2xl w-full p-3">
-        <p class="pl-5">{{ tabName }}</p>
+      <div
+        class="flex flex-row items-center justify-center bg-dark-blue text-cream text-center text-2xl w-full p-3"
+      >
+        <div class="bg-dark-blue text-cream p-3">
+          <button type="button" @click="isFirstTab = true">
+            <p class="pl-5">{{ firstTabName }}</p>
+          </button>
+        </div>
+        <div class="bg-dark-blue text-cream p-3">
+          <button type="button" @click="isFirstTab = false">
+            <p class="pl-5">{{ secondTabName }}</p>
+          </button>
+        </div>
       </div>
     </div>
-    <div class="flex items-center justify-center mt-10">
+    <div v-if="isFirstTab" class="flex items-center justify-center mt-10">
       <div
         class="mt-2 rounded-xl h-full p-10 w-[60rem] flex items-center justify-center bg-dark-blue relative"
       >
@@ -196,6 +207,11 @@
         </form>
       </div>
     </div>
+    <div v-if="!isFirstTab" class="flex flex-col mt-10 overflow-y-auto">
+      <div v-for="(student, index) in profileActivity" :key="index">
+        <p>{{ student.name }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -208,7 +224,9 @@
     getNotification,
     unreadNotification,
     updateActivity,
-    deleteActivity
+    deleteActivity,
+    getAllAcceptedActivityStatus,
+    profileActivity
   } = useFirebaseAuth()
   const { timeConverter, timeToDate } = useTools()
   const { uploadFiles } = useFirestorage()
@@ -223,7 +241,9 @@
 
   const errorMessage = ref('')
   const readContent = ref([])
-  const tabName = ref('EDIT ACTIVITY')
+  const firstTabName = ref('EDIT ACTIVITY')
+  const secondTabName = ref('SHOW STUDENTS')
+  const isFirstTab = ref(true)
   const pageTitle = ref('CES ACTIVITY')
   const isOpen = ref(false)
   const isEdit = ref(true)
@@ -233,6 +253,7 @@
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
+  console.log('test123', profileActivity)
 
   const handleFileSubmit = async (event) => {
     try {
@@ -292,6 +313,7 @@
   onMounted(async () => {
     await authorizedUser()
     await getActivityById(routerID)
+    await getAllAcceptedActivityStatus(routerID)
 
     if (specificActivity.value) {
       title.value = specificActivity.value.name

@@ -62,7 +62,7 @@
           <p class="text-cream">{{ specificActivity.name }}</p>
         </div>
         <button class="rounded-full bg-green h-12 w-56 px-3 mr-3" @click="join">
-          <p class="text-cream">JOIN ACTIVITY</p>
+          <p class="text-cream">JOIN</p>
         </button>
         <NuxtLink to="/student/activities/" class="mx-3 text-xl text-white">
           <VIcon
@@ -141,7 +141,10 @@
     addNotification,
     notification,
     unreadNotification,
-    getUserUID
+    getUserUID,
+    userUID,
+    getProfileActivityStatusById,
+    studentActivityStatusWithinProfile
   } = useFirebaseAuth()
   const { timeConverter } = useTools()
 
@@ -166,10 +169,13 @@
   const pendingUsers = ref([])
   const approvedUsers = ref([])
   const rejectedUsers = ref([])
+  const activityStatus = ref('')
 
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
+
+  console.log('test', studentActivityStatusWithinProfile.value)
 
   const join = async () => {
     try {
@@ -223,6 +229,8 @@
     await authorizedUser()
     await getActivityById(routerID)
     await getNotification()
+    await getProfileActivityStatusById(userUID.value, routerID)
+    console.log('test2', studentActivityStatusWithinProfile.value)
 
     if (specificActivity.value) {
       activityId.value = specificActivity.value.id

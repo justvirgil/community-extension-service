@@ -28,6 +28,7 @@ export const useFirebaseAuth = () => {
   const filteredActivities = useState(() => [])
   const activityLocations = useState(() => [])
   const studentActivityWithinProfile = useState(() => {})
+  const studentActivityStatusWithinProfile = useState(() => '')
   const students = useState(() => [])
   const allStudentId = useState(() => [])
   const profile = useState(() => [])
@@ -561,6 +562,32 @@ export const useFirebaseAuth = () => {
   //     errorMessage.value = `${error}`
   //   }
   // }
+  const getAllAcceptedActivityStatus = async (id: string) => {
+    try {
+      const studentsDataArray = await read('users')
+      profile.value = studentsDataArray
+
+      const studentsWithAcceptedActivities = studentsDataArray.flatMap(
+        (student) => {
+          if (student.joinedActivities && student.joinedActivities[id]) {
+            const activity = student.joinedActivities[id]
+            if (activity.status === 'APPROVED') {
+              return {
+                ...student,
+                joinedActivities: { [id]: activity }
+              }
+            }
+          }
+          return []
+        }
+      )
+
+      profileActivity.value = studentsWithAcceptedActivities
+    } catch (error) {
+      errorMessage.value = `Error: ${error.message || error}`
+    }
+  }
+
   const getAllActivityStatus = async () => {
     try {
       const studentsDataArray = await read('users')
@@ -649,6 +676,31 @@ export const useFirebaseAuth = () => {
         }
       } else {
         studentActivityWithinProfile.value = {}
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const getProfileActivityStatusById = async (
+    uid: string,
+    activityId: string
+  ) => {
+    try {
+      const studentsDataArray = await read('users')
+      const userProfile = studentsDataArray.find(
+        (student) => student.id === uid
+      )
+
+      if (userProfile && userProfile.joinedActivities) {
+        const joinedActivity = userProfile.joinedActivities[activityId].status
+        if (joinedActivity) {
+          studentActivityStatusWithinProfile.value = joinedActivity
+        } else {
+          studentActivityStatusWithinProfile.value = {}
+        }
+      } else {
+        studentActivityStatusWithinProfile.value = {}
       }
     } catch (error) {
       errorMessage.value = `${error}`
@@ -844,6 +896,8 @@ export const useFirebaseAuth = () => {
     userUID,
     getUserAllActivities,
     getProfileActivityById,
+    getProfileActivityStatusById,
+    studentActivityStatusWithinProfile,
     studentActivityWithinProfile,
     submitActivityPoints,
     addActivityPoints,
@@ -851,6 +905,7 @@ export const useFirebaseAuth = () => {
     getStudentsIds,
     allStudentId,
     getAllActivityStatus,
-    updateActivityStatus
+    updateActivityStatus,
+    getAllAcceptedActivityStatus
   }
 }

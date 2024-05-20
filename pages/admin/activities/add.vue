@@ -59,119 +59,148 @@
     </div>
     <div class="flex items-center justify-center mt-10">
       <div
-        class="mt-2 rounded-xl h-full p-10 w-[60rem] flex items-center justify-center bg-dark-blue"
+        class="mt-2 rounded-xl h-full w-[60rem] flex items-center justify-center bg-dark-blue overflow-y-auto"
       >
         <form
           class="flex flex-row items-center justify-center"
           @submit.prevent="createActivity"
         >
-          <div>
-            <div class="flex items-center justify-center">
-              <p
-                v-if="errorMessage"
-                class="text-red-500 text-xs text-center font-bold"
-              >
-                {{ errorMessage }}
-              </p>
-            </div>
-            <VTextField
-              v-model="title"
-              type="text"
-              placeholder="CES TITLE"
-              class="w-[25rem] h-8 text-black m-2"
-            />
-            <VTextField
-              v-model="description"
-              type="text"
-              placeholder="CES DESCRIPTION"
-              class="w-[25rem] h-24 rounded-xl text-black m-2"
-            />
-            <VTextField
-              v-model="where"
-              type="text"
-              placeholder="CES WHERE"
-              class="w-[25rem] h-8 text-black m-2"
-            />
-            <VTextField
-              v-model="what"
-              type="text"
-              placeholder="CES WHAT"
-              class="w-[25rem] h-8 text-black m-2"
-            />
-            <div
-              class="flex flex-row items-center w-[25rem] h-8 text-black m-2"
-            >
-              <label class="text-cream pl-3">CES WHEN:</label>
-              <input
-                v-model="when"
-                type="datetime-local"
-                name="when"
-                placeholder="CES WHEN"
-                class="ml-3 rounded-xl"
+          <div class="flex flex-row">
+            <div class="flex flex-col ml-3 mt-10">
+              <div class="flex items-center justify-center">
+                <p
+                  v-if="errorMessage"
+                  class="text-red-500 text-xs text-center font-bold"
+                >
+                  {{ errorMessage }}
+                </p>
+              </div>
+              <VTextField
+                v-model="title"
+                type="text"
+                placeholder="CES TITLE"
+                class="w-[25rem] h-8 text-black m-2"
               />
+              <VTextField
+                v-model="description"
+                type="text"
+                placeholder="CES DESCRIPTION"
+                class="w-[25rem] h-24 rounded-xl text-black m-2"
+              />
+              <VTextField
+                v-model="where"
+                type="text"
+                placeholder="CES WHERE"
+                class="w-[25rem] h-8 text-black m-2"
+              />
+              <VTextField
+                v-model="what"
+                type="text"
+                placeholder="CES WHAT"
+                class="w-[25rem] h-8 text-black m-2"
+              />
+              <div
+                class="flex flex-row items-center w-[25rem] h-8 text-black m-2"
+              >
+                <label class="text-cream pl-3">CES WHEN:</label>
+                <input
+                  v-model="when"
+                  type="datetime-local"
+                  name="when"
+                  placeholder="CES WHEN"
+                  class="ml-3 rounded-xl"
+                />
+              </div>
             </div>
-          </div>
-          <div class="ml-3 mt-10">
-            <div class="flex flex-row p-5">
-              <div class="mr-2">
-                <label for="yearLevel" class="text-cream mr-2"
-                  >Year Level:
-                </label>
-                <select id="yearLevel" v-model="yearLevel" name="yearLevel">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
+            <div class="ml-3 mt-10">
+              <div class="flex flex-row p-5">
+                <div class="flex mr-2">
+                  <label for="yearLevel" class="text-cream mr-2"
+                    >Year Level:
+                  </label>
+                  <select
+                    id="yearLevel"
+                    v-model="yearLevel"
+                    name="yearLevel"
+                    multiple
+                  >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                  </select>
+                </div>
+                <div class="flex">
+                  <label for="status" class="text-cream mr-2">Status: </label>
+                  <select id="status" v-model="status" name="status">
+                    <option value="PENDING">Pending</option>
+                    <option value="APPROVED">Approved</option>
+                  </select>
+                </div>
+              </div>
+              <div class="flex">
+                <label for="course" class="text-cream mr-2">Course: </label>
+                <select
+                  id="course"
+                  v-model="course"
+                  name="course"
+                  class="w-60"
+                  multiple
+                >
+                  <option value="Information and Communication Technologies">
+                    Information and Communication Technologies
+                  </option>
+                  <option value="Information Technology">
+                    Information Technology
+                  </option>
+                  <option value="Information System">Information System</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="Computer Science">Computer Science</option>
                 </select>
               </div>
-              <label for="status" class="text-cream mr-2">Status: </label>
-              <select id="status" v-model="status" name="status">
-                <option value="PENDING">Pending</option>
-                <option value="APPROVED">Approved</option>
-              </select>
-            </div>
-            <div class="flex flex-col items-center justity-between my-5">
-              <div class="flex flex-col bg-cream w-80 h-32 rounded-xl mb-5">
-                <input
-                  ref="fileInput"
-                  type="file"
-                  class="hidden"
-                  @change.prevent="handleFileSubmit($event)"
-                />
-                <button
-                  type="button"
-                  class="w-full h-full bg-gray-500 rounded-xl"
-                  @click="$refs.fileInput.click()"
-                >
-                  <p class="text-cream">CES PARENTAL FORMS</p>
-                  <VIcon
-                    class="text-cream w-full h-full"
-                    :alt="'ces-file-text'"
-                    :icon="'ces-file-text'"
-                    size="x-large"
+              <div class="flex flex-col items-center justity-between my-5">
+                <div class="flex flex-col bg-cream w-80 h-32 rounded-xl mb-5">
+                  <input
+                    ref="fileInput"
+                    type="file"
+                    class="hidden"
+                    @change.prevent="handleFileSubmit($event)"
                   />
-                </button>
-              </div>
-              <div class="flex flex-row justify-end mr-8 mt-2 mb-2">
-                <VButton
-                  class="w-24 mr-10"
-                  :is-bold="true"
-                  :is-rounded="true"
-                  type="submit"
-                >
-                  ADD
-                </VButton>
-                <NuxtLink
-                  to="/admin/activities/"
-                  class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
-                >
-                  <VIcon
-                    :alt="'ces-cross'"
-                    :icon="'ces-cross'"
-                    size="medium"
-                    class="text-cream flex items-center justify-center"
-                  />
-                </NuxtLink>
+                  <button
+                    type="button"
+                    class="w-full h-full bg-gray-500 rounded-xl"
+                    @click="$refs.fileInput.click()"
+                  >
+                    <p class="text-cream">CES PARENTAL FORMS</p>
+                    <VIcon
+                      class="text-cream w-full h-full"
+                      :alt="'ces-file-text'"
+                      :icon="'ces-file-text'"
+                      size="x-large"
+                    />
+                  </button>
+                </div>
+                <div class="flex flex-row justify-end mr-8 mt-2 mb-2">
+                  <VButton
+                    class="w-24 mr-10"
+                    :is-bold="true"
+                    :is-rounded="true"
+                    type="submit"
+                  >
+                    ADD
+                  </VButton>
+                  <NuxtLink
+                    to="/admin/activities/"
+                    class="bg-red-400 mx-1 flex items-center justify-center rounded-full h-10 w-10"
+                  >
+                    <VIcon
+                      :alt="'ces-cross'"
+                      :icon="'ces-cross'"
+                      size="medium"
+                      class="text-cream flex items-center justify-center"
+                    />
+                  </NuxtLink>
+                </div>
               </div>
             </div>
           </div>
@@ -202,6 +231,7 @@
   const when = ref('')
   const yearLevel = ref(1)
   const status = ref('APPROVED')
+  const course = ref('')
 
   const errorMessage = ref('')
   const readContent = ref([])
