@@ -56,6 +56,24 @@
           <VIcon :alt="'ces-pending'" :icon="'ces-pending'" size="medium" />
           <p class="ml-2">Pending</p>
         </NuxtLink>
+
+        <NuxtLink
+          to="/admin/announcement"
+          class="mb-8 flex flex-row items-center justify-start text-cream rounded-full w-28 h-8 pl-3"
+          active-class="bg-dark-blue text-red-500"
+        >
+          <VIcon :alt="'ces-plus'" :icon="'ces-plus'" size="medium" />
+          <p class="ml-2">Announcement</p>
+        </NuxtLink>
+
+        <NuxtLink
+          to="/admin/qr"
+          class="mb-8 flex flex-row items-center justify-start text-cream rounded-full w-28 h-8 pl-3"
+          active-class="bg-dark-blue text-red-500"
+        >
+          <VIcon :alt="'ces-edit'" :icon="'ces-edit'" size="medium" />
+          <p class="ml-2">QR</p>
+        </NuxtLink>
       </div>
     </aside>
 

@@ -41,6 +41,7 @@ export const useFirebaseAuth = () => {
   const userActivityCancelled = useState(() => [])
   const unreadNotification = useState(() => '')
   const generatedUUID = generateUUID()
+  const announcements = useState(() => [])
 
   const userUID = useState(() => '')
 
@@ -543,25 +544,7 @@ export const useFirebaseAuth = () => {
       errorMessage.value = `${error}`
     }
   }
-  // returns inside joinedActivities with status "PENDING'
-  // const getAllActivityStatus = async () => {
-  //   try {
-  //     const studentsDataArray = await read('users')
-  //     profile.value = studentsDataArray
 
-  //     const joinedActivities = studentsDataArray.reduce((acc, student) => {
-  //       if (student.joinedActivities) {
-  //         const pending = Object.values(student.joinedActivities).filter(activity => activity.status === "PENDING")
-  //         return acc.concat(pending)
-  //       }
-  //       return acc
-  //     }, [])
-
-  //     profileActivity.value = joinedActivities
-  //   } catch (error) {
-  //     errorMessage.value = `${error}`
-  //   }
-  // }
   const getAllAcceptedActivityStatus = async (id: string) => {
     try {
       const studentsDataArray = await read('users')
@@ -722,6 +705,7 @@ export const useFirebaseAuth = () => {
         const joinedActivity = userProfile.joinedActivities[activityId]
         if (joinedActivity) {
           joinedActivity.points = points
+          joinedActivity.isCompleted = true
 
           userProfile.joinedActivities[activityId] = joinedActivity
 
@@ -843,6 +827,24 @@ export const useFirebaseAuth = () => {
     return undefined
   }
 
+  const addAnnouncement = async (uid: string, data: Object) => {
+    try {
+      await addUser('announcements', uid, data)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const getAnnouncements = async () => {
+    try {
+      const dataArray = await read('announcements')
+      announcements.value = dataArray
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+
   return {
     errorMessage,
     dataFetched,
@@ -906,6 +908,9 @@ export const useFirebaseAuth = () => {
     allStudentId,
     getAllActivityStatus,
     updateActivityStatus,
-    getAllAcceptedActivityStatus
+    getAllAcceptedActivityStatus,
+    addAnnouncement,
+    getAnnouncements,
+    announcements
   }
 }

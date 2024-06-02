@@ -5,5 +5,8 @@
     "plugin:json/recommended",
     "prettier"
   ],
+  "rules": {
+  "no-console":"off"
+  },
   "ignorePatterns": ["vars/env.json"]
 }

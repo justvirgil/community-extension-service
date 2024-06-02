@@ -1,19 +1,17 @@
+f
 <template>
   <div class="flex flex-col h-full w-full bg-cream">
     <header
-      class="flex flex-row bg-dark-blue border-b border-l border-light-blue"
+      class="flex flex-row bg-light-blue border-b border-l border-dark-blue"
     >
       <nav class="flex flex-row my-8 grow">
         <div class="flex flex-row items-center grow ml-16 text-white">
-          <VIcon :alt="'ces-power'" :icon="'ces-power'" size="large" />
+          <VIcon :alt="'ces-user'" :icon="'ces-user'" size="large" />
           <p class="text-xl ml-2">{{ pageTitle }}</p>
         </div>
         <div class="flex items-center justify-center mr-5">
-          <NuxtLink to="/student/faq" class="mx-3 text-xl text-white">
-            <VIcon :alt="'ces-question'" :icon="'ces-question'" size="medium" />
-          </NuxtLink>
           <NuxtLink
-            to="/student/notification"
+            to="/admin/notification"
             class="mx-3 text-xl text-white flex flex-row items-center justify-center"
           >
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
@@ -36,7 +34,7 @@
                 <li class="flex flex-row justify-center items-center">
                   <VIcon :alt="'ces-user'" :icon="'ces-user'" size="medium" />
                   <NuxtLink
-                    to="/student/profile"
+                    to="/admin/profile"
                     class="block px-4 py-2 text-lg text-gray-800 hover:bg-gray-200"
                     >Profile</NuxtLink
                   >
@@ -57,61 +55,59 @@
     </header>
 
     <div class="flex flex-row">
-      <div class="grow flex flex-col items-center">
-        <div class="bg-light-blue text-cream p-3 text-xl text-start w-full">
-          <p>COMPLETED ACTIVITIES</p>
-        </div>
-        <div class="pt-12 py-auto w-[600px] overflow-auto">
-          <div class="bg-cream text-black h-fit">
-            <chart
-              :labels="chartLabels"
-              :datasets="chartDatasets"
-              :options="chartOptions"
-            />
-          </div>
-           <QRCode color="black" bg-color="white" />
-        </div>
+      <div
+        class="bg-dark-blue text-cream py-3 pr-4 flex items-center text-xl text-center w-full h-10"
+      >
+        <p class="pl-24 text-xl">Greetings, {{ profile.name }}</p>
       </div>
+    </div>
+    <div class="flex flex-col justify-center items-center">
+      	<div>
+	      	<p>
+	    		Scan QR Code
+	    	</p>
+    	</div>
+
+    	<div>
+	      	<p>
+	    		<QRCode color="black" bg-color="white" />
+	    	</p>
+    	</div>
     </div>
   </div>
 </template>
 
-<script setup> 
+<script setup>
+  import { QRCode } from 'ant-design-vue'
+
   const {
     authorizedUser,
     logout,
-    activity,
-    getUserAllActivities,
-    getNotification,
-    unreadNotification,
     getProfile,
-    profileActivity
+    profile,
+    getUserUID,
+    updateUserAvatar,
+    getNotification,
+    unreadNotification
   } = useFirebaseAuth()
+  const { uploadAvatar } = useFirestorage()
 
-  const pageTitle = ref('Tracker')
+  const userData = ref('')
+  const pageTitle = ref('QR Code')
   const isOpen = ref(false)
   const toggleDropDown = () => {
     isOpen.value = !isOpen.value
   }
 
-  const chartLabels = ref([])
-  const activityLength = ref(0)
-  const completedActivities = ref(0)
-  const completionPercentage = ref(0)
-  const remainingPercentage = ref(0)
-
-  const chartDatasets = ref([
-    {
-      backgroundColor: ['#FFFF00', '#00308C '],
-      data: [completionPercentage, remainingPercentage]
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files[0]
+    const userId = getUserUID()
+    if (userId && file) {
+      const downloadURL = await uploadAvatar(userId, file)
+      await updateUserAvatar(userId, downloadURL)
+      await getProfile()
     }
-  ])
-
-  const chartOptions = ref({
-    responsive: true,
-    maintainAspectRatio: false,
-    aspectRatio: 1
-  })
+  }
 
   const logUserOut = async () => {
     await logout()
@@ -120,23 +116,11 @@
 
   onMounted(async () => {
     await authorizedUser()
-    await getNotification()
-    await getUserAllActivities()
     await getProfile()
-
-    chartLabels.value = profileActivity.value
-      .filter(activity => activity.isCompleted)
-      .map(item => item.name)
-
-    activityLength.value = profileActivity.value.length
-    completedActivities.value = profileActivity.value.filter(item => item.isCompleted).length
-
-    completionPercentage.value =
-      (completedActivities.value / activityLength.value) * 100
-    remainingPercentage.value = 100 - completionPercentage.value
+    await getNotification()
   })
 
   definePageMeta({
-    layout: 'member'
+    layout: 'admin'
   })
 </script>
