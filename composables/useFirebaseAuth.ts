@@ -42,8 +42,9 @@ export const useFirebaseAuth = () => {
   const unreadNotification = useState(() => '')
   const generatedUUID = generateUUID()
   const announcements = useState(() => [])
-
   const userUID = useState(() => '')
+  const message = useState(() => [])
+
 
   const register = async (email: string, password: string, data: Object) => {
     try {
@@ -413,17 +414,16 @@ export const useFirebaseAuth = () => {
 
   const joinActivity = async (
     activityID: string,
-    userID: string,
     data: Object
   ) => {
     try {
       await update('activities', activityID, {
-        pendingUsers: arrayUnion(userID)
+        pendingUsers: arrayUnion(userUID.value)
       })
 
       const studentsDataArray = await read('users')
       const userProfile = studentsDataArray.find(
-        (student) => student.id === userID
+        (student) => student.id === userUID.value
       )
       const joinedActivities = userProfile.joinedActivities || {}
 
@@ -431,6 +431,11 @@ export const useFirebaseAuth = () => {
         ...joinedActivities,
         [activityID]: data
       }
+
+      console.log('studentsDataArray',studentsDataArray)
+       console.log('userProfile',userProfile)
+        console.log('joinedActivities',joinedActivities)
+      console.log('updatedJoinedActivities',updatedJoinedActivities)
 
       await update('users', userUID.value, {
         joinedActivities: updatedJoinedActivities
@@ -544,6 +549,30 @@ export const useFirebaseAuth = () => {
       errorMessage.value = `${error}`
     }
   }
+
+  const getMyAcceptedActivities = async () => {
+    try {
+      const studentsDataArray = await read('users')
+
+      const userProfile = studentsDataArray.find(
+        (student) => student.id === userUID.value
+      )
+
+      profile.value = userProfile
+
+      if (userProfile && userProfile.joinedActivities) {
+        const approvedActivities = Object.values(userProfile.joinedActivities).filter(
+          (activity) => activity.status === 'APPROVED'
+        )
+        profileActivity.value = approvedActivities
+      } else {
+        profileActivity.value = []
+      }
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
 
   const getAllAcceptedActivityStatus = async (id: string) => {
     try {
@@ -844,6 +873,55 @@ export const useFirebaseAuth = () => {
     }
   }
 
+  // const getNotification = async () => {
+  //   try {
+  //     const notifDataArray = await read(
+  //       `notifications/${userUID.value}/notificationList`
+  //     )
+  //     notification.value = notifDataArray
+
+  //     const unreadLength = notifDataArray.filter(
+  //       (notification) => !notification.isRead
+  //     ).length
+
+  //     const unreadMessage = notifDataArray
+
+  //     unreadNotification.value = unreadLength
+  //     notificationMessage.value = unreadMessage
+  //   } catch (error) {
+  //     errorMessage.value = `${error}`
+  //   }
+  // }
+
+  const addMessage = async (activityID, data: Object) => {
+    try {
+      await addSubcollection(
+        'chatGroups',
+        activityId,
+        'messages',
+        generateUUID(),
+        data
+      )
+      console.log("message Activity ID:", activityID)
+      console.log("object Activity ID:", data)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+  const getMessages = async (activityID) => {
+    try {
+      const chatGroupArray = await read(`chatGroups/${activityID}/messages/`)
+      console.log("Activity ID:", activityID)
+      
+      message.value = chatGroupArray
+      console.log("Messages:", message.value)
+    } catch (error) {
+      errorMessage.value = `${error}`
+    }
+  }
+
+
 
   return {
     errorMessage,
@@ -911,6 +989,10 @@ export const useFirebaseAuth = () => {
     getAllAcceptedActivityStatus,
     addAnnouncement,
     getAnnouncements,
-    announcements
+    announcements,
+    getMessages,
+    message,
+    getMyAcceptedActivities,
+    addMessage
   }
 }

@@ -62,7 +62,7 @@ f
       </div>
     </div>
     <div class="flex flex-col justify-center items-center">
-      	<div>
+      <div>
 	      	<p>
 	    		Scan QR Code
 	    	</p>
@@ -73,6 +73,11 @@ f
 	    		<QRCode color="black" bg-color="white" />
 	    	</p>
     	</div>
+
+      <div>
+        <button>Generate QR</button>
+      </div>
+
     </div>
   </div>
 </template>

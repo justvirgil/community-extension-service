@@ -149,7 +149,9 @@
     userActivityPending,
     userActivityUpcoming,
     userActivityCancelled,
-    getUserUID
+    getUserUID,
+    getMessages,
+    message
   } = useFirebaseAuth()
 
   const { uploadFiles } = useFirestorage()
@@ -213,7 +215,8 @@
     await getUserProfile()
     await getNotification()
     await getUserAcitivities()
-    await getProfile()
+    await getMessages()
+    console.log("message from chatGroups", message.value)
   })
 
   definePageMeta({

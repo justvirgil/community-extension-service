@@ -67,13 +67,26 @@
         </NuxtLink>
 
         <NuxtLink
+          to="/admin/chat"
+          class="mb-8 flex flex-row items-center justify-start text-cream rounded-full w-28 h-8 pl-3"
+          active-class="bg-dark-blue text-red-500">
+          <VIcon
+            :alt="'ces-chat-2'"
+            :icon="'ces-chat-2'"
+            size="medium"
+          />
+          <p class="ml-2">Chat</p>
+        </NuxtLink>
+
+        <NuxtLink
           to="/admin/qr"
           class="mb-8 flex flex-row items-center justify-start text-cream rounded-full w-28 h-8 pl-3"
           active-class="bg-dark-blue text-red-500"
         >
-          <VIcon :alt="'ces-edit'" :icon="'ces-edit'" size="medium" />
+          <VIcon :alt="'ces-checkmark'" :icon="'ces-checkmark'" size="medium" />
           <p class="ml-2">QR</p>
         </NuxtLink>
+
       </div>
     </aside>
 

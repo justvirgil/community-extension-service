@@ -25,6 +25,19 @@
         </NuxtLink>
 
         <NuxtLink
+          to="/student/chat"
+          class="mb-8 flex flex-row items-center justify-start text-cream rounded-full w-28 h-8 pl-3"
+          active-class="bg-light-blue text-light-green"
+        >
+          <VIcon
+            :alt="'ces-chat-2'"
+            :icon="'ces-chat-2'"
+            size="medium"
+          />
+          <p class="ml-2">Chat</p>
+        </NuxtLink>
+
+        <NuxtLink
           to="/student/calendar"
           class="mb-8 flex flex-row items-center justify-start text-cream rounded-full w-28 h-8 pl-3"
           active-class="bg-light-blue text-light-green"
@@ -63,6 +76,7 @@
           />
           <p class="ml-2">Available</p>
         </NuxtLink>
+
       </div>
     </aside>
 

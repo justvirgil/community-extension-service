@@ -80,8 +80,6 @@ s
     updateActivityStatus
   } = useFirebaseAuth()
 
-  console.log(profileActivity)
-
   const pageTitle = ref('Pending')
   const isOpen = ref(false)
   const toggleDropDown = () => {
@@ -147,6 +145,9 @@ s
     await getNotification()
     await getAllActivityStatus()
     await getStudents()
+
+      console.log('pa',profileActivity.value)
+  console.log('students',students.value)
   })
 
   definePageMeta({

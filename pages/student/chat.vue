@@ -19,7 +19,7 @@
             <VIcon :alt="'ces-bell'" :icon="'ces-bell'" size="medium" />
             <p
               v-if="unreadNotification > 0"
-              class="absolute top-[30px] right-[70px] bg-red-800 rounded-full h-5 w-5 flex items-center justify-center text-sm"
+              class="absolute top-[30px] right-[70px] rounded-full h-5 w-5 flex items-center justify-center text-sm"
             >
               {{ unreadNotification }}
             </p>
@@ -60,40 +60,15 @@
       <div
         class="py-3 flex bg-light-blue text-cream items-start text-xl text-center w-full"
       >
-        <p class="pl-24">FREQUENTLY ASKED</p>
+        <p class="pl-16">Groups</p>
       </div>
     </div>
 
     <div class="w-full h-full bg-cream flex flex-col">
-      <div class="flex flex-col p-5 text-sm relative">
-        <p>1. LOREM IPSUM</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta
-          lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo
-          pellentesque faucibus interdum a neque. Nam lobortis, nulla ut
-          consequat aliquet, lorem justo accumsan dui, non maximus ex erat at
-          nibh. Vivamus nec nisi arcu.
-        </p>
-        <p>2. LOREM IPSUM</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta
-          lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo
-          pellentesque faucibus interdum a neque. Nam lobortis, nulla ut
-          consequat aliquet, lorem justo accumsan dui, non maximus ex erat at
-          nibh. Vivamus nec nisi arcu.
-        </p>
-        <p>3. LOREM IPSUM</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta
-          lorem vitae ipsum finibus sodales. Suspendisse vitae quam id leo
-          pellentesque faucibus interdum a neque. Nam lobortis, nulla ut
-          consequat aliquet, lorem justo accumsan dui, non maximus ex erat at
-          nibh. Vivamus nec nisi arcu.
-        </p>
+
+      <div class="flex flex-col text-sm relative w-full h-full">
+        <chatBox />
       </div>
-      <button class="absolute right-20 bottom-5 bg-red-300 px-6 py-3">
-        CHAT
-      </button>
     </div>
   </div>
 </template>
@@ -104,7 +79,7 @@
   const { read } = useFirestore()
 
   const readContent = ref([])
-  const pageTitle = ref('FAQ')
+  const pageTitle = ref('CHAT')
 
   const isOpen = ref(false)
   const toggleDropDown = () => {

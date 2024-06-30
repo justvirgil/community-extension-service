@@ -205,14 +205,7 @@
         data.status = 'PENDING'
       }
 
-      await joinActivity(routerID, userID, data)
-      await addNotification({
-        activityId: activityId.value,
-        isRead: false,
-        message: `${userID} wants to join the activity`,
-        sender: `${userID}`,
-        timestamp: new Date()
-      })
+      await joinActivity(routerID, data)
       navigateTo('/student/activities/')
     } catch (error) {
       errorMessage.value = `${error}`

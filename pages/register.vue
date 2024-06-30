@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen">
     <div
-      class="bg-dark-blue/90 rounded-lg w-[600px] h-[700px] flex flex-col items-center justify-center"
+      class="bg-dark-blue/90 rounded-lg w-[600px] h-full my-3 py-3 flex flex-col items-center justify-center"
     >
       <div class="flex flex-col items-center justify-center mb-6">
         <p class="text-6xl text-green font-bold mb-2">CMS</p>
@@ -21,6 +21,12 @@
             </p>
           </div>
           <VTextField
+            v-model="userId"
+            type="text"
+            placeholder="Id"
+            class="w-80 h-12 text-black m-2"
+          />
+          <VTextField
             v-model="firstName"
             type="text"
             placeholder="first name"
@@ -33,6 +39,16 @@
             class="w-80 h-12 text-black m-2"
           />
           <div class="flex flex-col my-2">
+            <div class="mb-2 flex-row w-56">
+              <label for="role" class="text-cream mr-2"
+                >Role:
+              </label>
+              <select id="role" v-model="role" name="role">
+                <option value="student">student</option>
+                <option value="teacher">teacher</option>
+              </select>
+            </div>
+
             <div class="mb-2 flex-row w-56">
               <label for="yearLevel" class="text-cream mr-2"
                 >Year Level:
@@ -100,10 +116,12 @@
 </template>
 
 <script setup lang="ts">
+  const userId = ref('')
   const firstName = ref('')
   const lastName = ref('')
   const email = ref('')
   const password = ref('')
+  const role = ref('')
   const yearLevel = ref(1)
   const course = ref('')
   const confirmPassword = ref('')
@@ -124,12 +142,14 @@
   const handleSubmit = async () => {
     try {
       if (
+        userId.value === '' ||
         firstName.value === '' ||
         lastName.value === '' ||
         email.value === '' ||
         yearLevel.value === '' ||
         course.value === '' ||
         password.value === '' ||
+        role.value === '' ||
         confirmPassword.value === ''
       ) {
         errorMessage.value = 'Please fill empty field!'
@@ -144,6 +164,8 @@
           errorMessage.value = 'Email already exist!'
         } else {
           await register(email.value, password.value, {
+            userId: userId.value,
+            role: role.value,
             isAdmin: false,
             email: email.value,
             firstName: firstName.value,
