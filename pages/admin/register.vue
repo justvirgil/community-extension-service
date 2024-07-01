@@ -62,7 +62,7 @@
       </div>
       <div class="flex flex-row items-center justify-between mt-10">
         <google-button />
-        <NuxtLink to="/adminLogin">
+        <NuxtLink to="/admin/login">
           <VButton class="ml-3 w-full h-10 text-xs rounded-lg">
             <p class="font-bold">ALREADY HAVE?</p>
           </VButton>

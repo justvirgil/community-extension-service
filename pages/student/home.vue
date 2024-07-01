@@ -171,8 +171,6 @@
     await getUserAcitivities()
     await getProfile()
     await getAnnouncements()
-      console.log("tes", announcements.value)
-
   })
 
   definePageMeta({

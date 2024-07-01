@@ -57,77 +57,22 @@
       <p>Hello admin!</p>
     </div>
     <div
-      class="flex flex-row h-full overflow-x-auto justify-center bg-cream text-cream"
+      class="flex flex-col h-full overflow-x-auto bg-cream text-cream"
     >
-      <div class="grow flex flex-col items-center">
+      <div class="flex flex-col items-center mt-2">
         <p
-          class="flex rounded-2xl mt-5 text-2xl text-center items-center justify-center h-16 w-40 bg-dark-blue"
+          class="flex rounded-2xl mt-2 text-2xl text-center items-center justify-center h-16 w-52 bg-dark-blue"
         >
-          completed
+          Announcements
         </p>
-        <div class="py-5">
-          <activity-card
-            v-for="(item, index) in userActivityCompleted"
-            :key="index"
-            :card-data="item"
-            class="py-2"
-            @join="join(item.id)"
-            @upload-image="uploadActivity"
-            @upload-files="uploadActivity"
-          />
-        </div>
       </div>
-
-      <div class="grow flex flex-col items-center">
-        <p
-          class="flex rounded-2xl mt-5 text-2xl text-center items-center justify-center h-16 w-40 bg-dark-blue"
-        >
-          pending
-        </p>
-        <div class="py-5">
-          <activity-card
-            v-for="(item, index) in userActivityPending"
-            :key="index"
-            :card-data="item"
-            class="py-2"
-            @join="join(item.id)"
-          />
+        <div v-for="(item, index) in announcements" :key="index" class="flex flex-col text-l text-black">
+          <div class="flex flex-col mx-3 my-3 bg-light-blue/80 text-cream p-2">
+            <p>{{ item.title }}</p>
+            <p>{{ item.announcement }}</p>
+            <p>{{ timeConverter(item.date) }}</p>
+          </div>
         </div>
-      </div>
-
-      <div class="grow flex flex-col items-center">
-        <p
-          class="flex rounded-2xl mt-5 text-2xl text-center items-center justify-center h-16 w-40 bg-dark-blue"
-        >
-          upcoming
-        </p>
-        <div class="py-5">
-          <activity-card
-            v-for="(item, index) in userActivityUpcoming"
-            :key="index"
-            :card-data="item"
-            class="py-2"
-            @join="join(item.id)"
-          />
-        </div>
-      </div>
-
-      <div class="grow flex flex-col items-center">
-        <p
-          class="flex rounded-2xl mt-5 text-2xl text-center items-center justify-center h-16 w-40 bg-dark-blue"
-        >
-          cancelled
-        </p>
-        <div class="py-5">
-          <activity-card
-            v-for="(item, index) in userActivityCancelled"
-            :key="index"
-            :card-data="item"
-            class="py-2"
-            @join="join(item.id)"
-          />
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -151,10 +96,14 @@
     userActivityCancelled,
     getUserUID,
     getMessages,
-    message
+    message,
+    getAnnouncements,
+    announcements
   } = useFirebaseAuth()
 
   const { uploadFiles } = useFirestorage()
+  const { timeConverter } = useTools()
+
 
   const pageTitle = ref('Home')
   const date = ref(new Date())
@@ -216,7 +165,7 @@
     await getNotification()
     await getUserAcitivities()
     await getMessages()
-    console.log("message from chatGroups", message.value)
+    await getAnnouncements()
   })
 
   definePageMeta({

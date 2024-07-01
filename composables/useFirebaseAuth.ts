@@ -80,6 +80,39 @@ export const useFirebaseAuth = () => {
     }
   }
 
+  const registerAdmin = async (email: string, password: string, data: Object) => {
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(
+        $auth,
+        email,
+        password
+      )
+      const user = userCredentials.user
+      await sendEmailVerification(user)
+      await signOut($auth)
+      await addUser('admins', user.uid, data)
+    } catch (error) {
+      switch (error.code) {
+        case 'auth/invalid-email':
+          errorMessage.value = 'Invalid email address'
+          break
+        case 'auth/email-already-in-use':
+          errorMessage.value = 'Email address is already in use'
+          break
+        case 'auth/operation-not-allowed':
+          errorMessage.value = 'Operation not allowed. Please contact support'
+          break
+        case 'auth/weak-password':
+          errorMessage.value =
+            'Password is too weak. Please choose a stronger password'
+          break
+        default:
+          errorMessage.value = 'Registration failed. Please try again later'
+          break
+      }
+    }
+  }
+
   const loginUser = async (email: string, password: string) => {
     try {
       const userCredentials = await signInWithEmailAndPassword(
@@ -141,10 +174,8 @@ export const useFirebaseAuth = () => {
         password
       )
       const admin = adminCredentials.user
-      const adminDataArray = await readById('admins', admin.email)
-      if (adminDataArray.length === 0 || adminDataArray[0].isAdmin === false) {
-        errorMessage.value = 'Unauthorized role'
-      } else if (!admin.emailVerified) {
+      const adminDataArray = await readById('pendingUsers', admin.email)
+    if (!admin.emailVerified) {
         errorMessage.value = 'Email not verified'
       } else if (
         admin &&
@@ -152,12 +183,13 @@ export const useFirebaseAuth = () => {
         adminDataArray[0].isAdmin === true
       ) {
         const adminData = adminDataArray[0]
-        await addUser('pendingUsers', admin.uid, {
+        await addUser('admins', admin.uid, {
           isAdmin: adminData.isAdmin,
           email: adminData.email,
           name: `${adminData.firstName} ${adminData.lastName}`,
           createdAt: adminData.createdAt
         })
+        await del('pendingUsers', admin.uid)
         await navigateTo('/admin/home')
       } else {
         await navigateTo('/admin/login')
@@ -169,7 +201,7 @@ export const useFirebaseAuth = () => {
       ) {
         errorMessage.value = 'Invalid email or password'
       } else {
-        errorMessage.value = 'Invalid email or password'
+        errorMessage.value = `${error}`
       }
     }
   }
@@ -993,6 +1025,7 @@ export const useFirebaseAuth = () => {
     getMessages,
     message,
     getMyAcceptedActivities,
-    addMessage
+    addMessage,
+    registerAdmin
   }
 }
