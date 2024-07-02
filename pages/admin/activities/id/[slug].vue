@@ -122,6 +122,12 @@
                 class="ml-3 rounded-xl"
               />
             </div>
+              <VTextField
+                v-model="maxParticipants"
+                type="number"
+                placeholder="Max participants"
+                class="w-[25rem] h-8 text-black m-2"
+              />
           </div>
           <div class="ml-3 mt-10">
             <div class="absolute right-12 top-12">
@@ -149,14 +155,33 @@
                   <option value="4">4</option>
                 </select>
               </div>
-              <label for="status" class="text-cream mr-2">Status: </label>
-              <select id="status" v-model="status" name="status">
-                <option value="Pending">Pending</option>
-                <option value="Upcoming">Upcoming</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
-              </select>
+                <div class="flex">
+                  <label for="status" class="text-cream mr-2">Status: </label>
+                  <select id="status" v-model="status" name="status">
+                    <option value="PENDING">Pending</option>
+                    <option value="APPROVED">Approved</option>
+                  </select>
+                </div>
             </div>
+              <div class="flex">
+                <label for="course" class="text-cream mr-2">Course: </label>
+                <select
+                  id="course"
+                  v-model="course"
+                  name="course"
+                  class="w-60"
+                >
+                  <option value="ICT">
+                    Information and Communication Technologies
+                  </option>
+                  <option value="IT">
+                    Information Technology
+                  </option>
+                  <option value="IS">Information System</option>
+                  <option value="MATH">Mathematics</option>
+                  <option value="CS">Computer Science</option>
+                </select>
+              </div>
             <div class="flex flex-col items-center justity-between my-5">
               <div class="flex flex-col bg-cream w-80 h-32 rounded-xl mb-5">
                 <input
@@ -237,7 +262,9 @@
   const what = ref('')
   const when = ref('')
   const yearLevel = ref(1)
-  const status = ref('Upcoming')
+  const status = ref('APPROVED')
+  const course = ref('')
+  const maxParticipants = ref(1)
 
   const errorMessage = ref('')
   const readContent = ref([])
@@ -285,11 +312,14 @@
           where: where.value,
           when: new Date(when.value),
           what: what.value,
-          yearLevel: yearLevel.value,
+          course: course.value,
+          maxParticipants: Number(maxParticipants.value),
+          yearLevel: Number(yearLevel.value),
           createdAt: new Date(),
           status: status.value
         })
         errorMessage.value = ''
+        navigateTo('/admin/activities/')
       }
     } catch (error) {
       errorMessage.value = `${error}`
@@ -323,6 +353,8 @@
       when.value = timeToDate(specificActivity.value.when)
       yearLevel.value = specificActivity.value.yearLevel
       status.value = specificActivity.value.status
+      course.value = specificActivity.value.course
+      maxParticipants.value = specificActivity.value.maxParticipants
     }
     await getNotification()
   })

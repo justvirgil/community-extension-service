@@ -111,6 +111,12 @@
                   class="ml-3 rounded-xl"
                 />
               </div>
+              <VTextField
+                v-model="maxParticipants"
+                type="number"
+                placeholder="Max participants"
+                class="w-[25rem] h-8 text-black m-2"
+              />
             </div>
             <div class="ml-3 mt-10">
               <div class="flex flex-row p-5">
@@ -122,7 +128,6 @@
                     id="yearLevel"
                     v-model="yearLevel"
                     name="yearLevel"
-                    multiple
                   >
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -145,17 +150,16 @@
                   v-model="course"
                   name="course"
                   class="w-60"
-                  multiple
                 >
-                  <option value="Information and Communication Technologies">
+                  <option value="ICT">
                     Information and Communication Technologies
                   </option>
-                  <option value="Information Technology">
+                  <option value="IT">
                     Information Technology
                   </option>
-                  <option value="Information System">Information System</option>
-                  <option value="Mathematics">Mathematics</option>
-                  <option value="Computer Science">Computer Science</option>
+                  <option value="IS">Information System</option>
+                  <option value="MATH">Mathematics</option>
+                  <option value="CS">Computer Science</option>
                 </select>
               </div>
               <div class="flex flex-col items-center justity-between my-5">
@@ -232,6 +236,7 @@
   const yearLevel = ref(1)
   const status = ref('APPROVED')
   const course = ref('')
+  const maxParticipants = ref(1)
 
   const errorMessage = ref('')
   const readContent = ref([])
@@ -265,6 +270,7 @@
         !where.value ||
         !when.value ||
         !what.value ||
+        !course.value ||
         !yearLevel.value ||
         !status.value
       ) {
@@ -276,7 +282,9 @@
           where: where.value,
           when: new Date(when.value),
           what: what.value,
-          yearLevel: yearLevel.value,
+          course: course.value,
+          maxParticipants: Number(maxParticipants.value),
+          yearLevel: Number(yearLevel.value),
           createdAt: new Date(),
           status: status.value
         })
